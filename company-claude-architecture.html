@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Company Claude Architecture — Plan, Build, Iterate</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --panel: #ffffff;
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --muted: #8a8a8a;
+    --border: #e8e4dc;
+    --border-strong: #c9c2b3;
+    --accent: #c2410c;
+    --accent-soft: #fff1ea;
+    --accent-ink: #7a2807;
+    --green: #15803d;
+    --green-soft: #e8f5ec;
+    --red: #b91c1c;
+    --red-soft: #fdecec;
+    --yellow: #a16207;
+    --yellow-soft: #fef7e0;
+    --blue: #1d4ed8;
+    --blue-soft: #eaf0fd;
+    --code-bg: #1f1d1a;
+    --code-ink: #f3efe6;
+    --radius: 10px;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 28px 80px; }
+  header.top {
+    margin-bottom: 24px;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: 32px;
+    line-height: 1.2;
+    margin: 0 0 10px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: var(--ink-soft);
+    font-size: 17px;
+    max-width: 760px;
+  }
+  nav.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 28px 0 0;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  nav.tabs button {
+    background: transparent;
+    border: none;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink-soft);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    border-radius: 6px 6px 0 0;
+  }
+  nav.tabs button:hover { color: var(--ink); background: rgba(0,0,0,0.03); }
+  nav.tabs button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+  section.tab-panel { display: none; padding-top: 28px; }
+  section.tab-panel.active { display: block; animation: fade .25s ease; }
+  @keyframes fade { from {opacity:0; transform:translateY(4px)} to {opacity:1; transform:translateY(0)} }
+
+  h2 { font-size: 22px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  h2 + .lede { color: var(--ink-soft); margin-bottom: 18px; }
+  h3 { font-size: 17px; margin: 22px 0 8px; letter-spacing: -0.005em; }
+  h4 { font-size: 14px; margin: 14px 0 6px; color: var(--ink); text-transform: uppercase; letter-spacing: 0.06em; }
+  p { margin: 0 0 12px; color: var(--ink); }
+  p.muted { color: var(--ink-soft); }
+  ul, ol { margin: 0 0 14px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  a { color: var(--accent); }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .card.tight { padding: 14px 16px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .row { grid-template-columns: 1fr; } }
+  .row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 800px) { .row-3 { grid-template-columns: 1fr; } }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 6px;
+  }
+  .badge.green { background: var(--green-soft); color: var(--green); }
+  .badge.red { background: var(--red-soft); color: var(--red); }
+  .badge.yellow { background: var(--yellow-soft); color: var(--yellow); }
+  .badge.blue { background: var(--blue-soft); color: var(--blue); }
+  .badge.accent { background: var(--accent-soft); color: var(--accent-ink); }
+
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 20px; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: #f4f1ea; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }
+  tr:last-child td { border-bottom: none; }
+
+  pre {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: 16px 18px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    line-height: 1.55;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    position: relative;
+    margin: 8px 0 16px;
+  }
+  pre .copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #ddd;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  pre .copy:hover { background: rgba(255,255,255,0.2); }
+  code.inline {
+    background: #f4f1ea;
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+  }
+
+  details.accordion {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: var(--panel);
+    overflow: hidden;
+  }
+  details.accordion[open] { box-shadow: var(--shadow); }
+  details.accordion > summary {
+    cursor: pointer;
+    padding: 14px 16px;
+    list-style: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+  }
+  details.accordion > summary::-webkit-details-marker { display: none; }
+  details.accordion > summary::before {
+    content: "▸";
+    color: var(--muted);
+    transition: transform .15s ease;
+    font-size: 12px;
+  }
+  details.accordion[open] > summary::before { transform: rotate(90deg); }
+  details.accordion > .accordion-body { padding: 0 16px 16px 32px; }
+
+  /* Diagram */
+  .diagram {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 8px 0 20px;
+  }
+
+  .block {
+    border: 1.5px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: #fff;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .block:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .block .sub { font-weight: 400; color: var(--ink-soft); font-size: 11.5px; margin-top: 2px; }
+
+  .step-list { counter-reset: step; padding-left: 0; list-style: none; }
+  .step-list li {
+    counter-increment: step;
+    padding: 12px 14px 12px 48px;
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    width: 24px;
+    height: 24px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .step-list li strong { display: block; margin-bottom: 2px; }
+
+  .phase {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 14px;
+    margin-bottom: 18px;
+  }
+  .phase h4 { margin-top: 0; color: var(--accent-ink); }
+
+  .kv { display: grid; grid-template-columns: 160px 1fr; gap: 4px 14px; font-size: 13.5px; margin: 8px 0 12px; }
+  .kv .k { color: var(--ink-soft); }
+
+  .pill-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; margin-top: 12px; color: var(--ink-soft); }
+  .legend span::before {
+    content: "■";
+    margin-right: 4px;
+  }
+  .legend .l-skill::before { color: #c2410c; }
+  .legend .l-mcp::before { color: #1d4ed8; }
+  .legend .l-agent::before { color: #15803d; }
+  .legend .l-proj::before { color: #a16207; }
+
+  footer.foot {
+    margin-top: 50px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+  .callout {
+    background: var(--blue-soft);
+    border-left: 3px solid var(--blue);
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    margin: 10px 0 14px;
+  }
+  .callout.warn { background: var(--yellow-soft); border-color: var(--yellow); }
+  .callout.danger { background: var(--red-soft); border-color: var(--red); }
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  /* Sub-tabs */
+  nav.subtabs {
+    display: inline-flex;
+    gap: 4px;
+    margin: 0 0 22px;
+    background: #f4f1ea;
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  nav.subtabs button {
+    background: transparent;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-weight: 500;
+    transition: all .12s ease;
+  }
+  nav.subtabs button:hover { color: var(--ink); }
+  nav.subtabs button.active {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .subtab-panel { display: none; animation: fade .2s ease; }
+  .subtab-panel.active { display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Architecture brief · For a Claude Enterprise / Teams customer</div>
+    <h1>Building a Company-Wide Claude Knowledge & Skill System</h1>
+    <p class="subtitle">A practical plan for uploading decks, docs, and reusable workflows so Claude personalizes every output across the org — and so you, as the operator, can iterate on those workflows independently and push improvements seamlessly.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="possible">What's possible today</button>
+    <button class="tab-btn" data-tab="architecture">Recommended architecture</button>
+    <button class="tab-btn" data-tab="blocks">Building blocks</button>
+    <button class="tab-btn" data-tab="deliverables">Specific deliverables</button>
+    <button class="tab-btn" data-tab="hosting">Hosting & iteration</button>
+    <button class="tab-btn" data-tab="roadmap">Roadmap</button>
+    <button class="tab-btn" data-tab="limits">Limitations</button>
+  </nav>
+
+  <!-- ===== OVERVIEW ===== -->
+  <section class="tab-panel active" id="overview">
+    <h2>The shape of the answer</h2>
+    <p class="lede">Modern Claude (Teams / Enterprise, May 2026) gives you four primitives to personalize Claude for an org. Combine them right, and the company gets context-aware outputs without anyone copy-pasting "remember our brand voice" into every chat.</p>
+
+    <div class="row-3">
+      <div class="card tight">
+        <div class="badge accent">Primitive 1</div>
+        <h3 style="margin-top:6px">Skills</h3>
+        <p class="muted">Procedural knowledge — how to do a thing. A folder with a <code class="inline">SKILL.md</code> + scripts + templates + brand assets. Auto-activates when Claude sees a relevant task.</p>
+      </div>
+      <div class="card tight">
+        <div class="badge accent">Primitive 2</div>
+        <h3 style="margin-top:6px">Plugins</h3>
+        <p class="muted">A bundle of skills + connectors + sub-agents + slash commands shipped together. Distributed through a private GitHub marketplace your org subscribes to.</p>
+      </div>
+      <div class="card tight">
+        <div class="badge accent">Primitive 3</div>
+        <h3 style="margin-top:6px">MCP servers / Connectors</h3>
+        <p class="muted">Live data and actions — your CRM, data warehouse, Notion, internal APIs. Use when the data changes and you need fresh answers.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card tight">
+        <div class="badge accent">Primitive 4</div>
+        <h3 style="margin-top:6px">Projects</h3>
+        <p class="muted">Static, always-loaded context for an ongoing piece of work (a product launch, a client engagement). Different from skills — projects are scoped, skills are global.</p>
+      </div>
+      <div class="card tight">
+        <div class="badge blue">Glue</div>
+        <h3 style="margin-top:6px">Sub-agents</h3>
+        <p class="muted">Specialized review/critic personas (e.g. <code class="inline">coo-reviewer</code>, <code class="inline">brand-checker</code>) that a skill can invoke as a separate read-only pass.</p>
+      </div>
+    </div>
+
+    <h3>One-paragraph plan</h3>
+    <p>Stand up a single <strong>private GitHub repo</strong> that you own and operate. Inside it, define one <strong>plugin marketplace</strong> ("Acme Internal"). Inside that marketplace, ship one or more <strong>plugins</strong> (e.g. <code class="inline">acme-foundation</code>, <code class="inline">acme-go-to-market</code>). Each plugin bundles <strong>skills</strong> (pitch-deck, exec-memo, brand-guidelines, company-context), <strong>sub-agents</strong> (coo-reviewer, brand-checker), and any <strong>MCP servers</strong> (acme-data, acme-knowledge). The org's Claude admin subscribes once; updates flow from your <code class="inline">git push</code> to every employee's Claude.</p>
+
+    <div class="callout">
+      <strong>Why this stack, not just Projects</strong>
+      Projects are great for a specific ongoing piece of work, but they don't auto-trigger across all conversations and don't carry executable code or sub-agents. For company-wide "Claude always knows our brand / format / context," you want skills inside a plugin marketplace — that's the only mechanism that gives you (a) automatic invocation, (b) executable templates, (c) versioned distribution, and (d) admin-level rollout controls.
+    </div>
+  </section>
+
+  <!-- ===== POSSIBLE ===== -->
+  <section class="tab-panel" id="possible">
+    <h2>What is and isn't possible today</h2>
+    <p class="lede">Capability matrix as of May 2026. Verify the items marked <span class="badge yellow">VERIFY</span> against the latest help-center docs for your specific plan tier.</p>
+
+    <table>
+      <thead><tr><th style="width:32%">Capability</th><th style="width:14%">Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Upload skills to your personal Claude.ai account</td><td><span class="badge green">Yes</span></td><td>Any plan with skills enabled. Drag-and-drop a zipped folder or sync via the skill-creator.</td></tr>
+        <tr><td>Provision skills org-wide from an admin console</td><td><span class="badge green">Yes</span></td><td>Team & Enterprise plans. Owner uploads in org settings → all members see it under Customize → Skills automatically.</td></tr>
+        <tr><td>Host your own <strong>plugin marketplace</strong> in a private GitHub repo</td><td><span class="badge green">Yes</span></td><td>For Cowork org marketplaces: must be a <em>private or internal</em> repo on <strong>github.com</strong>. GitHub Enterprise Server is not supported.</td></tr>
+        <tr><td>Auto-install a plugin to all employees</td><td><span class="badge green">Yes</span></td><td>Enterprise admins can set per-group install policy: auto-install, optional, or hidden.</td></tr>
+        <tr><td>Bundle skills + MCP + sub-agents + slash commands together</td><td><span class="badge green">Yes</span></td><td>That's exactly what a plugin is. Defined by <code class="inline">plugin.json</code>, <code class="inline">.mcp.json</code>, and <code class="inline">agents/</code>, <code class="inline">commands/</code>, <code class="inline">skills/</code> subfolders.</td></tr>
+        <tr><td>Sub-agent that critiques a draft (e.g. "COO reviewer")</td><td><span class="badge green">Yes</span></td><td>Define a read-only sub-agent in <code class="inline">agents/coo-reviewer.md</code>. Reference it from the exec-memo skill. Returns a single critique message; doesn't pollute the main thread.</td></tr>
+        <tr><td>Ship updates by pushing to git, auto-sync to org</td><td><span class="badge green">Yes</span></td><td>GitHub sync supports manual or auto on push. Users get the new version on next session.</td></tr>
+        <tr><td>Connect Claude to a custom internal API (data, CRM, KPI dashboard)</td><td><span class="badge green">Yes</span></td><td>Build an MCP server, bundle in the plugin, or deploy as a desktop extension via the admin allowlist.</td></tr>
+        <tr><td>Pull live data from Notion, Google Drive, Slack, Salesforce, etc.</td><td><span class="badge green">Yes</span></td><td>Use the official connectors — no MCP server needed. Each user authenticates once.</td></tr>
+        <tr><td>Mix skills with always-on Project context</td><td><span class="badge green">Yes</span></td><td>Skills work inside Projects. Use a shared org Project for, say, "Annual Plan 2026" with all relevant docs uploaded; skills still fire on top.</td></tr>
+        <tr><td>Make a skill that calls another skill</td><td><span class="badge yellow">Partial</span></td><td>Skills are invoked by Claude based on context, not by other skills directly. But a skill can reference shared files (e.g. <code class="inline">brand/voice.md</code>) that live inside the same plugin.</td></tr>
+        <tr><td>Plugin-level CLAUDE.md (always-on instruction file)</td><td><span class="badge yellow">Partial</span></td><td>No exact equivalent in Cowork / Claude.ai today (CLAUDE.md is a Claude Code feature). Workaround: a <code class="inline">*-principles</code> skill with a broad trigger description, plus a shared team Project with principles in its custom instructions. Together they cover ~100% of cases.</td></tr>
+        <tr><td>Encrypt or DRM the contents of a skill</td><td><span class="badge red">No</span></td><td>Skill contents are plain files. For sensitive logic, put it behind an MCP server you host.</td></tr>
+        <tr><td>Force a sub-agent review before Claude can output</td><td><span class="badge yellow">Partial</span></td><td>You can <em>instruct</em> the parent skill to always invoke the reviewer, but Claude is the executor. Strict gating requires hooks (Claude Code) or an MCP-side guardrail.</td></tr>
+        <tr><td>Track which employee used which skill, and how often</td><td><span class="badge yellow">VERIFY</span></td><td>Some admin analytics exist; coverage varies. Confirm in the org admin console for your plan.</td></tr>
+        <tr><td>Auto-install a plugin without admin involvement</td><td><span class="badge red">No</span></td><td>An owner/admin must approve the marketplace once. After that, updates flow automatically.</td></tr>
+        <tr><td>Run skills from a non-GitHub source (GitLab, S3, Bitbucket) for an org</td><td><span class="badge red">No</span></td><td>Org Cowork marketplaces are github.com-only today. Personal/Claude Code marketplaces support more hosts.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Mental model</h3>
+    <div class="row">
+      <div class="card tight">
+        <h4 style="margin-top:0">Skills vs Projects</h4>
+        <p class="muted">Skills = "how we do things here" (procedure). Projects = "what we're currently working on" (context). Brand guidelines → skill. Q3 fundraise prep → project. Use both together.</p>
+      </div>
+      <div class="card tight">
+        <h4 style="margin-top:0">Skill vs MCP</h4>
+        <p class="muted">If the answer comes from files that change rarely (brand book, positioning, pitch templates) → ship as files inside a skill. If it changes every day or requires a live action (current pipeline, send a Slack) → MCP server.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ARCHITECTURE ===== -->
+  <section class="tab-panel" id="architecture">
+    <h2>Recommended architecture</h2>
+    <p class="lede">Single source of truth: a private GitHub repo you own. Everything radiates outward from there.</p>
+
+    <nav class="subtabs" role="tablist">
+      <button class="subtab-btn active" data-subtab="arch-overview">Diagram &amp; core design</button>
+      <button class="subtab-btn" data-subtab="arch-segmentation">Plugin segmentation</button>
+    </nav>
+
+    <div class="subtab-panel active" data-subtab="arch-overview">
+    <div class="diagram">
+      <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#8a8a8a"/>
+          </marker>
+        </defs>
+
+        <!-- You / Operator -->
+        <rect x="40" y="40" width="180" height="64" rx="8" fill="#fff1ea" stroke="#c2410c" stroke-width="1.5"/>
+        <text x="130" y="68" text-anchor="middle" font-size="14" font-weight="600" fill="#7a2807">You (the operator)</text>
+        <text x="130" y="86" text-anchor="middle" font-size="11.5" fill="#7a2807">Edits skills + agents, pushes</text>
+
+        <!-- GitHub repo -->
+        <rect x="40" y="160" width="280" height="160" rx="10" fill="#fff" stroke="#c9c2b3" stroke-width="1.5"/>
+        <text x="180" y="184" text-anchor="middle" font-size="13" font-weight="700">Private GitHub repo</text>
+        <text x="180" y="200" text-anchor="middle" font-size="11" fill="#8a8a8a">acme-org/claude-foundation</text>
+
+        <rect x="60" y="214" width="240" height="22" rx="4" fill="#fef7e0" stroke="#a16207" stroke-width="1"/>
+        <text x="180" y="229" text-anchor="middle" font-size="11" fill="#a16207">.claude-plugin/marketplace.json</text>
+
+        <rect x="60" y="242" width="115" height="22" rx="4" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1"/>
+        <text x="117" y="257" text-anchor="middle" font-size="11" fill="#1d4ed8">plugins/foundation</text>
+
+        <rect x="185" y="242" width="115" height="22" rx="4" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1"/>
+        <text x="242" y="257" text-anchor="middle" font-size="11" fill="#1d4ed8">plugins/gtm</text>
+
+        <rect x="60" y="270" width="240" height="22" rx="4" fill="#e8f5ec" stroke="#15803d" stroke-width="1"/>
+        <text x="180" y="285" text-anchor="middle" font-size="11" fill="#15803d">agents/  skills/  commands/  .mcp.json</text>
+
+        <!-- Arrow operator → repo -->
+        <line x1="130" y1="106" x2="130" y2="158" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <text x="146" y="138" font-size="10" fill="#8a8a8a">git push</text>
+
+        <!-- Marketplace sync -->
+        <rect x="400" y="160" width="220" height="120" rx="10" fill="#fff1ea" stroke="#c2410c" stroke-width="1.5"/>
+        <text x="510" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#7a2807">Org plugin marketplace</text>
+        <text x="510" y="202" text-anchor="middle" font-size="11" fill="#7a2807">"Acme Internal"</text>
+        <text x="510" y="226" text-anchor="middle" font-size="11" fill="#7a2807">Subscribed once by admin</text>
+        <text x="510" y="244" text-anchor="middle" font-size="11" fill="#7a2807">Auto-syncs on push</text>
+        <text x="510" y="262" text-anchor="middle" font-size="11" fill="#7a2807">Group-level install policy</text>
+
+        <line x1="320" y1="240" x2="396" y2="220" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <text x="335" y="218" font-size="10" fill="#8a8a8a">sync</text>
+
+        <!-- Employees -->
+        <rect x="700" y="40" width="240" height="64" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
+        <text x="820" y="64" text-anchor="middle" font-size="13" font-weight="600" fill="#15803d">Employee in Claude</text>
+        <text x="820" y="82" text-anchor="middle" font-size="11" fill="#15803d">Writes "draft a pitch deck for X"</text>
+        <text x="820" y="96" text-anchor="middle" font-size="11" fill="#15803d">Claude silently loads pitch-deck skill</text>
+
+        <rect x="700" y="160" width="240" height="64" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
+        <text x="820" y="184" text-anchor="middle" font-size="13" font-weight="600" fill="#15803d">Employee in Claude</text>
+        <text x="820" y="202" text-anchor="middle" font-size="11" fill="#15803d">Writes exec memo → coo-reviewer</text>
+        <text x="820" y="216" text-anchor="middle" font-size="11" fill="#15803d">auto-critiques before send</text>
+
+        <rect x="700" y="280" width="240" height="64" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
+        <text x="820" y="304" text-anchor="middle" font-size="13" font-weight="600" fill="#15803d">Employee in Claude</text>
+        <text x="820" y="322" text-anchor="middle" font-size="11" fill="#15803d">"What's our Q2 pipeline by stage?"</text>
+        <text x="820" y="336" text-anchor="middle" font-size="11" fill="#15803d">acme-data MCP server answers</text>
+
+        <line x1="620" y1="200" x2="698" y2="72" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="620" y1="220" x2="698" y2="190" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="620" y1="240" x2="698" y2="310" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- MCP server -->
+        <rect x="400" y="320" width="220" height="100" rx="10" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1.5"/>
+        <text x="510" y="344" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">acme-data MCP server</text>
+        <text x="510" y="362" text-anchor="middle" font-size="11" fill="#1d4ed8">Hosted on your infra</text>
+        <text x="510" y="378" text-anchor="middle" font-size="11" fill="#1d4ed8">Reads from Snowflake / CRM</text>
+        <text x="510" y="394" text-anchor="middle" font-size="11" fill="#1d4ed8">Returns rows, not files</text>
+        <text x="510" y="410" text-anchor="middle" font-size="11" fill="#1d4ed8">Updated independently</text>
+
+        <line x1="320" y1="295" x2="396" y2="350" stroke="#8a8a8a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="320" y="345" font-size="10" fill="#8a8a8a">declares in .mcp.json</text>
+
+        <line x1="620" y1="380" x2="698" y2="328" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+      </svg>
+      <div class="legend">
+        <span class="l-skill">Skills / plugins (files)</span>
+        <span class="l-mcp">MCP servers (live data)</span>
+        <span class="l-agent">Where employees experience it</span>
+        <span class="l-proj">Marketplace manifest</span>
+      </div>
+    </div>
+
+    <h3>Three things to internalize about this design</h3>
+    <ol>
+      <li><strong>One repo, one source of truth.</strong> Skills, sub-agents, MCP configs, slash commands, and the marketplace manifest all live in the same private repo. You version them together. A change is one PR.</li>
+      <li><strong>Files-as-knowledge for things that change slowly. MCP-for-data for things that change fast.</strong> Brand book = files. Pipeline numbers = MCP. Don't mix them.</li>
+      <li><strong>The admin subscribes once.</strong> After the marketplace is connected and the plugins are set to auto-install, you ship via <code class="inline">git push</code>. Employees do nothing.</li>
+    </ol>
+
+    <div class="callout">
+      <strong>Two more design questions worth their own subsection</strong>
+      How many plugins? See the <em>Plugin segmentation</em> sub-tab above. How do you encode each team's overall philosophy and ways of working? See the <strong>principles docs pattern</strong> in the <em>Building Blocks</em> tab.
+    </div>
+    </div><!-- /arch-overview -->
+
+    <div class="subtab-panel" data-subtab="arch-segmentation">
+    <h3 style="margin-top:0">One plugin or many?</h3>
+    <p>Multiple plugins, but start with one and split as natural seams appear. The plugin boundary is the unit of <em>which group has this installed by default</em>, not the unit of code organization.</p>
+
+    <div class="row">
+      <div class="card tight">
+        <h4 style="margin-top:0">Why not one giant plugin</h4>
+        <p class="muted">Every employee's Claude would carry every skill description on every conversation. Engineers don't need <code class="inline">pitch-deck</code> taking up context; sales doesn't need <code class="inline">incident-runbook</code>. Discovery gets noisier, and you lose role-based access — sensitive things like a comp framework can't be hidden from non-HR if they're bundled with everything.</p>
+      </div>
+      <div class="card tight">
+        <h4 style="margin-top:0">Why not one plugin per skill</h4>
+        <p class="muted">Too much management overhead, and skills genuinely share files (<code class="inline">brand-guidelines</code> is referenced by pitch-deck, exec-memo, client-proposal — keeping them in one plugin avoids duplicating the brand book N times).</p>
+      </div>
+    </div>
+
+    <h4>The right cleavage: by audience, not by topic</h4>
+    <table>
+      <thead><tr><th>Plugin</th><th>Audience</th><th>Install policy</th><th>Contains</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code class="inline">acme-foundation</code></td>
+          <td>Everyone</td>
+          <td><span class="badge green">Auto</span></td>
+          <td><code class="inline">company-principles</code>, <code class="inline">brand-guidelines</code>, <code class="inline">company-context</code>, <code class="inline">exec-memo</code> (light), <code class="inline">weekly-update</code></td>
+        </tr>
+        <tr>
+          <td><code class="inline">acme-gtm</code></td>
+          <td>Sales + marketing</td>
+          <td><span class="badge green">Auto</span> (group)</td>
+          <td><code class="inline">gtm-principles</code>, <code class="inline">pitch-deck</code>, <code class="inline">client-proposal</code>, <code class="inline">objection-handling</code>, <code class="inline">discovery-call-notes</code>, <code class="inline">acme-data</code> MCP</td>
+        </tr>
+        <tr>
+          <td><code class="inline">acme-engineering</code></td>
+          <td>Engineering</td>
+          <td><span class="badge green">Auto</span> (group)</td>
+          <td><code class="inline">engineering-principles</code>, <code class="inline">prd-template</code>, <code class="inline">incident-runbook</code>, <code class="inline">code-review-checklist</code>, codebase MCP</td>
+        </tr>
+        <tr>
+          <td><code class="inline">acme-exec</code></td>
+          <td>Leadership / Staff+</td>
+          <td><span class="badge green">Auto</span> (group)</td>
+          <td><code class="inline">exec-principles</code>, strict <code class="inline">exec-memo</code> with mandatory <code class="inline">coo-reviewer</code>, <code class="inline">board-update</code>, <code class="inline">compensation-framework</code></td>
+        </tr>
+        <tr>
+          <td><code class="inline">acme-people</code></td>
+          <td>HR / managers</td>
+          <td><span class="badge green">Auto</span> (group)</td>
+          <td><code class="inline">people-principles</code>, <code class="inline">performance-review</code>, <code class="inline">hiring-loop-debrief</code>, <code class="inline">offer-letter</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>Rule of thumb</strong>
+      If a skill would be useful to <strong>&gt;70% of the company</strong>, it goes in <code class="inline">acme-foundation</code>. Otherwise, it goes in a role plugin. When unsure, default to foundation — you can always split later, and consolidation never hurts.
+    </div>
+
+    <h4>The shared-files question</h4>
+    <p>Truly cross-cutting reference material — brand book, company-context, positioning — lives in <code class="inline">acme-foundation</code>. Skills in role plugins reference it by name in their SKILL.md ("If <code class="inline">brand-guidelines</code> is available, read its <code class="inline">voice.md</code> for tone calibration"). This works because foundation is auto-installed for everyone, so the reference is always present when a role plugin needs it.</p>
+
+    <h4>Operational reality</h4>
+    <p>"Multiple plugins" doesn't mean multiple repos or multiple admin approvals. <strong>All plugins live in the same GitHub repo, in the same marketplace</strong> — just different folders under <code class="inline">plugins/</code>. The admin subscribes to the marketplace once. Plugin boundaries become visibility / auto-install boundaries on top.</p>
+
+    <div class="callout warn">
+      <strong>Sequencing</strong>
+      Ship <code class="inline">acme-foundation</code> first and live on it for 3–4 weeks before splitting out role plugins. You'll discover the real seams by watching what people actually use rather than guessing them upfront. Splitting later is one PR — moving files between plugin folders and updating the marketplace manifest.
+    </div>
+    </div><!-- /arch-segmentation -->
+  </section>
+
+  <!-- ===== BUILDING BLOCKS ===== -->
+  <section class="tab-panel" id="blocks">
+    <h2>The building blocks, in detail</h2>
+    <p class="lede">First, the <strong>primitives</strong> — what each one is, when to reach for it, and what files it consists of. Then, the <strong>patterns</strong> — recurring ways of combining the primitives that you'll use across multiple plugins.</p>
+
+    <h3 style="margin:20px 0 10px">Primitives</h3>
+
+    <details class="accordion" open>
+      <summary>Skill — the unit of "how we do this"</summary>
+      <div class="accordion-body">
+        <p>A folder. Minimum: a <code class="inline">SKILL.md</code> with YAML frontmatter (<code class="inline">name</code>, <code class="inline">description</code>). Optional: any number of supporting files — templates, reference docs, Python scripts, images, sample inputs and outputs.</p>
+        <p>The <strong>description</strong> is the most important line in the whole system. Claude reads descriptions to decide which skills to invoke. A vague description = skill never fires.</p>
+        <h4>Minimal SKILL.md</h4>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>---
+name: exec-memo
+description: Use this skill whenever the user is drafting an internal executive memo, board update, all-hands recap, or formal company-wide written communication. Triggers include "exec memo", "board update", "all-hands note", "write up for the team", or any 1+ page internal communication intended for leadership or the whole org. Do NOT use for casual Slack messages or external marketing copy.
+---
+
+# Acme exec memo
+
+When asked to produce an exec memo, follow these steps:
+1. Read `reference/format.md` for the canonical structure (TL;DR, Context, Decision, Asks, Appendix).
+2. Read `reference/voice.md` for tone calibration.
+3. Draft the memo.
+4. Hand the draft to the `coo-reviewer` sub-agent for a critique pass. Incorporate its top 3 critiques before showing the user.
+5. Return the revised memo plus a "What I changed based on review" footnote.</pre>
+        <p>The skill also typically contains:</p>
+        <ul>
+          <li><code class="inline">reference/format.md</code> — the canonical structure</li>
+          <li><code class="inline">reference/voice.md</code> — tone, banned phrases, preferred openings</li>
+          <li><code class="inline">examples/q3-board-update.md</code> — 2-3 real exemplars (anonymized)</li>
+          <li><code class="inline">scripts/wordcount.py</code> — optional helper, if useful</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>Plugin — the unit of distribution</summary>
+      <div class="accordion-body">
+        <p>A folder that bundles skills, sub-agents, slash commands, and MCP server declarations together. Distributed through a marketplace. One plugin = one logical product (e.g. "Acme foundation" for everyone, "Acme GTM" for sales & marketing only).</p>
+        <p><strong>One plugin or many?</strong> Multiple, split by audience not by topic. <code class="inline">acme-foundation</code> auto-installs for everyone; <code class="inline">acme-gtm</code>, <code class="inline">acme-engineering</code>, <code class="inline">acme-exec</code>, <code class="inline">acme-people</code> auto-install per group. All live in the same repo and same marketplace — plugin boundaries are visibility / install scopes, not separate operational footprints. Rule of thumb: <strong>useful to &gt;70% of the company → foundation, otherwise → a role plugin</strong>. See the Architecture tab for the full breakdown.</p>
+        <h4>Plugin folder layout</h4>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>plugins/acme-foundation/
+├── plugin.json              # metadata (name, version, description)
+├── version.json
+├── .mcp.json                # MCP servers this plugin declares
+├── skills/
+│   ├── pitch-deck/
+│   │   ├── SKILL.md
+│   │   ├── templates/...
+│   │   └── examples/...
+│   ├── exec-memo/
+│   ├── brand-guidelines/
+│   └── company-context/
+├── agents/
+│   ├── coo-reviewer.md
+│   └── brand-checker.md
+└── commands/
+    ├── new-memo.md
+    └── new-deck.md</pre>
+        <h4>plugin.json (sketch)</h4>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>{
+  "name": "acme-foundation",
+  "displayName": "Acme Foundation",
+  "version": "0.4.2",
+  "description": "Core Acme skills: pitch decks, exec memos, brand voice, positioning. Auto-applies in every conversation.",
+  "author": "Acme Operations"
+}</pre>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>Sub-agent — the critic / specialist</summary>
+      <div class="accordion-body">
+        <p>A separate "persona" with its own system prompt and tool access. When a parent skill invokes it, the sub-agent runs in its own context — its intermediate steps stay inside the sub-agent, and only its final message returns to the main thread.</p>
+        <p>Perfect for review/critique loops: keep the main thread clean, let the sub-agent burn tokens being thorough.</p>
+        <h4>agents/coo-reviewer.md</h4>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>---
+name: coo-reviewer
+description: Reviews exec memos, board updates, and other formal internal communications from the perspective of an experienced COO. Use when a skill needs a critique pass on a draft before showing the user.
+tools: [Read]   # read-only; cannot edit
+---
+
+You are reviewing a draft as Acme's COO would. Your job is critique, not rewriting.
+
+Optics & framing:
+- Does the TL;DR actually summarize the decision, or just the topic?
+- Is the "Ask" specific enough that a reader can act on it without follow-up questions?
+- Are numbers framed against a baseline?
+
+Risks the COO will flag:
+- Unstated assumptions about Q4 burn
+- Vague success metrics
+- Anything that reads as a victory lap without naming what was hard
+
+Output exactly:
+1. Three concrete critiques (one sentence each).
+2. One sentence on what the memo does well.
+3. A single line: "Ship-ready: yes / no / needs revision."</pre>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>MCP server / connector — the unit of live data</summary>
+      <div class="accordion-body">
+        <p>An MCP server is a small service Claude can call to fetch data or perform actions. Connectors are pre-built MCP integrations (Slack, GDrive, Notion, Salesforce, M365, etc.) — use those first when they exist.</p>
+        <p>Build your own MCP server when:</p>
+        <ul>
+          <li>The data lives in an internal system with no off-the-shelf connector (custom CRM, internal KPI dashboard, proprietary database).</li>
+          <li>You want a stable, opinionated interface ("get_pipeline_by_stage", "current_burn_rate") rather than raw SQL.</li>
+          <li>You want to enforce row-level access control or audit logging Claude-side.</li>
+        </ul>
+        <h4>.mcp.json snippet</h4>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>{
+  "mcpServers": {
+    "acme-data": {
+      "transport": "http",
+      "url": "https://mcp.acme-internal.com/data",
+      "auth": "oauth2"
+    }
+  }
+}</pre>
+        <p>You host the server (e.g. on your own infra or a desktop extension). Updates to its capabilities don't require any change in Claude — just deploy the server.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>Project — the unit of "what we're working on right now"</summary>
+      <div class="accordion-body">
+        <p>A Project is a chat container with custom instructions + uploaded knowledge files that are <em>always</em> in the conversation. Use it for ongoing work, not for global company personalization.</p>
+        <p>Where projects fit alongside the rest of this stack:</p>
+        <ul>
+          <li><strong>Use a project</strong> for "Q2 Board Prep," "Acme x Bigcorp deal," "Hiring loop for Head of Eng."</li>
+          <li><strong>Use a skill</strong> for everything that should be available in every conversation.</li>
+          <li><strong>They compose.</strong> Inside the Q2 Board Prep project, the exec-memo skill still fires when needed.</li>
+        </ul>
+        <p>Team & Enterprise allow sharing projects with the org, so you can also use Projects as a lightweight way to ship working contexts (e.g. an "All-Hands prep" project that gets cloned each quarter).</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>Slash command — the unit of "give me a starting point"</summary>
+      <div class="accordion-body">
+        <p>A slash command is a user-facing shortcut. Typing <code class="inline">/new-memo</code> seeds the conversation with the right context and triggers the right skill. Lives in <code class="inline">commands/</code> inside the plugin.</p>
+        <p>Worth shipping a few of these for high-frequency workflows. Discoverability matters: people forget skills exist, but they remember a slash command they've used.</p>
+      </div>
+    </details>
+
+    <h3 style="margin:32px 0 10px">Patterns</h3>
+    <p class="muted" style="margin-bottom:14px">Recurring designs that combine multiple primitives. Apply them consistently across plugins so the system feels coherent.</p>
+
+    <details class="accordion" open>
+      <summary>Pattern: Principles docs (the CLAUDE.md analog)</summary>
+      <div class="accordion-body">
+        <p>Every group plugin should carry a <em>principles</em> skill — the team's overall philosophy, do's and don'ts, decision frameworks, banned approaches. It's the closest thing in Cowork to a CLAUDE.md.</p>
+
+        <div class="callout">
+          <strong>Mental model clarification</strong>
+          <code class="inline">CLAUDE.md</code> is a Claude Code feature — a file that auto-loads when you start a coding session in a repo. Cowork / Claude.ai doesn't have an exact equivalent: there's no plugin-level "always-on system prompt" file today. You can get ~90% of the way there with a deliberately-designed skill, and ~100% with a shared Project on top.
+        </div>
+
+        <h4>Pattern A — the "principles" skill (recommended)</h4>
+        <p>One skill per group plugin whose entire job is to load that team's philosophy as background context.</p>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>plugins/acme-engineering/
+└── skills/
+    ├── engineering-principles/
+    │   ├── SKILL.md
+    │   ├── principles.md
+    │   ├── dos-and-donts.md
+    │   ├── decision-frameworks.md
+    │   └── examples/
+    ├── prd-template/
+    ├── incident-runbook/
+    └── code-review-checklist/</pre>
+
+        <p>The SKILL.md description is the whole game — write it broadly enough that Claude treats this skill as "load on anything in this domain":</p>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>---
+name: engineering-principles
+description: Use whenever the user is doing any engineering, technical, architecture, code review, system design, debugging, sprint planning, or product-engineering work for Acme. Loads team principles, ways of working, do's and don'ts, and decision frameworks. Always applies when discussing technical tradeoffs, writing or reviewing code, planning work, or making engineering decisions.
+---
+
+# Engineering principles
+
+Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply them as background context throughout your response. Cite a specific principle by name when it materially shapes your answer.</pre>
+
+        <h4>Pattern B — every other skill in the plugin references it explicitly</h4>
+        <p>In <code class="inline">prd-template/SKILL.md</code>, <code class="inline">incident-runbook/SKILL.md</code>, etc., include: "Before drafting, read <code class="inline">../engineering-principles/principles.md</code> for the team's ways of working." This guarantees principles apply whenever <em>any</em> team skill fires, even if the principles skill itself didn't auto-trigger. Belt-and-braces.</p>
+
+        <h4>Pattern C — shared Project for true always-on coverage</h4>
+        <p>Stand up a team-wide shared Project ("Acme Engineering — Working Space") with the top-cited principles pasted into the Project's custom instructions. Anyone chatting inside that Project always has them loaded, and skills still fire on top. Use the Project for the most-cited principles; use the skill for the deeper reference material. Together they give you near-CLAUDE.md behavior.</p>
+
+        <h4>What belongs in a principles doc</h4>
+        <p>Value comes from being specific and opinionated:</p>
+        <ul>
+          <li>Decision principles ("prefer reversibility over consensus")</li>
+          <li>Do's and don'ts ("never ship a P0 fix without a follow-up postmortem")</li>
+          <li>Voice and tone for written artifacts</li>
+          <li>How we disagree / escalation patterns</li>
+          <li>Banned phrases or banned approaches</li>
+          <li>Concrete examples of good vs not-good outputs</li>
+        </ul>
+        <p class="muted">Keep fast-changing things (this quarter's priorities, current OKRs) out — those go in a Project or an MCP. Principles should be quarterly-stable or slower, or they stop being principles.</p>
+
+        <h4>Composition with foundation is the real win</h4>
+        <p><code class="inline">acme-foundation</code> carries <strong>company-wide</strong> principles ("how Acme operates"); each group plugin adds <strong>team-specific</strong> principles that compose on top. An engineer drafting an RFC ends up with foundation principles + engineering principles + the specific skill (<code class="inline">prd-template</code>), naturally cascading from general to specific. That's exactly what you'd want a CLAUDE.md to do — just spread across the right scopes.</p>
+
+        <div class="row">
+          <div class="card tight">
+            <h4 style="margin-top:0">Foundation principles (everyone)</h4>
+            <p class="muted">"How Acme operates." Customer obsession, written-first culture, default to action, escalation norms, decision-making framework, brand voice rules.</p>
+          </div>
+          <div class="card tight">
+            <h4 style="margin-top:0">Team principles (per group plugin)</h4>
+            <p class="muted">"How <em>this team</em> operates." Engineering's review standards, GTM's qualification framework, Exec's communication norms, People's interview rubric.</p>
+          </div>
+        </div>
+
+        <p class="muted" style="margin-top:14px">See also: the <code class="inline">*-principles</code> deliverable card in the <em>Specific Deliverables</em> tab for the concrete files to ship.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ===== DELIVERABLES ===== -->
+  <section class="tab-panel" id="deliverables">
+    <h2>Specific deliverables for this company</h2>
+    <p class="lede">Each card below is one concrete thing to build, with its name, what it does, what files it contains, and what triggers it. Built in a recommended order.</p>
+
+    <details class="accordion" open>
+      <summary><span class="badge accent">Skill pattern</span> <code class="inline">*-principles</code> — one per plugin (the CLAUDE.md analog)</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Instances</div><div><code class="inline">company-principles</code> (foundation), <code class="inline">engineering-principles</code>, <code class="inline">gtm-principles</code>, <code class="inline">exec-principles</code>, <code class="inline">people-principles</code></div>
+          <div class="k">Triggers</div><div>Broad — fires on essentially any work in that team's domain. Description is intentionally wide.</div>
+          <div class="k">Role</div><div>Background context skill. Loads philosophy, do's and don'ts, decision frameworks. Other skills in the same plugin reference its files directly.</div>
+        </div>
+        <h4>Files (consistent shape across all team plugins)</h4>
+        <ul>
+          <li><code class="inline">SKILL.md</code> — broad-trigger description; instructs Claude to read the reference files and apply them as background.</li>
+          <li><code class="inline">principles.md</code> — top-line philosophy. Quarterly-stable.</li>
+          <li><code class="inline">dos-and-donts.md</code> — concrete do's, don'ts, banned phrases.</li>
+          <li><code class="inline">decision-frameworks.md</code> — how this team makes decisions (escalation, reversibility test, etc.).</li>
+          <li><code class="inline">examples/</code> — 2–3 worked examples of the philosophy applied to a real situation.</li>
+        </ul>
+        <h4>Companion: shared Project</h4>
+        <p>For each team, also stand up a shared Project with the top-cited principles in its custom instructions. Project covers the "no clear trigger" cases; skill covers everything else; together they give near-CLAUDE.md coverage.</p>
+        <p class="muted">Owner pattern: head of each function owns their <code class="inline">*-principles</code> skill and reviews it quarterly. CEO/COO owns <code class="inline">company-principles</code>.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge accent">Skill</span> <code class="inline">pitch-deck</code> — pitch & sales decks</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Triggers</div><div>"draft a pitch deck", "make slides for", "create a deck", any .pptx involvement</div>
+          <div class="k">Lives in</div><div><code class="inline">plugins/acme-foundation/skills/pitch-deck/</code></div>
+          <div class="k">References</div><div><code class="inline">../brand-guidelines/</code> for colors, fonts, slide masters</div>
+        </div>
+        <h4>Files</h4>
+        <ul>
+          <li><code class="inline">SKILL.md</code> — instructions: which template by audience (investor / customer / partner), max slides, when to use which layout.</li>
+          <li><code class="inline">templates/acme-master.pptx</code> — the master deck with brand-styled layouts.</li>
+          <li><code class="inline">templates/investor-narrative.md</code> — the prescribed story arc (problem → market → why now → solution → traction → ask).</li>
+          <li><code class="inline">examples/series-b-deck.pptx</code> — an exemplar (anonymized).</li>
+          <li><code class="inline">scripts/build_deck.py</code> — opens template, fills slides programmatically (uses python-pptx).</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge accent">Skill</span> <code class="inline">exec-memo</code> — exec memos & board updates (with COO review)</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Triggers</div><div>"exec memo", "board update", "all-hands recap", "write up for leadership"</div>
+          <div class="k">Calls</div><div><code class="inline">coo-reviewer</code> sub-agent automatically</div>
+        </div>
+        <h4>Files</h4>
+        <ul>
+          <li><code class="inline">SKILL.md</code> — workflow: draft → coo-reviewer → revise → present with "what changed" footnote.</li>
+          <li><code class="inline">reference/format.md</code> — the canonical TL;DR / Context / Decision / Ask / Appendix structure.</li>
+          <li><code class="inline">reference/voice.md</code> — tone rules, banned phrases ("synergy," "leverage as a verb"), preferred openings.</li>
+          <li><code class="inline">examples/</code> — three anonymized real memos.</li>
+        </ul>
+        <h4>Companion sub-agent</h4>
+        <p><code class="inline">agents/coo-reviewer.md</code> (read-only; produces 3 critiques + 1 strength + ship-ready verdict).</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge accent">Skill</span> <code class="inline">brand-guidelines</code> — shared design & voice reference</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Triggers</div><div>Visual or written work; mostly invoked indirectly by other skills</div>
+          <div class="k">Role</div><div>Shared reference. Other skills point here so brand stays consistent across deliverables.</div>
+        </div>
+        <h4>Files</h4>
+        <ul>
+          <li><code class="inline">SKILL.md</code> — high-level: when to use which color/voice mode (formal, marketing, internal).</li>
+          <li><code class="inline">design/colors.md</code> — hex codes, accessibility pairs.</li>
+          <li><code class="inline">design/typography.md</code> — font stack, sizing scale, do/don't.</li>
+          <li><code class="inline">design/logo/</code> — SVG + PNG variants.</li>
+          <li><code class="inline">voice/voice.md</code> — tone, person, sentence shape, brand vocabulary.</li>
+          <li><code class="inline">voice/banned.md</code> — phrases to never use.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge accent">Skill</span> <code class="inline">company-context</code> — positioning, market, ICP</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Triggers</div><div>"how do we position vs X", "draft messaging for", "what's our story for", strategic / market work</div>
+        </div>
+        <h4>Files</h4>
+        <ul>
+          <li><code class="inline">SKILL.md</code> — when to apply which framing depending on audience.</li>
+          <li><code class="inline">positioning/one-line.md</code>, <code class="inline">positioning/three-line.md</code>, <code class="inline">positioning/long-form.md</code>.</li>
+          <li><code class="inline">market/icp.md</code> — ideal customer profile, segments, pains.</li>
+          <li><code class="inline">market/competitive-landscape.md</code> — competitors, differentiators, talk tracks.</li>
+          <li><code class="inline">market/objection-handling.md</code> — top 10 objections + responses.</li>
+        </ul>
+        <p class="muted">This is the file the company will most want to "iterate" on. Treat it like product copy — quarterly review, owner = head of marketing.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge accent">Skill</span> <code class="inline">client-proposal</code> — SOWs, proposals, pricing</summary>
+      <div class="accordion-body">
+        <p>Same shape: SKILL.md with workflow, <code class="inline">templates/</code> for SOW skeleton and pricing table, <code class="inline">reference/pricing-policy.md</code>, examples folder.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge accent">Skill</span> <code class="inline">weekly-update</code> — repeatable team / department reports</summary>
+      <div class="accordion-body">
+        <p>Format-driven; useful as a "first one to ship" — easy to evaluate and gives the team an immediate win.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge blue">Sub-agent</span> <code class="inline">coo-reviewer</code></summary>
+      <div class="accordion-body">
+        <p>Critique sub-agent for memos / board updates. Read-only. Strict output format. (See Building Blocks tab for full prompt.)</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge blue">Sub-agent</span> <code class="inline">brand-checker</code></summary>
+      <div class="accordion-body">
+        <p>Validates a draft (deck, doc, email) against <code class="inline">brand-guidelines/voice/banned.md</code> and tone rules. Returns either "passes" or a list of specific violations with line numbers.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge blue">Sub-agent</span> <code class="inline">numbers-checker</code></summary>
+      <div class="accordion-body">
+        <p>Optional but valuable. Re-derives every numeric claim in a memo from source data (via the <code class="inline">acme-data</code> MCP). Flags anything that doesn't reconcile.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge" style="background:#eaf0fd;color:#1d4ed8">MCP</span> <code class="inline">acme-data</code> — internal metrics & pipeline</summary>
+      <div class="accordion-body">
+        <p>Optional, big payoff. A small HTTP MCP server that exposes opinionated read endpoints over your data warehouse: <code class="inline">get_pipeline_by_stage</code>, <code class="inline">current_burn</code>, <code class="inline">arr_by_segment</code>, <code class="inline">churn_last_quarter</code>. Auth via OAuth so employee access maps to existing permissions.</p>
+        <p class="muted">Build this <em>after</em> the file-based skills are in use. Once it exists, it elevates every skill — exec memos can be auto-numerate, decks can pull live traction stats.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge" style="background:#eaf0fd;color:#1d4ed8">Connector</span> Off-the-shelf: Slack, GDrive, Notion, Salesforce, M365</summary>
+      <div class="accordion-body">
+        <p>Don't build these — use Anthropic's official connectors. Each user authenticates once and gets read access (and, where relevant, write actions).</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="badge yellow">Command</span> <code class="inline">/new-memo</code>, <code class="inline">/new-deck</code>, <code class="inline">/weekly</code></summary>
+      <div class="accordion-body">
+        <p>Slash commands map to the relevant skill and seed a structured prompt. Lower the activation energy for the most common workflows.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ===== HOSTING ===== -->
+  <section class="tab-panel" id="hosting">
+    <h2>Hosting & iteration model</h2>
+    <p class="lede">The whole point: you operate the system, the company gets the upgrades. Here's the exact loop.</p>
+
+    <h3>The repo</h3>
+    <p>One private GitHub repo, owned by you (or a service account you control). Suggested name: <code class="inline">acme-org/claude-foundation</code>. Must be private or internal — public repos are not allowed as Cowork org marketplaces.</p>
+
+<pre><button class="copy" onclick="copyPre(this)">copy</button>acme-org/claude-foundation/
+├── .claude-plugin/
+│   └── marketplace.json            # the marketplace manifest
+├── plugins/
+│   ├── acme-foundation/            # auto-installed for everyone
+│   │   ├── plugin.json
+│   │   ├── .mcp.json
+│   │   ├── skills/
+│   │   ├── agents/
+│   │   └── commands/
+│   └── acme-gtm/                   # opt-in for sales & marketing
+│       └── ...
+└── README.md</pre>
+
+    <h3>The marketplace manifest</h3>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>{
+  "name": "acme-internal",
+  "displayName": "Acme Internal",
+  "owner": "Acme Operations",
+  "plugins": [
+    {
+      "name": "acme-foundation",
+      "path": "plugins/acme-foundation",
+      "defaultInstall": "auto"
+    },
+    {
+      "name": "acme-gtm",
+      "path": "plugins/acme-gtm",
+      "defaultInstall": "optional",
+      "groups": ["sales", "marketing"]
+    }
+  ]
+}</pre>
+
+    <h3>One-time admin setup (~15 min)</h3>
+    <ol class="step-list">
+      <li><strong>Create the repo.</strong> Private GitHub repo, add a deploy key for the org's Claude integration.</li>
+      <li><strong>Connect the marketplace.</strong> The org's Claude owner goes to Organization → Plugins → Add marketplace, supplies the repo URL.</li>
+      <li><strong>Set install policies.</strong> Foundation plugin → auto-install for everyone. GTM plugin → optional for sales/marketing groups.</li>
+      <li><strong>Enable GitHub sync.</strong> Auto-sync on push (or sync manually via a button if you prefer staged rollouts).</li>
+      <li><strong>Onboard MCP server (if any).</strong> Deploy the <code class="inline">acme-data</code> service; admin allowlists the desktop extension or registers the MCP endpoint.</li>
+    </ol>
+
+    <h3>The iteration loop (every day after)</h3>
+    <ol class="step-list">
+      <li><strong>You make a change locally</strong> — edit a SKILL.md, tweak a sub-agent prompt, add an example.</li>
+      <li><strong>Open a PR.</strong> Optional but recommended: have a teammate (or another Claude agent) review the diff.</li>
+      <li><strong>Merge to main.</strong> GitHub Action bumps <code class="inline">version.json</code>.</li>
+      <li><strong>Marketplace syncs.</strong> The org marketplace picks up the new version automatically.</li>
+      <li><strong>Employees get it on next session.</strong> No action needed.</li>
+    </ol>
+
+    <h3>Staged rollouts (if you want them)</h3>
+    <p>Add a <code class="inline">channel</code> field per plugin: <code class="inline">stable</code> vs <code class="inline">beta</code>. Auto-install stable for everyone; opt-in beta for a pilot group (e.g. the exec team). Promote beta → stable after a week of usage. This is the same shape as any internal release process.</p>
+
+    <h3>Quality / evaluation</h3>
+    <p>Skills are prompts; like any prompt they drift in quality. Two things keep them sharp:</p>
+    <ul>
+      <li><strong>An evals folder in the repo</strong> (<code class="inline">evals/exec-memo/</code>) with a handful of "ideal input → expected behavior" pairs. The skill-creator skill has tooling for running these.</li>
+      <li><strong>A monthly review</strong> with the skill owner (e.g. head of marketing owns <code class="inline">company-context</code> and <code class="inline">brand-guidelines</code>; COO owns <code class="inline">exec-memo</code>). Pull recent outputs, identify failure modes, iterate.</li>
+    </ul>
+
+    <div class="callout warn">
+      <strong>Independence caveat</strong>
+      You can fully own the GitHub repo and the iteration cadence. What you can't unilaterally control is admin-level org config (who gets which plugin, whether plugins auto-install). That requires an org owner/admin to approve once. Plan a working agreement with whoever holds that role.
+    </div>
+  </section>
+
+  <!-- ===== ROADMAP ===== -->
+  <section class="tab-panel" id="roadmap">
+    <h2>Implementation roadmap</h2>
+    <p class="lede">Four phases, ~6 weeks end-to-end for the core. Earlier phases produce visible wins; later phases compound.</p>
+
+    <div class="phase">
+      <h4>Phase 0 — Foundations (Week 0, ~3 days)</h4>
+      <ul>
+        <li>Stand up the private GitHub repo + marketplace manifest.</li>
+        <li>Walk the org's Claude admin through subscribing the marketplace + setting auto-install policy.</li>
+        <li>Ship a deliberately tiny first plugin (just <code class="inline">company-context</code>) to validate the pipeline end-to-end.</li>
+        <li>Watch one employee try a Claude conversation that should trigger it. Confirm it fires.</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <h4>Phase 1 — Core skills, file-based only (Weeks 1–2)</h4>
+      <ul>
+        <li>Build <code class="inline">brand-guidelines</code>, <code class="inline">company-context</code>, <code class="inline">exec-memo</code>, <code class="inline">pitch-deck</code>.</li>
+        <li>No MCP yet. No sub-agents yet. Just SKILL.md + reference files + templates + examples.</li>
+        <li>For each skill: gather 3 real-world exemplars from the company before writing the skill. The skill should produce something that looks like those.</li>
+        <li>Ship to a pilot group of 5–10 people. Collect qualitative feedback for a week.</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <h4>Phase 2 — Sub-agents & quality loops (Weeks 3–4)</h4>
+      <ul>
+        <li>Add <code class="inline">coo-reviewer</code> and wire it into <code class="inline">exec-memo</code>.</li>
+        <li>Add <code class="inline">brand-checker</code> and wire into <code class="inline">pitch-deck</code> and <code class="inline">client-proposal</code>.</li>
+        <li>Stand up <code class="inline">evals/</code> folder with 5 cases per skill. Run weekly.</li>
+        <li>Promote to org-wide auto-install.</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <h4>Phase 3 — Live data (Weeks 5–6)</h4>
+      <ul>
+        <li>Connect Anthropic's off-the-shelf connectors first: Slack, GDrive, Notion, Salesforce, M365. Each user authenticates once.</li>
+        <li>Decide whether <code class="inline">acme-data</code> MCP is worth building. Heuristic: yes if multiple skills repeatedly need the same kinds of numbers.</li>
+        <li>If yes: build the MCP server (start with 3 endpoints), deploy, register, wire into <code class="inline">exec-memo</code> and <code class="inline">weekly-update</code>.</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <h4>Phase 4 — Compound (ongoing)</h4>
+      <ul>
+        <li>Add skills as the company asks. Each new skill takes ~half a day if you have a good template.</li>
+        <li>Monthly skill-owner review. Quarterly positioning refresh in <code class="inline">company-context</code>.</li>
+        <li>Watch for the moment you can retire a Notion page or a "how do we do X" Slack thread — that's the signal a skill is working.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== LIMITS ===== -->
+  <section class="tab-panel" id="limits">
+    <h2>Limitations & honest caveats</h2>
+    <p class="lede">Things this architecture doesn't fully solve — worth knowing upfront.</p>
+
+    <div class="card">
+      <h3>1. Invocation is probabilistic, not deterministic</h3>
+      <p>Claude decides which skills to load based on the user's message and the skill descriptions. Even with a great description, occasionally a skill won't fire when you'd expect. Mitigations: write descriptions that read like trigger lists, add slash commands for the highest-value workflows, and instruct users that they can always say "use the exec-memo skill" explicitly.</p>
+    </div>
+
+    <div class="card">
+      <h3>2. You can't strictly gate output behind a sub-agent</h3>
+      <p>A skill can <em>tell Claude</em> to always invoke <code class="inline">coo-reviewer</code> before returning. In practice this works the great majority of the time, but Claude is the executor and may skip it. If you need hard gating, the move is to put the gate in an MCP server (where you control the code) or to use Claude Code hooks for engineering workflows.</p>
+    </div>
+
+    <div class="card">
+      <h3>3. Skill contents are not encrypted</h3>
+      <p>Anyone who can read the marketplace repo can read the skills. For most company-wide content (brand, format, positioning) this is fine. For sensitive prompts or proprietary logic, hide it behind an MCP server you host.</p>
+    </div>
+
+    <div class="card">
+      <h3>4. Org marketplaces must be on github.com</h3>
+      <p>If the company standardizes on GitLab or self-hosted GHES, that's incompatible with org Cowork marketplaces today. You'd need to either (a) keep this one repo on github.com as an exception, or (b) use Claude Code-style marketplaces for developers and fall back to manual skill provisioning in the org console for everyone else.</p>
+    </div>
+
+    <div class="card">
+      <h3>5. There's no "auto-install" without an admin</h3>
+      <p>The very first marketplace connection requires an org owner / admin to approve. You can't be fully self-serve as an external operator. After that initial approval, updates flow freely.</p>
+    </div>
+
+    <div class="card">
+      <h3>6. Sub-agents and skills are still maturing</h3>
+      <p>Both primitives have shipped recently and are evolving. Expect feature changes (new fields, better discovery, better analytics) over 2026. Design for portability: keep skill content as plain markdown + files, avoid relying on obscure features.</p>
+    </div>
+
+    <div class="card">
+      <h3>7. Evaluation is mostly manual today</h3>
+      <p>There's tooling for running skill evals, but "how good is our exec-memo skill this quarter?" is still substantially a human judgment call. Build a habit of having the skill owner review 5 real outputs per month.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    Architecture brief generated May 12, 2026 · Verify capability details against the current Claude Help Center, Claude Docs, and your specific plan tier before committing to a build. Items marked VERIFY in the capability matrix are the most likely to have drifted.
+  </footer>
+</div>
+
+<script>
+  // Tabs
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }));
+
+  // Sub-tabs (architecture section)
+  const subtabs = document.querySelectorAll('.subtab-btn');
+  subtabs.forEach(t => t.addEventListener('click', () => {
+    const target = t.dataset.subtab;
+    // find sibling subtabs within same nav and toggle them
+    const nav = t.closest('nav.subtabs');
+    nav.querySelectorAll('.subtab-btn').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    // toggle panels within the same parent section
+    const section = nav.closest('.tab-panel');
+    section.querySelectorAll('.subtab-panel').forEach(p => {
+      p.classList.toggle('active', p.dataset.subtab === target);
+    });
+    // scroll subtab nav into view (gentle)
+    nav.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }));
+
+  // Copy buttons
+  function copyPre(btn) {
+    const pre = btn.parentElement;
+    const text = pre.innerText.replace(/^copy\n?/, '');
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = 'copied';
+      setTimeout(() => btn.textContent = orig, 1200);
+    });
+  }
+  window.copyPre = copyPre;
+
+</script>
+</body>
+</html>
