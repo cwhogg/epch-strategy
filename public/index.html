@@ -335,12 +335,12 @@
 
   <nav class="tabs" role="tablist">
     <button class="tab-btn active" data-tab="overview">Overview</button>
-    <button class="tab-btn" data-tab="possible">What's possible today</button>
     <button class="tab-btn" data-tab="architecture">Recommended architecture</button>
     <button class="tab-btn" data-tab="blocks">Building blocks</button>
     <button class="tab-btn" data-tab="deliverables">Specific deliverables</button>
     <button class="tab-btn" data-tab="hosting">Hosting & iteration</button>
     <button class="tab-btn" data-tab="roadmap">Roadmap</button>
+    <button class="tab-btn" data-tab="possible">What's possible today</button>
     <button class="tab-btn" data-tab="limits">Limitations</button>
   </nav>
 
@@ -351,29 +351,29 @@
 
     <div class="row-3">
       <div class="card tight">
-        <div class="badge accent">Primitive 1</div>
+        <div class="badge accent">Workflow</div>
         <h3 style="margin-top:6px">Skills</h3>
         <p class="muted">Procedural knowledge — how to do a thing. A folder with a <code class="inline">SKILL.md</code> + scripts + templates + brand assets. Auto-activates when Claude sees a relevant task.</p>
       </div>
       <div class="card tight">
-        <div class="badge accent">Primitive 2</div>
+        <div class="badge accent">Distribution</div>
         <h3 style="margin-top:6px">Plugins</h3>
         <p class="muted">A bundle of skills + connectors + sub-agents + slash commands shipped together. Distributed through a private GitHub marketplace your org subscribes to.</p>
       </div>
       <div class="card tight">
-        <div class="badge accent">Primitive 3</div>
+        <div class="badge accent">Live data</div>
         <h3 style="margin-top:6px">MCP servers / Connectors</h3>
         <p class="muted">Live data and actions — your CRM, data warehouse, Notion, internal APIs. Use when the data changes and you need fresh answers.</p>
       </div>
     </div>
     <div class="row">
       <div class="card tight">
-        <div class="badge accent">Primitive 4</div>
+        <div class="badge accent">Context</div>
         <h3 style="margin-top:6px">Projects</h3>
         <p class="muted">Static, always-loaded context for an ongoing piece of work (a product launch, a client engagement). Different from skills — projects are scoped, skills are global.</p>
       </div>
       <div class="card tight">
-        <div class="badge blue">Glue</div>
+        <div class="badge blue">Specialist</div>
         <h3 style="margin-top:6px">Sub-agents</h3>
         <p class="muted">Specialized review/critic personas (e.g. <code class="inline">coo-reviewer</code>, <code class="inline">brand-checker</code>) that a skill can invoke as a separate read-only pass.</p>
       </div>
@@ -612,9 +612,9 @@
   <!-- ===== BUILDING BLOCKS ===== -->
   <section class="tab-panel" id="blocks">
     <h2>The building blocks, in detail</h2>
-    <p class="lede">First, the <strong>primitives</strong> — what each one is, when to reach for it, and what files it consists of. Then, the <strong>patterns</strong> — recurring ways of combining the primitives that you'll use across multiple plugins.</p>
+    <p class="lede">First, the <strong>components</strong> — what each one is, when to reach for it, and what files it consists of. Then, the <strong>patterns</strong> — recurring ways of combining the components that you'll use across multiple plugins.</p>
 
-    <h3 style="margin:20px 0 10px">Primitives</h3>
+    <h3 style="margin:20px 0 10px">Components</h3>
 
     <details class="accordion" open>
       <summary>Skill — the unit of "how we do this"</summary>
