@@ -748,7 +748,7 @@
 
     <div class="subtab-panel active" data-subtab="arch-overview">
     <div class="diagram">
-      <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
         <defs>
           <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
             <path d="M0,0 L0,6 L9,3 z" fill="#8a8a8a"/>
@@ -761,73 +761,84 @@
         <text x="130" y="86" text-anchor="middle" font-size="11.5" fill="#7a2807">Edits skills + agents, pushes</text>
 
         <!-- GitHub repo -->
-        <rect x="40" y="160" width="280" height="160" rx="10" fill="#fff" stroke="#c9c2b3" stroke-width="1.5"/>
+        <rect x="40" y="160" width="280" height="200" rx="10" fill="#fff" stroke="#c9c2b3" stroke-width="1.5"/>
         <text x="180" y="184" text-anchor="middle" font-size="13" font-weight="700">Private GitHub repo</text>
-        <text x="180" y="200" text-anchor="middle" font-size="11" fill="#8a8a8a">acme-org/claude-foundation</text>
+        <text x="180" y="200" text-anchor="middle" font-size="11" fill="#8a8a8a">acme-org/claude-plugins</text>
 
         <rect x="60" y="214" width="240" height="22" rx="4" fill="#fef7e0" stroke="#a16207" stroke-width="1"/>
         <text x="180" y="229" text-anchor="middle" font-size="11" fill="#a16207">.claude-plugin/marketplace.json</text>
 
-        <rect x="60" y="242" width="115" height="22" rx="4" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1"/>
-        <text x="117" y="257" text-anchor="middle" font-size="11" fill="#1d4ed8">plugins/foundation</text>
+        <rect x="60" y="242" width="240" height="22" rx="4" fill="#fff1ea" stroke="#c2410c" stroke-width="1"/>
+        <text x="180" y="257" text-anchor="middle" font-size="11" fill="#7a2807">plugins/acme-foundation  (everyone)</text>
 
-        <rect x="185" y="242" width="115" height="22" rx="4" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1"/>
-        <text x="242" y="257" text-anchor="middle" font-size="11" fill="#1d4ed8">plugins/gtm</text>
+        <rect x="60" y="270" width="78" height="22" rx="4" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1"/>
+        <text x="99" y="285" text-anchor="middle" font-size="10.5" fill="#1d4ed8">acme-exec</text>
 
-        <rect x="60" y="270" width="240" height="22" rx="4" fill="#e8f5ec" stroke="#15803d" stroke-width="1"/>
-        <text x="180" y="285" text-anchor="middle" font-size="11" fill="#15803d">agents/  skills/  commands/  .mcp.json</text>
+        <rect x="141" y="270" width="78" height="22" rx="4" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1"/>
+        <text x="180" y="285" text-anchor="middle" font-size="10.5" fill="#1d4ed8">acme-bd</text>
+
+        <rect x="222" y="270" width="78" height="22" rx="4" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1"/>
+        <text x="261" y="285" text-anchor="middle" font-size="10.5" fill="#1d4ed8">acme-engineering</text>
+
+        <rect x="60" y="298" width="240" height="22" rx="4" fill="#e8f5ec" stroke="#15803d" stroke-width="1"/>
+        <text x="180" y="313" text-anchor="middle" font-size="10.5" fill="#15803d">each: skills/  agents/  commands/  .mcp.json</text>
+
+        <text x="180" y="338" text-anchor="middle" font-size="10" fill="#8a8a8a" font-style="italic">+ acme-people, acme-marketing as you grow</text>
 
         <!-- Arrow operator → repo -->
         <line x1="130" y1="106" x2="130" y2="158" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
         <text x="146" y="138" font-size="10" fill="#8a8a8a">git push</text>
 
         <!-- Marketplace sync -->
-        <rect x="400" y="160" width="220" height="120" rx="10" fill="#fff1ea" stroke="#c2410c" stroke-width="1.5"/>
-        <text x="510" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#7a2807">Org plugin marketplace</text>
-        <text x="510" y="202" text-anchor="middle" font-size="11" fill="#7a2807">"Acme Internal"</text>
-        <text x="510" y="226" text-anchor="middle" font-size="11" fill="#7a2807">Subscribed once by admin</text>
-        <text x="510" y="244" text-anchor="middle" font-size="11" fill="#7a2807">Auto-syncs on push</text>
-        <text x="510" y="262" text-anchor="middle" font-size="11" fill="#7a2807">Group-level install policy</text>
+        <rect x="400" y="180" width="220" height="120" rx="10" fill="#fff1ea" stroke="#c2410c" stroke-width="1.5"/>
+        <text x="510" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#7a2807">Org plugin marketplace</text>
+        <text x="510" y="222" text-anchor="middle" font-size="11" fill="#7a2807">"Acme Internal"</text>
+        <text x="510" y="246" text-anchor="middle" font-size="11" fill="#7a2807">Subscribed once by admin</text>
+        <text x="510" y="264" text-anchor="middle" font-size="11" fill="#7a2807">Auto-syncs on push</text>
+        <text x="510" y="282" text-anchor="middle" font-size="11" fill="#7a2807">Group-level install policy</text>
 
-        <line x1="320" y1="240" x2="396" y2="220" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
-        <text x="335" y="218" font-size="10" fill="#8a8a8a">sync</text>
+        <line x1="320" y1="240" x2="396" y2="240" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <text x="345" y="234" font-size="10" fill="#8a8a8a">sync</text>
 
-        <!-- Employees -->
-        <rect x="700" y="40" width="240" height="64" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
-        <text x="820" y="64" text-anchor="middle" font-size="13" font-weight="600" fill="#15803d">Employee in Claude</text>
-        <text x="820" y="82" text-anchor="middle" font-size="11" fill="#15803d">Writes "draft a pitch deck for X"</text>
-        <text x="820" y="96" text-anchor="middle" font-size="11" fill="#15803d">Claude silently loads pitch-deck skill</text>
+        <!-- Employees: 3 specific roles -->
+        <rect x="700" y="40" width="240" height="76" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
+        <text x="820" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">Account Executive</text>
+        <text x="820" y="80" text-anchor="middle" font-size="10.5" fill="#15803d">"Draft a Bigcorp pitch deck"</text>
+        <text x="820" y="96" text-anchor="middle" font-size="10.5" fill="#15803d">→ pitch-deck skill loads</text>
+        <text x="820" y="110" text-anchor="middle" font-size="10" fill="#15803d" font-style="italic">from acme-bd plugin</text>
 
-        <rect x="700" y="160" width="240" height="64" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
-        <text x="820" y="184" text-anchor="middle" font-size="13" font-weight="600" fill="#15803d">Employee in Claude</text>
-        <text x="820" y="202" text-anchor="middle" font-size="11" fill="#15803d">Writes exec memo → coo-reviewer</text>
-        <text x="820" y="216" text-anchor="middle" font-size="11" fill="#15803d">auto-critiques before send</text>
+        <rect x="700" y="180" width="240" height="76" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
+        <text x="820" y="202" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">CEO</text>
+        <text x="820" y="220" text-anchor="middle" font-size="10.5" fill="#15803d">"Draft Q1 board update"</text>
+        <text x="820" y="236" text-anchor="middle" font-size="10.5" fill="#15803d">→ exec-memo + coo-reviewer</text>
+        <text x="820" y="250" text-anchor="middle" font-size="10" fill="#15803d" font-style="italic">from acme-exec plugin</text>
 
-        <rect x="700" y="280" width="240" height="64" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
-        <text x="820" y="304" text-anchor="middle" font-size="13" font-weight="600" fill="#15803d">Employee in Claude</text>
-        <text x="820" y="322" text-anchor="middle" font-size="11" fill="#15803d">"What's our Q2 pipeline by stage?"</text>
-        <text x="820" y="336" text-anchor="middle" font-size="11" fill="#15803d">acme-data MCP server answers</text>
+        <rect x="700" y="320" width="240" height="76" rx="8" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
+        <text x="820" y="342" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">VP Sales</text>
+        <text x="820" y="360" text-anchor="middle" font-size="10.5" fill="#15803d">"What's our Q2 pipeline by stage?"</text>
+        <text x="820" y="376" text-anchor="middle" font-size="10.5" fill="#15803d">→ acme-data MCP answers</text>
+        <text x="820" y="390" text-anchor="middle" font-size="10" fill="#15803d" font-style="italic">live data, not files</text>
 
-        <line x1="620" y1="200" x2="698" y2="72" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
-        <line x1="620" y1="220" x2="698" y2="190" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
-        <line x1="620" y1="240" x2="698" y2="310" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="620" y1="220" x2="698" y2="80" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="620" y1="240" x2="698" y2="218" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="620" y1="260" x2="698" y2="358" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
 
         <!-- MCP server -->
-        <rect x="400" y="320" width="220" height="100" rx="10" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1.5"/>
-        <text x="510" y="344" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">acme-data MCP server</text>
-        <text x="510" y="362" text-anchor="middle" font-size="11" fill="#1d4ed8">Hosted on your infra</text>
-        <text x="510" y="378" text-anchor="middle" font-size="11" fill="#1d4ed8">Reads from Snowflake / CRM</text>
-        <text x="510" y="394" text-anchor="middle" font-size="11" fill="#1d4ed8">Returns rows, not files</text>
-        <text x="510" y="410" text-anchor="middle" font-size="11" fill="#1d4ed8">Updated independently</text>
+        <rect x="400" y="380" width="220" height="100" rx="10" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1.5"/>
+        <text x="510" y="404" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">acme-data MCP server</text>
+        <text x="510" y="422" text-anchor="middle" font-size="11" fill="#1d4ed8">Hosted on your infra</text>
+        <text x="510" y="438" text-anchor="middle" font-size="11" fill="#1d4ed8">Reads from Snowflake / CRM</text>
+        <text x="510" y="454" text-anchor="middle" font-size="11" fill="#1d4ed8">Returns rows, not files</text>
+        <text x="510" y="470" text-anchor="middle" font-size="11" fill="#1d4ed8">Updated independently</text>
 
-        <line x1="320" y1="295" x2="396" y2="350" stroke="#8a8a8a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
-        <text x="320" y="345" font-size="10" fill="#8a8a8a">declares in .mcp.json</text>
+        <line x1="320" y1="335" x2="396" y2="395" stroke="#8a8a8a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="330" y="378" font-size="10" fill="#8a8a8a">declares in .mcp.json</text>
 
-        <line x1="620" y1="380" x2="698" y2="328" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="620" y1="410" x2="698" y2="370" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
       </svg>
       <div class="legend">
-        <span class="l-skill">Skills / plugins (files)</span>
-        <span class="l-mcp">MCP servers (live data)</span>
+        <span class="l-skill">Operator / foundation plugin / marketplace</span>
+        <span class="l-mcp">Team plugins &amp; MCP servers (live data)</span>
         <span class="l-agent">Where employees experience it</span>
         <span class="l-proj">Marketplace manifest</span>
       </div>
@@ -872,10 +883,10 @@
           <td><code class="inline">company-principles</code>, <code class="inline">brand-guidelines</code>, <code class="inline">company-context</code>, <code class="inline">exec-memo</code> (light), <code class="inline">weekly-update</code></td>
         </tr>
         <tr>
-          <td><code class="inline">acme-gtm</code></td>
-          <td>Sales + marketing</td>
+          <td><code class="inline">acme-bd</code></td>
+          <td>Sales + business development</td>
           <td><span class="badge green">Auto</span> (group)</td>
-          <td><code class="inline">gtm-principles</code>, <code class="inline">pitch-deck</code>, <code class="inline">client-proposal</code>, <code class="inline">objection-handling</code>, <code class="inline">discovery-call-notes</code>, <code class="inline">acme-data</code> MCP</td>
+          <td><code class="inline">bd-principles</code>, <code class="inline">pitch-deck</code>, <code class="inline">client-proposal</code>, <code class="inline">objection-handling</code>, <code class="inline">discovery-call-notes</code>, <code class="inline">acme-data</code> MCP</td>
         </tr>
         <tr>
           <td><code class="inline">acme-engineering</code></td>
@@ -955,27 +966,28 @@ When asked to produce an exec memo, follow these steps:
     <details class="accordion">
       <summary>Plugin — the unit of distribution</summary>
       <div class="accordion-body">
-        <p>A folder that bundles skills, sub-agents, slash commands, and MCP server declarations together. Distributed through a marketplace. One plugin = one logical product (e.g. "Acme foundation" for everyone, "Acme GTM" for sales & marketing only).</p>
-        <p><strong>One plugin or many?</strong> Multiple, split by audience not by topic. <code class="inline">acme-foundation</code> auto-installs for everyone; <code class="inline">acme-gtm</code>, <code class="inline">acme-engineering</code>, <code class="inline">acme-exec</code>, <code class="inline">acme-people</code> auto-install per group. All live in the same repo and same marketplace — plugin boundaries are visibility / install scopes, not separate operational footprints. Rule of thumb: <strong>useful to &gt;70% of the company → foundation, otherwise → a role plugin</strong>. See the Architecture tab for the full breakdown.</p>
-        <h4>Plugin folder layout</h4>
+        <p>A folder that bundles skills, sub-agents, slash commands, and MCP server declarations together. Distributed through a marketplace. One plugin = one logical product (e.g. "Acme Foundation" for everyone, "Acme BD" for sales &amp; business development only).</p>
+        <p><strong>One plugin or many?</strong> Multiple, split by audience not by topic. <code class="inline">acme-foundation</code> auto-installs for everyone; <code class="inline">acme-exec</code>, <code class="inline">acme-bd</code>, <code class="inline">acme-engineering</code>, <code class="inline">acme-people</code> auto-install per group. All live in the same repo and same marketplace — plugin boundaries are visibility / install scopes, not separate operational footprints. Rule of thumb: <strong>useful to &gt;70% of the company → foundation, otherwise → a role plugin</strong>. See the Architecture tab for the full breakdown.</p>
+        <h4>Plugin folder layout (foundation example)</h4>
 <pre><button class="copy" onclick="copyPre(this)">copy</button>plugins/acme-foundation/
 ├── plugin.json              # metadata (name, version, description)
 ├── version.json
 ├── .mcp.json                # MCP servers this plugin declares
 ├── skills/
-│   ├── pitch-deck/
+│   ├── company-principles/
 │   │   ├── SKILL.md
-│   │   ├── templates/...
-│   │   └── examples/...
-│   ├── exec-memo/
+│   │   ├── principles.md
+│   │   └── dos-and-donts.md
 │   ├── brand-guidelines/
-│   └── company-context/
+│   ├── company-context/
+│   ├── weekly-update/
+│   └── meeting-notes/
 ├── agents/
-│   ├── coo-reviewer.md
-│   └── brand-checker.md
+│   ├── brand-checker.md
+│   └── voice-checker.md
 └── commands/
-    ├── new-memo.md
-    └── new-deck.md</pre>
+    ├── new-weekly.md
+    └── new-meeting-notes.md</pre>
         <h4>plugin.json (sketch)</h4>
 <pre><button class="copy" onclick="copyPre(this)">copy</button>{
   "name": "acme-foundation",
@@ -1147,7 +1159,7 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       <summary><span class="badge accent">Skill pattern</span> <code class="inline">*-principles</code> — one per plugin (the CLAUDE.md analog)</summary>
       <div class="accordion-body">
         <div class="kv">
-          <div class="k">Instances</div><div><code class="inline">company-principles</code> (foundation), <code class="inline">engineering-principles</code>, <code class="inline">gtm-principles</code>, <code class="inline">exec-principles</code>, <code class="inline">people-principles</code></div>
+          <div class="k">Instances</div><div><code class="inline">company-principles</code> (foundation), <code class="inline">exec-principles</code>, <code class="inline">bd-principles</code>, <code class="inline">engineering-principles</code>, <code class="inline">people-principles</code></div>
           <div class="k">Triggers</div><div>Broad — fires on essentially any work in that team's domain. Description is intentionally wide.</div>
           <div class="k">Role</div><div>Background context skill. Loads philosophy, do's and don'ts, decision frameworks. Other skills in the same plugin reference its files directly.</div>
         </div>
@@ -1170,8 +1182,8 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       <div class="accordion-body">
         <div class="kv">
           <div class="k">Triggers</div><div>"draft a pitch deck", "make slides for", "create a deck", any .pptx involvement</div>
-          <div class="k">Lives in</div><div><code class="inline">plugins/acme-foundation/skills/pitch-deck/</code></div>
-          <div class="k">References</div><div><code class="inline">../brand-guidelines/</code> for colors, fonts, slide masters</div>
+          <div class="k">Lives in</div><div><code class="inline">plugins/acme-bd/skills/pitch-deck/</code></div>
+          <div class="k">References</div><div><code class="inline">acme-foundation</code>'s <code class="inline">brand-guidelines</code> skill for colors, fonts, slide masters</div>
         </div>
         <h4>Files</h4>
         <ul>
@@ -1304,9 +1316,9 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
     <p class="lede">The whole point: you operate the system, the company gets the upgrades. Here's the exact loop.</p>
 
     <h3>The repo</h3>
-    <p>One private GitHub repo, owned by you (or a service account you control). Suggested name: <code class="inline">acme-org/claude-foundation</code>. Must be private or internal — public repos are not allowed as Cowork org marketplaces.</p>
+    <p>One private GitHub repo, owned by you (or a service account you control). Suggested name: <code class="inline">acme-org/claude-plugins</code>. Must be private or internal — public repos are not allowed as Cowork org marketplaces.</p>
 
-<pre><button class="copy" onclick="copyPre(this)">copy</button>acme-org/claude-foundation/
+<pre><button class="copy" onclick="copyPre(this)">copy</button>acme-org/claude-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json            # the marketplace manifest
 ├── plugins/
@@ -1316,8 +1328,9 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
 │   │   ├── skills/
 │   │   ├── agents/
 │   │   └── commands/
-│   └── acme-gtm/                   # opt-in for sales & marketing
-│       └── ...
+│   ├── acme-exec/                  # auto for leadership group
+│   ├── acme-bd/                    # auto for sales / business development
+│   └── acme-engineering/           # auto for engineering
 └── README.md</pre>
 
     <h3>The marketplace manifest</h3>
@@ -1332,10 +1345,10 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       "defaultInstall": "auto"
     },
     {
-      "name": "acme-gtm",
-      "path": "plugins/acme-gtm",
-      "defaultInstall": "optional",
-      "groups": ["sales", "marketing"]
+      "name": "acme-bd",
+      "path": "plugins/acme-bd",
+      "defaultInstall": "auto",
+      "groups": ["sales", "business-development"]
     }
   ]
 }</pre>
