@@ -469,6 +469,7 @@
     <button class="tab-btn" data-tab="roadmap">Roadmap</button>
     <button class="tab-btn" data-tab="possible">What's possible today</button>
     <button class="tab-btn" data-tab="limits">Limitations</button>
+    <button class="tab-btn" data-tab="kb">Knowledge base</button>
   </nav>
 
   <!-- ===== OVERVIEW ===== -->
@@ -778,7 +779,7 @@
         <text x="180" y="285" text-anchor="middle" font-size="10.5" fill="#1d4ed8">acme-bd</text>
 
         <rect x="222" y="270" width="78" height="22" rx="4" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="1"/>
-        <text x="261" y="285" text-anchor="middle" font-size="10.5" fill="#1d4ed8">acme-engineering</text>
+        <text x="261" y="285" text-anchor="middle" font-size="10.5" fill="#1d4ed8">acme-eng</text>
 
         <rect x="60" y="298" width="240" height="22" rx="4" fill="#e8f5ec" stroke="#15803d" stroke-width="1"/>
         <text x="180" y="313" text-anchor="middle" font-size="10.5" fill="#15803d">each: skills/  agents/  commands/  .mcp.json</text>
@@ -1480,6 +1481,330 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       <h3>7. Evaluation is mostly manual today</h3>
       <p>There's tooling for running skill evals, but "how good is our exec-memo skill this quarter?" is still substantially a human judgment call. Build a habit of having the skill owner review 5 real outputs per month.</p>
     </div>
+  </section>
+
+  <!-- ===== KNOWLEDGE BASE ===== -->
+  <section class="tab-panel" id="kb">
+    <h2>Knowledge base <span class="badge yellow" style="vertical-align:middle;font-size:11px;margin-left:8px">Phase 2 · Optional</span></h2>
+    <p class="lede">A centralized institutional-memory layer Claude can search across thousands of company documents. Sits alongside skills (curated procedure), MCP data servers (live numbers), and connectors (per-user live documents). <strong>This is Phase 2 work</strong> — build it after 4–6 weeks of operating skills + off-the-shelf connectors, once you know which questions Claude can't currently answer well.</p>
+
+    <nav class="subtabs" role="tablist">
+      <button class="subtab-btn active" data-subtab="kb-overview">Overview &amp; where it fits</button>
+      <button class="subtab-btn" data-subtab="kb-contents">What's in it</button>
+      <button class="subtab-btn" data-subtab="kb-build">How to build it</button>
+      <button class="subtab-btn" data-subtab="kb-use">How skills use it &amp; examples</button>
+    </nav>
+
+    <!-- ========== KB OVERVIEW ========== -->
+    <div class="subtab-panel active" data-subtab="kb-overview">
+
+    <div class="callout warn" style="margin-top:0">
+      <strong>Sequencing reminder</strong>
+      Don't build this on day one. Ship foundation + role plugins first, connect Notion / GDrive / M365 via the off-the-shelf connectors, watch where Claude falls short. The KB earns its place when you can name 5+ specific questions a week that connectors can't answer well because the right document is buried somewhere across systems.
+    </div>
+
+    <h3>Why a separate knowledge tier</h3>
+    <p>Skills carry <em>procedural knowledge</em> and ~20–50 curated reference docs that Claude reads fully every time it triggers. A knowledge base carries <em>institutional memory</em> — thousands of documents that Claude searches rather than reads. Different shapes, different jobs. The skill teaches Claude <em>how</em> to write a board memo; the KB lets Claude check <em>whether the company already concluded anything about this two quarters ago</em>.</p>
+
+    <h3>The three-tier information access model</h3>
+    <p>Think of company knowledge as three nested tiers. Each has a different volume, refresh cadence, and access mechanism.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 980 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <defs>
+          <marker id="kb-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#8a8a8a"/>
+          </marker>
+        </defs>
+
+        <!-- Tier 1: Skills -->
+        <rect x="220" y="30" width="540" height="80" rx="10" fill="#fff1ea" stroke="#c2410c" stroke-width="1.5"/>
+        <text x="240" y="56" font-size="13" font-weight="700" fill="#7a2807">Tier 1 — Skills (curated playbook)</text>
+        <text x="240" y="78" font-size="11" fill="#7a2807">~20–50 documents per plugin. Read fully when triggered.</text>
+        <text x="240" y="96" font-size="11" fill="#7a2807">Brand book, voice rules, principles, formats, top 3 examples, decision frameworks.</text>
+        <text x="730" y="68" text-anchor="end" font-size="10.5" fill="#7a2807" font-style="italic">Small · Curated · Versioned</text>
+        <text x="730" y="84" text-anchor="end" font-size="10.5" fill="#7a2807" font-style="italic">Lives in plugin repo</text>
+
+        <!-- Tier 2: KB MCP -->
+        <rect x="120" y="140" width="740" height="100" rx="10" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="140" y="166" font-size="14" font-weight="700" fill="#1d4ed8">Tier 2 — Knowledge base MCP (institutional memory)</text>
+        <text x="140" y="188" font-size="11.5" fill="#1d4ed8">Thousands to tens of thousands of documents. Searched semantically, not read.</text>
+        <text x="140" y="206" font-size="11.5" fill="#1d4ed8">Past memos, customer calls, postmortems, design docs, proposals, internal wiki, prior decks.</text>
+        <text x="140" y="224" font-size="11.5" fill="#1d4ed8">Hosted by you. Consistent results across users. Permissions enforced server-side.</text>
+        <text x="840" y="180" text-anchor="end" font-size="10.5" fill="#1d4ed8" font-style="italic">Large · Indexed</text>
+        <text x="840" y="196" text-anchor="end" font-size="10.5" fill="#1d4ed8" font-style="italic">Custom MCP you host</text>
+
+        <!-- Tier 3: Connectors -->
+        <rect x="40" y="270" width="900" height="80" rx="10" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
+        <text x="60" y="296" font-size="13" font-weight="700" fill="#15803d">Tier 3 — Native connectors (live working surface)</text>
+        <text x="60" y="318" font-size="11" fill="#15803d">The current Notion pages, GDrive docs, Slack threads each employee is actively reading and writing today.</text>
+        <text x="60" y="336" font-size="11" fill="#15803d">Per-user authentication. Per-user permissions. Real-time. Already supported by Anthropic's connectors.</text>
+        <text x="920" y="308" text-anchor="end" font-size="10.5" fill="#15803d" font-style="italic">Broad · Live · Per-user</text>
+        <text x="920" y="324" text-anchor="end" font-size="10.5" fill="#15803d" font-style="italic">Off-the-shelf — no build</text>
+
+        <!-- Volume scale -->
+        <line x1="20" y1="30" x2="20" y2="350" stroke="#8a8a8a" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="14" y="62" text-anchor="end" font-size="9" fill="#8a8a8a" transform="rotate(-90 14 62)">50 docs</text>
+        <text x="14" y="190" text-anchor="end" font-size="9" fill="#8a8a8a" transform="rotate(-90 14 190)">10,000+</text>
+        <text x="14" y="310" text-anchor="end" font-size="9" fill="#8a8a8a" transform="rotate(-90 14 310)">unbounded</text>
+      </svg>
+      <div class="legend">
+        <span class="l-skill">Tier 1: Skills (files in plugins)</span>
+        <span class="l-mcp">Tier 2: Knowledge base MCP</span>
+        <span class="l-agent">Tier 3: Live connectors</span>
+      </div>
+    </div>
+
+    <h3>Is the KB duplicative with the rest of the architecture?</h3>
+    <p><strong>Additive, not duplicative.</strong> Each tier solves a different problem:</p>
+    <ul>
+      <li><strong>Skill</strong> = "always relevant, opinionated, fits on a few pages." Brand voice, decision frameworks, top-3 examples.</li>
+      <li><strong>KB</strong> = "sometimes relevant, too many to curate, needs ranking." Last 200 customer calls, last 50 postmortems, every memo from the past three years.</li>
+      <li><strong>Data MCP</strong> = "quantitative, changes fast, lives in a database." Pipeline, burn, ARR — not really "knowledge."</li>
+      <li><strong>Project</strong> = "currently being worked on, small group, fixed scope." Q2 board prep, the Bigcorp deal.</li>
+    </ul>
+    <p>Using the wrong tier is what makes Claude feel either dumb (no relevant context) or annoying (drowning in irrelevant context). The KB fills a specific gap that no other tier addresses: making the long tail of company writing accessible without having to pre-curate it.</p>
+
+    </div><!-- /kb-overview -->
+
+    <!-- ========== KB CONTENTS ========== -->
+    <div class="subtab-panel" data-subtab="kb-contents">
+
+    <h3 style="margin-top:0">What goes in the KB</h3>
+    <p>The instinct to "upload every written doc" is mostly right — but with judgment about which surfaces are worth the indexing cost, and a few categories that should stay out for privacy or noise reasons.</p>
+
+    <h4>Recommended sources</h4>
+    <table>
+      <thead><tr><th style="width:25%">Source</th><th style="width:15%">Include?</th><th>Why / What from it</th></tr></thead>
+      <tbody>
+        <tr><td>Notion / internal wiki</td><td><span class="badge green">Yes</span></td><td>Primary working surface for most companies. Includes principles, playbooks, retro notes, OKRs, RFCs.</td></tr>
+        <tr><td>Google Drive / M365 docs</td><td><span class="badge green">Yes</span></td><td>Long-form work — memos, proposals, post-mortems, strategic docs. Filter to shared spaces, not personal drives.</td></tr>
+        <tr><td>Customer call transcripts (Gong, Fathom)</td><td><span class="badge green">Yes</span></td><td>Voice of customer. Highest-value source for sales / BD plugins. Anonymize PII before indexing if needed.</td></tr>
+        <tr><td>Slack — selected channels</td><td><span class="badge green">Yes (curated)</span></td><td>Customer-facing channels, decision channels, eng-architecture. <em>Not</em> #random, #social, DMs.</td></tr>
+        <tr><td>PDF archive (decks, proposals, contracts)</td><td><span class="badge green">Yes</span></td><td>Legacy material that's not in a connector. OCR if needed.</td></tr>
+        <tr><td>GitHub READMEs / docs</td><td><span class="badge green">Yes (eng-scoped)</span></td><td>Codebase context for engineering plugin. Skip the actual code unless you have a dedicated code-aware MCP.</td></tr>
+        <tr><td>Confluence / SharePoint (if used)</td><td><span class="badge green">Yes</span></td><td>Same shape as Notion — institutional documentation.</td></tr>
+        <tr><td>Public blog / external content</td><td><span class="badge green">Yes</span></td><td>Useful for "what have we said publicly" lookups.</td></tr>
+        <tr><td>Email</td><td><span class="badge red">No</span></td><td>Too noisy, mostly private, privacy minefield. Exception: a deliberately curated "external comms" archive if your company maintains one.</td></tr>
+        <tr><td>HR records, comp data, performance reviews</td><td><span class="badge red">No</span></td><td>Sensitive. Keep separate, behind tighter access controls, in a different MCP if at all.</td></tr>
+        <tr><td>Source code</td><td><span class="badge yellow">Separately</span></td><td>Belongs in a dedicated code-search MCP (acme-codebase) — different tooling, different chunking, different ranking.</td></tr>
+        <tr><td>Personal Drive / inbox content</td><td><span class="badge red">No</span></td><td>Individual privacy. Let connectors handle per-user access for live work instead.</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Mental model: signal density per source</h4>
+    <p>The good question to ask of any candidate source: <em>"if I read 5 random documents from this source, would 3+ of them tell me something useful about how the company operates?"</em> If yes, index it. If less than 1 in 5, skip — you'll dilute search results and pay storage/compute for noise.</p>
+
+    <h4>What to exclude even from good sources</h4>
+    <ul>
+      <li>Documents older than a chosen cutoff (e.g. &gt; 3 years) unless explicitly archival.</li>
+      <li>Drafts / scratch pages explicitly tagged as such.</li>
+      <li>Anything in a "Personal" or "Private" folder convention your company uses.</li>
+      <li>Files with detected PII unless you've run anonymization.</li>
+      <li>Auto-generated content (CI logs, automated meeting notes that nobody curates).</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Permissions matter from day one</strong>
+      Decide upfront whether the KB enforces document-level permissions (i.e. an employee only sees results from docs they would have access to in the source system) or whether it's a single shared corpus. The first is harder to engineer (you must store ACLs alongside vectors and filter at query time) but is mandatory if you include anything sensitive. The simplest v1 is to index <em>only</em> material that's already broadly accessible inside the company and skip the per-user permission work entirely.
+    </div>
+
+    </div><!-- /kb-contents -->
+
+    <!-- ========== KB BUILD ========== -->
+    <div class="subtab-panel" data-subtab="kb-build">
+
+    <h3 style="margin-top:0">Architecture: indexing pipeline + MCP server</h3>
+    <p>The KB is a custom MCP server backed by a standard retrieval stack. The stack is well-trodden — what's specific to your company is which sources to index, how to chunk them, and which endpoints to expose.</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <defs>
+          <marker id="kbb-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#8a8a8a"/>
+          </marker>
+        </defs>
+
+        <!-- Sources column -->
+        <rect x="30" y="30" width="160" height="240" rx="10" fill="#e8f5ec" stroke="#15803d" stroke-width="1.5"/>
+        <text x="110" y="54" text-anchor="middle" font-size="12" font-weight="700" fill="#15803d">Sources</text>
+        <text x="110" y="84" text-anchor="middle" font-size="10.5" fill="#15803d">Notion</text>
+        <text x="110" y="104" text-anchor="middle" font-size="10.5" fill="#15803d">GDrive / M365</text>
+        <text x="110" y="124" text-anchor="middle" font-size="10.5" fill="#15803d">Slack (curated channels)</text>
+        <text x="110" y="144" text-anchor="middle" font-size="10.5" fill="#15803d">Gong call transcripts</text>
+        <text x="110" y="164" text-anchor="middle" font-size="10.5" fill="#15803d">Internal wiki</text>
+        <text x="110" y="184" text-anchor="middle" font-size="10.5" fill="#15803d">Past PDFs (proposals,</text>
+        <text x="110" y="198" text-anchor="middle" font-size="10.5" fill="#15803d">decks, contracts)</text>
+        <text x="110" y="222" text-anchor="middle" font-size="10.5" fill="#15803d">GitHub READMEs</text>
+        <text x="110" y="246" text-anchor="middle" font-size="9.5" fill="#15803d" font-style="italic">refreshed daily/hourly</text>
+
+        <!-- Arrow -->
+        <line x1="192" y1="150" x2="232" y2="150" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#kbb-arrow)"/>
+
+        <!-- Pipeline -->
+        <rect x="240" y="80" width="180" height="140" rx="10" fill="#fff" stroke="#c9c2b3" stroke-width="1.5"/>
+        <text x="330" y="104" text-anchor="middle" font-size="12" font-weight="700">Indexing pipeline</text>
+        <text x="330" y="130" text-anchor="middle" font-size="10.5" fill="#4a4a4a">1. Extract &amp; clean text</text>
+        <text x="330" y="150" text-anchor="middle" font-size="10.5" fill="#4a4a4a">2. OCR PDFs / images</text>
+        <text x="330" y="170" text-anchor="middle" font-size="10.5" fill="#4a4a4a">3. Chunk (~500 tokens)</text>
+        <text x="330" y="190" text-anchor="middle" font-size="10.5" fill="#4a4a4a">4. Embed (vector model)</text>
+        <text x="330" y="210" text-anchor="middle" font-size="10.5" fill="#4a4a4a">5. Tag with metadata</text>
+
+        <!-- Arrow -->
+        <line x1="422" y1="150" x2="462" y2="150" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#kbb-arrow)"/>
+
+        <!-- Vector store -->
+        <rect x="470" y="100" width="170" height="100" rx="10" fill="#fef7e0" stroke="#a16207" stroke-width="1.5"/>
+        <text x="555" y="124" text-anchor="middle" font-size="12" font-weight="700" fill="#a16207">Vector store</text>
+        <text x="555" y="148" text-anchor="middle" font-size="10.5" fill="#a16207">Pinecone / Weaviate /</text>
+        <text x="555" y="164" text-anchor="middle" font-size="10.5" fill="#a16207">OpenSearch / pgvector</text>
+        <text x="555" y="184" text-anchor="middle" font-size="10.5" fill="#a16207">+ ACLs &amp; recency scores</text>
+
+        <!-- Arrow -->
+        <line x1="642" y1="150" x2="682" y2="150" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#kbb-arrow)"/>
+
+        <!-- MCP server -->
+        <rect x="690" y="60" width="200" height="180" rx="10" fill="#eaf0fd" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="790" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">acme-knowledge</text>
+        <text x="790" y="100" text-anchor="middle" font-size="11" fill="#1d4ed8">MCP server</text>
+        <text x="790" y="124" text-anchor="middle" font-size="10" fill="#1d4ed8">Endpoints:</text>
+        <text x="790" y="140" text-anchor="middle" font-size="10" fill="#1d4ed8">kb_search()</text>
+        <text x="790" y="156" text-anchor="middle" font-size="10" fill="#1d4ed8">kb_get_doc()</text>
+        <text x="790" y="172" text-anchor="middle" font-size="10" fill="#1d4ed8">kb_recent()</text>
+        <text x="790" y="188" text-anchor="middle" font-size="10" fill="#1d4ed8">kb_by_author()</text>
+        <text x="790" y="216" text-anchor="middle" font-size="10" fill="#1d4ed8" font-style="italic">hosted on your infra</text>
+        <text x="790" y="230" text-anchor="middle" font-size="10" fill="#1d4ed8" font-style="italic">declared in .mcp.json</text>
+
+        <!-- Down to Claude -->
+        <line x1="790" y1="240" x2="790" y2="280" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#kbb-arrow)"/>
+
+        <rect x="660" y="280" width="260" height="32" rx="6" fill="#fff1ea" stroke="#c2410c" stroke-width="1.5"/>
+        <text x="790" y="302" text-anchor="middle" font-size="11.5" font-weight="600" fill="#7a2807">Claude (via any skill that queries it)</text>
+      </svg>
+    </div>
+
+    <h4>The MCP server's endpoints</h4>
+    <p>Expose opinionated, named operations rather than raw search — easier for skills to use correctly, easier for you to evolve under the hood.</p>
+<pre><button class="copy" onclick="copyPre(this)">copy</button>{
+  "name": "acme-knowledge",
+  "endpoints": {
+    "kb_search": "(query: string, top_k=5, filters?: {team, since, doc_type}) → [{title, snippet, doc_id, score, source, last_modified}]",
+    "kb_get_doc": "(doc_id: string) → {title, full_text, metadata, source_url}",
+    "kb_recent": "(topic: string, days=90) → [{title, snippet, doc_id, last_modified}]",
+    "kb_by_author": "(person: string, topic?: string) → [{title, snippet, doc_id, last_modified}]",
+    "kb_related": "(doc_id: string, top_k=5) → [{title, doc_id, score}]"
+  }
+}</pre>
+
+    <h4>Operational considerations</h4>
+    <ul>
+      <li><strong>Refresh cadence:</strong> daily incremental, with a weekly full rebuild. Most sources expose change feeds; subscribe rather than poll.</li>
+      <li><strong>Permissions:</strong> if the corpus contains anything sensitive, store source-system ACLs alongside the vectors and filter at query time. Otherwise constrain ingestion to broadly-accessible material and call the KB itself "internal-public."</li>
+      <li><strong>Recency boosts:</strong> default-rank with a recency multiplier — a doc from last quarter beats a doc from three years ago at the same semantic similarity. Override with explicit filters when callers want historical lookup.</li>
+      <li><strong>Hosting:</strong> a small Python service (FastAPI + your vector DB client) on whatever your company already uses for internal services. Wrap as an MCP-compliant HTTP endpoint. Declare in plugin <code class="inline">.mcp.json</code>.</li>
+      <li><strong>Cost:</strong> embedding 10k–50k documents is cheap one-time (~$50–$500 depending on model and chunk size); vector storage and query cost are the ongoing line items.</li>
+      <li><strong>Observability:</strong> log every query + which results were ultimately cited in Claude's response. This is your eval signal — refine ranking based on what employees actually find useful.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Build vs. buy</strong>
+      Several vendors now sell "company knowledgebase with MCP" as a managed service (Glean, Notion AI, custom Pinecone integrations). For most companies, buying is faster than building until you hit edge cases (custom auth, internal-only data, regulated industries). Decide based on whether the time-to-value of buying outweighs the loss of control. If buying: still front it with your own MCP wrapper so you can swap the backend later without touching skills.
+    </div>
+
+    </div><!-- /kb-build -->
+
+    <!-- ========== KB USE & EXAMPLES ========== -->
+    <div class="subtab-panel" data-subtab="kb-use">
+
+    <h3 style="margin-top:0">How skills use the KB</h3>
+    <p>Skills query the KB by adding explicit instructions to their SKILL.md. The same KB serves many skills — each one passes different queries, filters, and follow-up logic.</p>
+
+    <h4>The integration pattern in a skill</h4>
+<pre><button class="copy" onclick="copyPre(this)">copy</button># client-proposal SKILL.md (excerpt)
+
+When asked to draft a client proposal:
+1. Read brand-guidelines/voice.md and bd-principles/decision-frameworks.md.
+2. Query acme-knowledge:
+   - kb_search("proposals + {customer industry}", filters={team:"bd"}, top_k=3)
+   - kb_recent("{customer name}", days=365)  // any prior touchpoints
+   - kb_search("objections {customer industry}", top_k=3)
+3. Read the top results in full (via kb_get_doc) before drafting.
+4. Draft the proposal grounding pricing, structure, and risks in the retrieved precedent.
+5. Cite the docs you drew on in a "Prior precedent" footnote so the user can verify.
+6. Hand to pricing-reviewer sub-agent before returning.</pre>
+
+    <p>Two principles that make this work reliably:</p>
+    <ul>
+      <li><strong>Cite, don't just absorb.</strong> Make every skill cite the KB docs it drew on. Lets users verify and surfaces when a skill is leaning on a stale or off-topic precedent.</li>
+      <li><strong>Bounded queries.</strong> Filter aggressively (team, date range, doc type). Unfiltered <code class="inline">kb_search</code> with high top_k will retrieve noise and cost tokens.</li>
+    </ul>
+
+    <h3 style="margin-top:30px">Worked use cases</h3>
+    <p>Four concrete scenarios where the KB changes what Claude can do.</p>
+
+    <details class="accordion" open>
+      <summary>1. AE drafts a pitch deck for a fintech prospect</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Trigger</div><div>Account Exec writes: "Draft a pitch deck for Stripe-adjacent fintech prospect Bigcorp"</div>
+          <div class="k">Skills loaded</div><div><code class="inline">company-principles</code>, <code class="inline">brand-guidelines</code>, <code class="inline">bd-principles</code>, <code class="inline">pitch-deck</code></div>
+          <div class="k">KB queries</div><div><code class="inline">kb_search("pitch decks fintech", filters={team:"bd"}, top_k=3)</code><br><code class="inline">kb_recent("Bigcorp", days=365)</code> — prior touchpoints<br><code class="inline">kb_search("competitor mentions fintech", top_k=3)</code></div>
+          <div class="k">What the KB adds</div><div>The 3 prior pitch decks the BD team has used for fintech customers. Any prior Bigcorp interactions (Gong calls, intro emails, prior proposals). Recent competitive intel. Without this, the deck is generic; with it, it inherits the team's institutional playbook.</div>
+          <div class="k">Output footnote</div><div>"Drew on: prior decks for [fintech_co_1], [fintech_co_2], discovery call with Bigcorp's CTO on 2025-11-12."</div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>2. CEO writes Q1 board update with continuity</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Trigger</div><div>CEO writes: "Draft Q1 board update — focus on growth trajectory"</div>
+          <div class="k">Skills loaded</div><div><code class="inline">exec-principles</code>, <code class="inline">exec-memo</code>, <code class="inline">board-update</code></div>
+          <div class="k">MCPs called</div><div><code class="inline">acme-data</code> for current quarter numbers</div>
+          <div class="k">KB queries</div><div><code class="inline">kb_recent("board update", days=180)</code> — last 2 quarters' updates<br><code class="inline">kb_search("growth narrative Q4")</code> — to thread continuity with what was said before<br><code class="inline">kb_search("board feedback action items", days=180)</code> — outstanding asks from prior meetings</div>
+          <div class="k">What the KB adds</div><div>Continuity. Without it, every board memo reads as if it were the first one. With it, Claude can frame Q1 as a follow-up to the Q4 commitments, address whatever the board flagged last time, and avoid contradicting prior narrative.</div>
+          <div class="k">Sub-agents</div><div><code class="inline">coo-reviewer</code> critiques the draft; <code class="inline">numbers-checker</code> reconciles every numeric claim against <code class="inline">acme-data</code>.</div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>3. SRE writing a postmortem after a database outage</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Trigger</div><div>SRE writes: "Draft a postmortem for the 2026-05-08 db connection pool exhaustion"</div>
+          <div class="k">Skills loaded</div><div><code class="inline">engineering-principles</code>, <code class="inline">incident-runbook</code>, <code class="inline">postmortem</code></div>
+          <div class="k">KB queries</div><div><code class="inline">kb_search("postmortem database connection pool", days=730)</code><br><code class="inline">kb_search("recurring infrastructure incidents", filters={team:"eng"})</code></div>
+          <div class="k">What the KB adds</div><div>The 4 prior incidents with similar symptoms. Includes the action items that were filed, the ones that landed, and the ones that didn't. Postmortem ends with a "Was this preventable based on prior learnings?" section that names specific previous postmortems.</div>
+          <div class="k">Eng value</div><div>Stops the company from re-learning the same incident. The KB makes the institutional cost of <em>not</em> closing past action items visible.</div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>4. Sales rep handling a pricing objection on a call</summary>
+      <div class="accordion-body">
+        <div class="kv">
+          <div class="k">Trigger</div><div>AE writes (mid-call or right after): "Customer pushed back on $X/seat pricing — they cited [competitor] at $Y. How do I respond?"</div>
+          <div class="k">Skills loaded</div><div><code class="inline">bd-principles</code>, <code class="inline">objection-handling</code></div>
+          <div class="k">KB queries</div><div><code class="inline">kb_search("pricing objection competitor X", filters={source:"gong"}, top_k=5)</code><br><code class="inline">kb_search("competitive talk track {competitor}")</code></div>
+          <div class="k">What the KB adds</div><div>Five real instances where teammates have handled the same objection, drawn from Gong transcripts. Which framings closed, which lost. Patterns: "When we got it to value-per-user instead of seat-price, we won 3/4."</div>
+          <div class="k">Why this beats a template</div><div>An <code class="inline">objection-handling</code> skill alone produces a generic, polite response. With KB-backed examples, the response is grounded in <em>this team's actual experience</em>. That's the difference between Claude being a copywriter and being a colleague.</div>
+        </div>
+      </div>
+    </details>
+
+    <h3 style="margin-top:30px">When the KB compounds with other primitives</h3>
+    <p>The pattern that shows up across all four examples: <strong>foundation skills + role plugin skills + KB precedent + (sometimes) data MCP + (sometimes) sub-agent review</strong>. Each layer adds something the others can't. The KB's specific contribution is <em>"don't draft this in a vacuum — find out what we already know."</em></p>
+
+    <div class="callout">
+      <strong>The diminishing-returns test</strong>
+      Before building the KB, log every Claude conversation across the company for a week. Tag each one with "would have benefited from precedent / past examples?" If &lt;20% benefit, you don't need it yet — keep iterating on skills. If &gt;40%, it's the highest-leverage Phase 2 investment you can make. Between 20–40%, build it scoped to one team first (e.g. just BD with Gong call indexing) and measure before going wide.
+    </div>
+
+    </div><!-- /kb-use -->
+
   </section>
 
   <footer class="foot">
