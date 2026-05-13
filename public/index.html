@@ -638,6 +638,130 @@
   .uc-compare ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.55; }
   .uc-compare li { margin-bottom: 4px; }
 
+  /* Process flow diagram */
+  .flow {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px 4px;
+    margin: 16px 0 22px;
+    box-shadow: var(--shadow);
+  }
+  .flow-stage {
+    display: flex;
+    gap: 14px;
+    align-items: stretch;
+    position: relative;
+  }
+  .flow-stage-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    z-index: 2;
+    position: relative;
+  }
+  .flow-stage::before {
+    content: "";
+    position: absolute;
+    left: 13.5px;
+    top: 30px;
+    bottom: 0;
+    width: 1.5px;
+    background: var(--border-strong);
+    z-index: 1;
+  }
+  .flow-stage:last-child::before { display: none; }
+  .flow-stage-content {
+    flex: 1;
+    padding-bottom: 18px;
+  }
+  .flow-stage-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .flow-stage-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .flow-stage-detail {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .flow-row {
+    margin-top: 8px;
+  }
+  .flow-row .flow-row-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .flow-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .flow-chip {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 11.5px;
+    font-weight: 500;
+    border: 1px solid;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .flow-chip.foundation { background: #fff1ea; border-color: #f9c5a7; color: #7a2807; }
+  .flow-chip.role       { background: #fef7e0; border-color: #e5cd83; color: #a16207; }
+  .flow-chip.mcp        { background: #eaf0fd; border-color: #b8cef4; color: #1d4ed8; }
+  .flow-chip.kb         { background: #efe9ff; border-color: #c7b5f3; color: #7c3aed; }
+  .flow-chip.connector  { background: #e8f5ec; border-color: #a3d3b1; color: #15803d; }
+  .flow-chip.subagent   { background: #f7e6ee; border-color: #d4afc4; color: #9b2c5c; }
+  .flow-chip.artifact   { background: #f4f1ea; border-color: var(--border-strong); color: var(--ink); }
+
+  .flow-legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .flow-legend .swatch {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
+    border: 1px solid;
+  }
+  .flow-legend .sw-foundation { background: #fff1ea; border-color: #f9c5a7; }
+  .flow-legend .sw-role       { background: #fef7e0; border-color: #e5cd83; }
+  .flow-legend .sw-mcp        { background: #eaf0fd; border-color: #b8cef4; }
+  .flow-legend .sw-kb         { background: #efe9ff; border-color: #c7b5f3; }
+  .flow-legend .sw-connector  { background: #e8f5ec; border-color: #a3d3b1; }
+  .flow-legend .sw-subagent   { background: #f7e6ee; border-color: #d4afc4; }
+
   .block {
     border: 1.5px solid var(--border-strong);
     border-radius: 8px;
@@ -1624,6 +1748,7 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       <button class="subtab-btn active" data-subtab="uc-vpbd">VP BD: Pfizer pitch deck</button>
       <button class="subtab-btn" data-subtab="uc-coo">COO: Weekly OKR memo</button>
       <button class="subtab-btn" data-subtab="uc-vpm">VP Marketing: Trial result LinkedIn post</button>
+      <button class="subtab-btn" data-subtab="uc-hr">Head of HR: Leave policy rollout</button>
     </nav>
 
     <!-- ============================ -->
@@ -1640,6 +1765,124 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       </div>
 
       <div class="uc-input">Draft a pitch deck for Pfizer for our cardiometabolic RWE data partnership. They're focused on the GLP-1 successor pipeline this year — frame our offer around that. Include our pharma traction numbers and a slide on how this compares to the deal we ran with Merck last year.</div>
+
+      <div class="uc-section">
+        <h4>Process flow — from prompt to deck</h4>
+        <div class="flow">
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">1</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Prompt received</div>
+              <div class="flow-stage-title">Claude parses the request</div>
+              <div class="flow-stage-detail">Identifies: VP BD user · pitch-deck output · named account "Pfizer" · domain "cardiometabolic / RWE" · prior comparison reference "Merck."</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">2</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Skills activate</div>
+              <div class="flow-stage-title">Foundation skills (auto-loaded for everyone) + acme-bd skills (auto-loaded for BD group) + task-matched skill</div>
+              <div class="flow-row">
+                <div class="flow-row-label">Foundation</div>
+                <div class="flow-chips">
+                  <span class="flow-chip foundation">company-principles</span>
+                  <span class="flow-chip foundation">brand-guidelines</span>
+                  <span class="flow-chip foundation">company-context</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">acme-bd (role plugin)</div>
+                <div class="flow-chips">
+                  <span class="flow-chip role">bd-principles</span>
+                  <span class="flow-chip role">pitch-deck</span>
+                </div>
+              </div>
+              <div class="flow-stage-detail" style="margin-top:8px">Claude reads each SKILL.md to learn: brand voice, narrative arc (Problem → Why us → Methodology → Traction → Customer angle → Pricing → Ask), and the explicit instructions in <code class="inline">pitch-deck/SKILL.md</code> to query the MCP, KB, and CRM.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">3</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Data fetched (parallel)</div>
+              <div class="flow-stage-title">Claude executes the queries the skill told it to run</div>
+              <div class="flow-row">
+                <div class="flow-row-label">MCP — structured numbers</div>
+                <div class="flow-chips">
+                  <span class="flow-chip mcp">acme-data · pharma_traction()</span>
+                  <span class="flow-chip mcp">acme-data · arr_by_customer_tier()</span>
+                  <span class="flow-chip mcp">acme-data · case_study_count(domain="cardiometabolic")</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">KB — institutional memory</div>
+                <div class="flow-chips">
+                  <span class="flow-chip kb">kb_recent("Pfizer", days=540)</span>
+                  <span class="flow-chip kb">kb_search("RWE pitch decks pharma", top_k=3)</span>
+                  <span class="flow-chip kb">kb_get_doc("merck-2024-deal-summary")</span>
+                  <span class="flow-chip kb">kb_search("GLP-1 pipeline landscape")</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">Connectors — live systems</div>
+                <div class="flow-chips">
+                  <span class="flow-chip connector">Salesforce · Pfizer account</span>
+                  <span class="flow-chip connector">Gong · prior Pfizer calls</span>
+                  <span class="flow-chip connector">GDrive · Merck case-study PPT</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">4</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Draft assembled</div>
+              <div class="flow-stage-title">Claude synthesizes everything into a 12-slide PPTX</div>
+              <div class="flow-stage-detail">Opens <code class="inline">templates/acme-master.pptx</code>, runs <code class="inline">scripts/build_deck.py</code> to populate slides using the narrative arc from <code class="inline">pitch-deck</code>, the brand voice from <code class="inline">brand-guidelines</code>, the live numbers from <code class="inline">acme-data</code>, and the Pfizer/Merck specifics from KB and Gong.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">5</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Sub-agents review (parallel, read-only)</div>
+              <div class="flow-stage-title">Each sub-agent runs in its own context and returns only critiques</div>
+              <div class="flow-chips">
+                <span class="flow-chip subagent">brand-checker · voice + visual</span>
+                <span class="flow-chip subagent">competitive-checker · positioning risk</span>
+                <span class="flow-chip subagent">pricing-reviewer · deal terms sanity</span>
+              </div>
+              <div class="flow-stage-detail" style="margin-top:8px">Claude incorporates flagged items — e.g. softens a borderline "we're better than X" claim that <code class="inline">competitive-checker</code> caught.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">6</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Output delivered</div>
+              <div class="flow-stage-title">12-slide pitch deck + cited sources footnote</div>
+              <div class="flow-chips">
+                <span class="flow-chip artifact">acme-pfizer-rwe-deck-v1.pptx</span>
+                <span class="flow-chip artifact">Sources footnote (KB doc IDs + Gong call IDs)</span>
+                <span class="flow-chip artifact">Reviewer-pass summary</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-legend">
+            <span><span class="swatch sw-foundation"></span>Foundation skill</span>
+            <span><span class="swatch sw-role"></span>Role plugin skill</span>
+            <span><span class="swatch sw-mcp"></span>MCP server</span>
+            <span><span class="swatch sw-kb"></span>Knowledge base query</span>
+            <span><span class="swatch sw-connector"></span>Native connector</span>
+            <span><span class="swatch sw-subagent"></span>Sub-agent</span>
+          </div>
+
+        </div>
+      </div>
 
       <div class="uc-section">
         <h4>Under the hood — what fires when this is typed</h4>
@@ -1799,6 +2042,122 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       <div class="uc-input">Take all department status reports filed this week and write a one-page status memo for the leadership team. For each Q2 OKR, give me a green/yellow/red status with current vs. target numbers. Call out anything at risk and any decisions you need from me.</div>
 
       <div class="uc-section">
+        <h4>Process flow — from prompt to memo</h4>
+        <div class="flow">
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">1</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Prompt received</div>
+              <div class="flow-stage-title">Claude parses the request</div>
+              <div class="flow-stage-detail">Identifies: COO user · exec-memo output · OKR scorecard requirement (green/yellow/red) · cross-departmental scope · risk-flagging requirement · ask-extraction.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">2</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Skills activate</div>
+              <div class="flow-stage-title">Foundation + acme-exec skills load</div>
+              <div class="flow-row">
+                <div class="flow-row-label">Foundation</div>
+                <div class="flow-chips">
+                  <span class="flow-chip foundation">company-principles</span>
+                  <span class="flow-chip foundation">brand-guidelines</span>
+                  <span class="flow-chip foundation">weekly-update</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">acme-exec (role plugin)</div>
+                <div class="flow-chips">
+                  <span class="flow-chip role">exec-principles</span>
+                  <span class="flow-chip role">exec-memo</span>
+                </div>
+              </div>
+              <div class="flow-stage-detail" style="margin-top:8px">Claude reads <code class="inline">exec-memo/SKILL.md</code> which prescribes the format (TL;DR / Status / OKR Scorecard / Risks / Asks), the COO's voice (from <code class="inline">reference/voice.md</code>), and the explicit instruction to reconcile every number via <code class="inline">numbers-checker</code>.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">3</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Data fetched (parallel)</div>
+              <div class="flow-stage-title">Claude pulls department status, OKR targets, and prior context</div>
+              <div class="flow-row">
+                <div class="flow-row-label">MCP — OKR &amp; KPI data</div>
+                <div class="flow-chips">
+                  <span class="flow-chip mcp">acme-data · okr_status(quarter="Q2")</span>
+                  <span class="flow-chip mcp">acme-data · headcount_actuals()</span>
+                  <span class="flow-chip mcp">acme-data · arr_by_segment()</span>
+                  <span class="flow-chip mcp">acme-data · burn_rate()</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">Connectors — this week's status</div>
+                <div class="flow-chips">
+                  <span class="flow-chip connector">Notion · 6 dept status pages</span>
+                  <span class="flow-chip connector">GDrive · Q2 OKR doc</span>
+                  <span class="flow-chip connector">Linear · ticket counts per team</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">KB — continuity</div>
+                <div class="flow-chips">
+                  <span class="flow-chip kb">kb_recent("status memo", days=90)</span>
+                  <span class="flow-chip kb">kb_recent("at-risk OKR", days=180)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">4</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Draft assembled</div>
+              <div class="flow-stage-title">Claude composes the one-page memo</div>
+              <div class="flow-stage-detail">Synthesizes department highlights from Notion + OKR percent-to-target from <code class="inline">acme-data</code> + previously-flagged risks from KB. Color-codes each OKR row green/yellow/red. Extracts "asks" by detecting decision points in the dept status pages.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">5</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Sub-agents review (parallel, read-only)</div>
+              <div class="flow-stage-title">Two reviewers run; <code class="inline">coo-reviewer</code> is skipped (user IS the COO)</div>
+              <div class="flow-chips">
+                <span class="flow-chip subagent">numbers-checker · reconcile every figure</span>
+                <span class="flow-chip subagent">strategic-devils-advocate · risk surfacing</span>
+              </div>
+              <div class="flow-stage-detail" style="margin-top:8px">Numbers-checker confirms every number ties to source. Devils-advocate elevates a recurring "Eng hiring lag" risk that was flagged last month and hasn't resolved.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">6</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Output delivered</div>
+              <div class="flow-stage-title">One-page memo + source links + reviewer log</div>
+              <div class="flow-chips">
+                <span class="flow-chip artifact">weekly-status-memo-W19-2026.md</span>
+                <span class="flow-chip artifact">OKR scorecard table (live numbers)</span>
+                <span class="flow-chip artifact">Reviewer-pass footnote</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-legend">
+            <span><span class="swatch sw-foundation"></span>Foundation skill</span>
+            <span><span class="swatch sw-role"></span>Role plugin skill</span>
+            <span><span class="swatch sw-mcp"></span>MCP server</span>
+            <span><span class="swatch sw-kb"></span>Knowledge base query</span>
+            <span><span class="swatch sw-connector"></span>Native connector</span>
+            <span><span class="swatch sw-subagent"></span>Sub-agent</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="uc-section">
         <h4>Under the hood</h4>
         <div class="uc-anatomy">
           <div class="uc-row skills">
@@ -1945,6 +2304,121 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       <div class="uc-input">We just got the Phase 2b results for the cardiac drug — primary endpoint hit with statistical significance (p&lt;0.001, 32% relative risk reduction in the composite endpoint vs. placebo). Write me a 200-word LinkedIn post for the company page. Make it compelling but legally safe — we haven't filed for approval yet.</div>
 
       <div class="uc-section">
+        <h4>Process flow — from prompt to publishable post</h4>
+        <div class="flow">
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">1</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Prompt received</div>
+              <div class="flow-stage-title">Claude parses the request</div>
+              <div class="flow-stage-detail">Identifies: VP Marketing user · LinkedIn post output · clinical trial data (high regulatory sensitivity) · 200-word target · pre-approval status (no contractual or approval implications allowed).</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">2</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Skills activate</div>
+              <div class="flow-stage-title">Foundation + acme-marketing skills load; medical-claims-policy mandatory for clinical content</div>
+              <div class="flow-row">
+                <div class="flow-row-label">Foundation</div>
+                <div class="flow-chips">
+                  <span class="flow-chip foundation">company-principles</span>
+                  <span class="flow-chip foundation">brand-guidelines</span>
+                  <span class="flow-chip foundation">company-context</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">acme-marketing (role plugin)</div>
+                <div class="flow-chips">
+                  <span class="flow-chip role">marketing-principles</span>
+                  <span class="flow-chip role">linkedin-post</span>
+                  <span class="flow-chip role">medical-claims-policy</span>
+                </div>
+              </div>
+              <div class="flow-stage-detail" style="margin-top:8px">Claude reads <code class="inline">linkedin-post/SKILL.md</code> (structure, 250-word cap, hook → context → numbers → impact → next step → CTA) and the <code class="inline">medical-claims-policy</code> banned-phrases and preferred-language files. The policy skill explicitly requires <code class="inline">regulatory-reviewer</code> for any post with clinical data.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">3</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Data fetched (parallel)</div>
+              <div class="flow-stage-title">Trial stats + prior post patterns + regulatory language</div>
+              <div class="flow-row">
+                <div class="flow-row-label">MCP — verified trial data</div>
+                <div class="flow-chips">
+                  <span class="flow-chip mcp">acme-data · trial_results(study_id)</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">KB — institutional memory</div>
+                <div class="flow-chips">
+                  <span class="flow-chip kb">kb_search("LinkedIn announcement trial results", top_k=3)</span>
+                  <span class="flow-chip kb">kb_search("FDA-friendly language clinical")</span>
+                  <span class="flow-chip kb">kb_recent("cardiac drug pipeline narrative", days=180)</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">Connectors — source documents</div>
+                <div class="flow-chips">
+                  <span class="flow-chip connector">GDrive · trial statistical report</span>
+                  <span class="flow-chip connector">GDrive · "what we can / can't say" memo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">4</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Draft assembled</div>
+              <div class="flow-stage-title">Claude writes the 200-word post</div>
+              <div class="flow-stage-detail">Uses the team's empirically-best-performing structure from KB. Pulls the 32% / p&lt;0.001 numbers from the MCP (not retyped). Applies <code class="inline">medical-claims-policy</code> guardrails during drafting — e.g. picks "milestone" over "breakthrough," "may help" over "cures," "preparing for Phase 3" over any implied approval.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">5</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Sub-agents review (parallel, read-only)</div>
+              <div class="flow-stage-title">Regulatory review is mandatory; brand &amp; voice run in parallel</div>
+              <div class="flow-chips">
+                <span class="flow-chip subagent">regulatory-reviewer · per-claim ✓ / ⚠️ / ✗</span>
+                <span class="flow-chip subagent">brand-checker · voice + banned phrases</span>
+                <span class="flow-chip subagent">voice-checker · Acme tone vs. generic PR</span>
+              </div>
+              <div class="flow-stage-detail" style="margin-top:8px">Regulatory-reviewer flags "could change how we treat" as overclaim → Claude rewrites to "could expand options for clinicians and patients." Final verdict line: "Ship-ready: yes, with medical review of the patient-impact paragraph as final check."</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">6</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Output delivered</div>
+              <div class="flow-stage-title">200-word post + regulatory-review annotation log</div>
+              <div class="flow-chips">
+                <span class="flow-chip artifact">linkedin-post-phase-2b-cardiac.md</span>
+                <span class="flow-chip artifact">Per-claim review annotations (✓ / ⚠️ / ✗)</span>
+                <span class="flow-chip artifact">Before/after of rewrites</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-legend">
+            <span><span class="swatch sw-foundation"></span>Foundation skill</span>
+            <span><span class="swatch sw-role"></span>Role plugin skill</span>
+            <span><span class="swatch sw-mcp"></span>MCP server</span>
+            <span><span class="swatch sw-kb"></span>Knowledge base query</span>
+            <span><span class="swatch sw-connector"></span>Native connector</span>
+            <span><span class="swatch sw-subagent"></span>Sub-agent</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="uc-section">
         <h4>Under the hood</h4>
         <div class="uc-anatomy">
           <div class="uc-row skills">
@@ -2080,6 +2554,337 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       </div>
 
     </div><!-- /uc-vpm -->
+
+
+    <!-- =================================== -->
+    <!-- USE CASE 4: Head of HR / Leave policy -->
+    <!-- =================================== -->
+    <div class="subtab-panel" data-subtab="uc-hr">
+
+      <div class="uc-persona">
+        <div class="uc-icon">HR</div>
+        <div>
+          <h3>Head of HR — Formal company-wide announcement</h3>
+          <p class="task"><strong>Task:</strong> Roll out an updated parental and caregiver leave policy company-wide. Needs three coordinated artifacts: the formal announcement, a manager FAQ, and a Slack version — all consistent with each other, legally reviewed, warm in tone.</p>
+        </div>
+      </div>
+
+      <div class="uc-input">We're updating our parental and caregiver leave policy effective July 1: 20 weeks fully paid for primary caregivers (up from 12), 8 weeks for secondary, plus a new 4-week bereavement / caregiving allowance for any family member. Draft the company-wide announcement, a manager FAQ they can use 1:1, and a shorter Slack #all-hands version. Make it warm, legally clean, and consistent across all three.</div>
+
+      <div class="uc-section">
+        <h4>Process flow — from prompt to three coordinated artifacts</h4>
+        <div class="flow">
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">1</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Prompt received</div>
+              <div class="flow-stage-title">Claude parses the request</div>
+              <div class="flow-stage-detail">Identifies: Head of HR user · <em>three</em> coordinated artifacts (memo + manager FAQ + Slack) · policy domain · effective-date sensitivity · jurisdictional implications (state/country variation in leave law) · explicit warmth + legal-cleanliness requirements.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">2</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Skills activate</div>
+              <div class="flow-stage-title">Foundation + acme-people skills; three task-specific skills (one per artifact)</div>
+              <div class="flow-row">
+                <div class="flow-row-label">Foundation</div>
+                <div class="flow-chips">
+                  <span class="flow-chip foundation">company-principles</span>
+                  <span class="flow-chip foundation">brand-guidelines</span>
+                  <span class="flow-chip foundation">company-context</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">acme-people (role plugin)</div>
+                <div class="flow-chips">
+                  <span class="flow-chip role">people-principles</span>
+                  <span class="flow-chip role">policy-announcement</span>
+                  <span class="flow-chip role">manager-faq</span>
+                  <span class="flow-chip role">slack-all-hands</span>
+                </div>
+              </div>
+              <div class="flow-stage-detail" style="margin-top:8px">Claude reads each SKILL.md: <code class="inline">policy-announcement</code> gives the canonical memo structure, <code class="inline">manager-faq</code> enforces the <em>What to say / What not to say / When to escalate</em> template per Q+A, <code class="inline">slack-all-hands</code> caps length and prescribes Slack-native voice. <code class="inline">people-principles</code> applies "treat employees as adults" and "always acknowledge human cost" throughout.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">3</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Data fetched (parallel)</div>
+              <div class="flow-stage-title">Jurisdictional headcount + prior rollout learnings + legal guidance</div>
+              <div class="flow-row">
+                <div class="flow-row-label">MCP — usage stats</div>
+                <div class="flow-chips">
+                  <span class="flow-chip mcp">acme-data · headcount_by_state()</span>
+                  <span class="flow-chip mcp">acme-data · parental_leave_usage(last_24_months)</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">Connectors — source docs &amp; HRIS</div>
+                <div class="flow-chips">
+                  <span class="flow-chip connector">HRIS · employees by jurisdiction</span>
+                  <span class="flow-chip connector">GDrive · legal policy memo</span>
+                  <span class="flow-chip connector">GDrive · prior leave policy doc</span>
+                </div>
+              </div>
+              <div class="flow-row">
+                <div class="flow-row-label">KB — institutional memory</div>
+                <div class="flow-chips">
+                  <span class="flow-chip kb">kb_recent("policy update announcement", days=730)</span>
+                  <span class="flow-chip kb">kb_search("parental leave state-by-state")</span>
+                  <span class="flow-chip kb">kb_search("employee questions prior policy changes")</span>
+                  <span class="flow-chip kb">kb_search("manager talking points sensitive topics")</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">4</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Draft assembled (three artifacts in one coordinated pass)</div>
+              <div class="flow-stage-title">Claude drafts all three artifacts using a shared canonical fact-set</div>
+              <div class="flow-stage-detail">Establishes a single source of truth for the policy facts (weeks, eligibility, effective date, jurisdictional caveats) and writes each artifact from it. Memo follows the canonical announcement structure; FAQ generates 10 Q+A pairs anchored on real prior-rollout questions from KB; Slack version compresses to 4 paragraphs with links back. State-specific notice scoping is added automatically based on HRIS jurisdictional data.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">5</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Sub-agents review (parallel, read-only)</div>
+              <div class="flow-stage-title">Four reviewers run; consistency-checker is unique to multi-artifact outputs</div>
+              <div class="flow-chips">
+                <span class="flow-chip subagent">legal-reviewer · jurisdictional + contractual risk</span>
+                <span class="flow-chip subagent">empathy-reviewer · tone + acknowledgment</span>
+                <span class="flow-chip subagent">consistency-checker · cross-artifact diff</span>
+                <span class="flow-chip subagent">brand-checker · voice + banned phrases</span>
+              </div>
+              <div class="flow-stage-detail" style="margin-top:8px">Legal-reviewer flags the "fully paid" phrasing → Claude scopes it to the policy doc's definition. Consistency-checker catches a mismatch — Slack says "starting July 1," memo says "effective July 1" → standardized to "effective July 1" across all three. Empathy-reviewer adds the "we know change creates uncertainty" sentence to the closing.</div>
+            </div>
+          </div>
+
+          <div class="flow-stage">
+            <div class="flow-stage-num">6</div>
+            <div class="flow-stage-content">
+              <div class="flow-stage-label">Output delivered</div>
+              <div class="flow-stage-title">Three coordinated artifacts + reviewer pass log</div>
+              <div class="flow-chips">
+                <span class="flow-chip artifact">leave-policy-announcement.md (email + Notion)</span>
+                <span class="flow-chip artifact">manager-faq-leave-policy.md</span>
+                <span class="flow-chip artifact">slack-all-hands-leave-policy.md</span>
+                <span class="flow-chip artifact">Reviewer-pass log (legal / empathy / consistency / brand)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-legend">
+            <span><span class="swatch sw-foundation"></span>Foundation skill</span>
+            <span><span class="swatch sw-role"></span>Role plugin skill</span>
+            <span><span class="swatch sw-mcp"></span>MCP server</span>
+            <span><span class="swatch sw-kb"></span>Knowledge base query</span>
+            <span><span class="swatch sw-connector"></span>Native connector</span>
+            <span><span class="swatch sw-subagent"></span>Sub-agent</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>Under the hood</h4>
+        <div class="uc-anatomy">
+          <div class="uc-row skills">
+            <div class="role">Skills loaded</div>
+            <ul>
+              <li><code>company-principles</code> — foundation</li>
+              <li><code>brand-guidelines</code> — voice critical here</li>
+              <li><code>company-context</code> — foundation</li>
+              <li><code>people-principles</code> — acme-people</li>
+              <li><code>policy-announcement</code> — acme-people, primary skill</li>
+              <li><code>manager-faq</code> — acme-people, for the manager-facing artifact</li>
+              <li><code>slack-all-hands</code> — acme-people, for the shorter version</li>
+            </ul>
+          </div>
+          <div class="uc-row agents">
+            <div class="role">Sub-agents called</div>
+            <ul>
+              <li><code>legal-reviewer</code> — flags jurisdictional issues, contractual implications, retroactive claims; mandatory for any policy comm</li>
+              <li><code>empathy-reviewer</code> — checks tone for warmth, plain language, acknowledgment of human impact</li>
+              <li><code>consistency-checker</code> — verifies numbers, dates, eligibility language match across the three artifacts</li>
+              <li><code>brand-checker</code> — voice + banned phrases</li>
+            </ul>
+          </div>
+          <div class="uc-row mcps">
+            <div class="role">MCP servers queried</div>
+            <ul>
+              <li><code>acme-data</code> → <code>headcount_by_state()</code>, <code>parental_leave_usage(last_24_months)</code> — anonymized usage stats to inform impact framing</li>
+            </ul>
+          </div>
+          <div class="uc-row connectors">
+            <div class="role">Native connectors used</div>
+            <ul>
+              <li>HRIS (Rippling / BambooHR / Justworks) — counts of employees by jurisdiction (state, country) for legal scoping</li>
+              <li>GDrive — the legal team's policy memo, prior version of the leave policy doc, the company's communication-style guide</li>
+              <li>Notion — to publish the final policy page once approved</li>
+            </ul>
+          </div>
+          <div class="uc-row kb">
+            <div class="role">Knowledge base queries (Phase 2)</div>
+            <ul>
+              <li><code>kb_recent("policy update announcement", days=730)</code> — prior internal announcements for voice + structure reference</li>
+              <li><code>kb_search("parental leave state-by-state", filters={team:"people"})</code> — internal legal memos on jurisdictional rules</li>
+              <li><code>kb_search("employee questions prior policy changes")</code> — questions raised in past rollouts, to pre-empt them in the FAQ</li>
+              <li><code>kb_search("manager talking points sensitive topics", filters={team:"people"})</code> — talking-point patterns from prior comms</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>How the relevant skills were originally built</h4>
+
+        <div class="uc-built">
+          <h5>The <code>policy-announcement</code> skill came from:</h5>
+          <ul>
+            <li>Five prior company-wide announcements the Head of HR rated as "landed well" — analyzed for what made them work, distilled into a canonical structure (<code>reference/format.md</code>).</li>
+            <li>Structure: TL;DR → Why now → What's changing specifically → What's <em>not</em> changing → Timeline → How to access support → Warm closing.</li>
+            <li>The HR team's voice doc — plain-spoken, warm, never corporate-speak — became <code>reference/voice.md</code>.</li>
+            <li>An explicit banned-phrases list: no "exciting opportunity" when delivering hard news, no "circle back," no "synergy," no "leverage as a verb" → <code>reference/banned-phrases.md</code>.</li>
+            <li>Three anonymized prior announcements as exemplars in <code>examples/</code>.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>manager-faq</code> skill came from:</h5>
+          <ul>
+            <li>Real questions managers raised after the last three policy changes, collected in post-rollout retros and pulled into <code>reference/common-questions.md</code>.</li>
+            <li>The People team's "how to have hard conversations" doc → <code>reference/manager-talking-points.md</code>.</li>
+            <li>Each Q+A in the output follows a strict template: <strong>What to say</strong> / <strong>What NOT to say</strong> / <strong>When to escalate to People</strong>.</li>
+            <li>Examples of past manager FAQs with annotations from the Head of HR on what worked.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>slack-all-hands</code> skill came from:</h5>
+          <ul>
+            <li>The 10 highest-engagement Slack announcements from the past 18 months — patterns extracted into <code>templates/slack-formats.md</code>.</li>
+            <li>Rules around Slack formatting: short paragraphs, emoji used sparingly and only where they reinforce warmth (never for hard news), threaded follow-up structure.</li>
+            <li>Length cap: 4 short paragraphs max + links to the full memo and FAQ.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>people-principles</code> skill (foundation of acme-people plugin) came from:</h5>
+          <ul>
+            <li>The Head of HR's leadership philosophy doc → <code>principles.md</code> ("we treat employees as adults," "always acknowledge the human cost of change," "never spin a downside").</li>
+            <li>The company's values around caregiving, flexibility, and equity.</li>
+            <li>A "what good comms look like at this company" doc the CPO maintains.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>legal-reviewer</code> sub-agent was built collaboratively with the company's outside employment law firm:</h5>
+          <ul>
+            <li>Read-only persona that reviews drafts for: benefit descriptions that vary by state/country without explicit caveat, phrasing that could imply a contractual obligation not intended, retroactive claims, timing language that could conflict with state notice requirements.</li>
+            <li>Output format: per-claim ✓ / ⚠️ / ✗, each flagged item gets a suggested rewrite.</li>
+            <li>Final line: "Ship-ready: yes / needs employment-law review / do not publish."</li>
+            <li>The outside firm reviewed the agent's prompt for completeness before it was deployed.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>empathy-reviewer</code> sub-agent was built from:</h5>
+          <ul>
+            <li>The Head of HR's notes on "what made our best announcements land emotionally."</li>
+            <li>A checklist: does it acknowledge the human angle? Does it use plain language? Does it avoid both corporate-speak and false intimacy? Does it tell people what to do if they have questions / need support?</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>consistency-checker</code> sub-agent was built for this specific multi-artifact pattern:</h5>
+          <ul>
+            <li>Reads all three artifacts in one pass.</li>
+            <li>Verifies: numbers (week counts, dates, eligibility thresholds) are identical across all three, key terminology is consistent ("primary caregiver" used the same way everywhere), no artifact says something the others contradict.</li>
+            <li>Output: a diff table of any mismatch, with a recommended canonical version.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>What comes back</h4>
+        <div class="uc-output">
+          Three coordinated artifacts, plus reviewer-pass annotations:
+
+          <p style="margin-top:12px"><strong>1. Company-wide announcement memo</strong> (email + Notion page)</p>
+          <ul>
+            <li>Subject: "An update to our parental and caregiver leave benefits"</li>
+            <li>TL;DR: 2-line summary of the change</li>
+            <li>Why: framed around employee feedback over the past year, citing anonymized usage patterns from <code>acme-data</code></li>
+            <li>What's changing: bullet list with specific numbers and eligibility</li>
+            <li>What this means for different scenarios: currently pregnant, currently on leave under old policy, planning to start a family, supporting an aging parent, recent bereavement</li>
+            <li>Timeline: effective dates, how to apply, who to contact</li>
+            <li>Where to get help: HR contact, FAQ link, the scheduled live Q&amp;A</li>
+            <li>Warm closing from the Head of HR with a specific invitation to surface concerns</li>
+          </ul>
+
+          <p style="margin-top:10px"><strong>2. Manager FAQ</strong> (sent to all managers + posted in Notion)</p>
+          <ul>
+            <li>10 anticipated questions with structured answers: <em>What to say / What NOT to say / When to escalate to People</em></li>
+            <li>Covers: "How do I handle a 1:1 with a report who's currently pregnant under the old policy?", "What if my team is concerned about coverage during a 20-week leave?", "How does this interact with state-mandated leave?", "What if a report asks about caregiving for chosen family / non-biological relatives?", "How do I plan team capacity around longer leaves?"</li>
+            <li>Each answer pulls in patterns from prior rollout retros (via KB)</li>
+          </ul>
+
+          <p style="margin-top:10px"><strong>3. Slack #all-hands version</strong> (shorter, more conversational)</p>
+          <ul>
+            <li>4 short paragraphs of the announcement</li>
+            <li>Links to the full memo and the manager FAQ</li>
+            <li>Date/time for the live Q&amp;A session</li>
+            <li>Tone matches Slack-native voice, not formal-memo voice</li>
+          </ul>
+
+          <p style="margin-top:10px"><strong>Reviewer-pass annotations:</strong></p>
+          <ul>
+            <li><code>legal-reviewer</code>: ⚠️ "fully paid" — added a footnote scoping to the policy doc's definition (✓ after revision). ⚠️ California / NY notice timing — added a sentence noting state-specific timing rules (✓ after revision). Ship-ready: <strong>yes, after final employment-law sign-off on the policy doc itself.</strong></li>
+            <li><code>empathy-reviewer</code>: suggested adding the "we know change creates uncertainty — here's how to get help" paragraph to the closing (✓ incorporated).</li>
+            <li><code>consistency-checker</code>: caught one mismatch — Slack version said "starting July 1," memo said "effective July 1" — standardized to "effective July 1" across all three artifacts.</li>
+            <li><code>brand-checker</code>: clean.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>Why this beats Claude alone</h4>
+        <div class="uc-compare">
+          <div class="col without">
+            <h5>Without the system</h5>
+            <ul>
+              <li>Head of HR drafts each of the three artifacts from scratch — ~6 hours of writing.</li>
+              <li>High risk of inconsistency: dates, eligibility thresholds, terminology drift between memo / FAQ / Slack version.</li>
+              <li>Legal review happens as a slow round-trip after drafts are complete — typically 2–4 day cycle.</li>
+              <li>Tone slips toward generic HR-comms voice (corporate, hedged, lifeless) without consistent reference.</li>
+              <li>Manager FAQ often misses common questions because it's hard to anticipate them from memory.</li>
+              <li>State-specific notice and eligibility rules easy to forget or get wrong.</li>
+              <li>No structured way to incorporate lessons from prior rollouts.</li>
+            </ul>
+          </div>
+          <div class="col with">
+            <h5>With the system</h5>
+            <ul>
+              <li>All three artifacts drafted simultaneously, consistent with each other on first pass — &lt;30 min.</li>
+              <li><code>consistency-checker</code> verifies numbers, dates, eligibility language match across artifacts before they're shown.</li>
+              <li><code>legal-reviewer</code> catches jurisdictional and contractual issues on first draft — shrinks the employment-law review cycle from days to a confirmation pass.</li>
+              <li><code>empathy-reviewer</code> enforces tone calibration — the Head of HR's voice, not generic HR boilerplate.</li>
+              <li>Manager FAQ pre-empts the questions that actually got raised in prior rollouts (via KB), not the ones the author guessed at.</li>
+              <li>State-specific scoping language is added automatically based on HRIS jurisdiction data.</li>
+              <li>Head of HR spends time editing &amp; calibrating, not drafting from a blank page.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /uc-hr -->
 
   </section>
 
