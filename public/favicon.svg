@@ -1,0 +1,6 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="100" fill="#F07563"/>
+  <text x="100" y="65" text-anchor="middle" font-family="SF Mono, Courier, monospace" font-weight="800" font-size="48" fill="white" opacity="0.65">{</text>
+  <text x="100" y="118" text-anchor="middle" font-family="SF Mono, Courier, monospace" font-weight="700" font-size="39" fill="white" letter-spacing="3">EPCH</text>
+  <text x="100" y="162" text-anchor="middle" font-family="SF Mono, Courier, monospace" font-weight="800" font-size="48" fill="white" opacity="0.65">}</text>
+</svg>
