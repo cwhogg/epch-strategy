@@ -1212,7 +1212,7 @@
         <rect x="60" y="298" width="240" height="22" rx="4" fill="#e8f5ec" stroke="#15803d" stroke-width="1"/>
         <text x="180" y="313" text-anchor="middle" font-size="10.5" fill="#15803d">each: skills/  agents/  commands/  .mcp.json</text>
 
-        <text x="180" y="338" text-anchor="middle" font-size="10" fill="#8a8a8a" font-style="italic">+ acme-people, acme-marketing as you grow</text>
+        <text x="180" y="338" text-anchor="middle" font-size="10" fill="#8a8a8a" font-style="italic">+ acme-people, acme-marketing, more as you grow</text>
 
         <!-- Arrow operator → repo -->
         <line x1="130" y1="106" x2="130" y2="158" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#arrow)"/>
@@ -1333,7 +1333,13 @@
           <td><code class="inline">acme-people</code></td>
           <td>HR / managers</td>
           <td><span class="badge green">Auto</span> (group)</td>
-          <td><code class="inline">people-principles</code>, <code class="inline">performance-review</code>, <code class="inline">hiring-loop-debrief</code>, <code class="inline">offer-letter</code></td>
+          <td><code class="inline">people-principles</code>, <code class="inline">policy-announcement</code>, <code class="inline">manager-faq</code>, <code class="inline">slack-all-hands</code>, <code class="inline">performance-review</code>, <code class="inline">hiring-loop-debrief</code>, <code class="inline">offer-letter</code></td>
+        </tr>
+        <tr>
+          <td><code class="inline">acme-marketing</code></td>
+          <td>Marketing / Comms</td>
+          <td><span class="badge green">Auto</span> (group)</td>
+          <td><code class="inline">marketing-principles</code>, <code class="inline">linkedin-post</code>, <code class="inline">medical-claims-policy</code>, <code class="inline">press-release</code>, <code class="inline">brand-campaign-brief</code></td>
         </tr>
       </tbody>
     </table>
@@ -1515,10 +1521,10 @@ Output exactly:
 
         <div class="callout">
           <strong>Mental model clarification</strong>
-          <code class="inline">CLAUDE.md</code> is a Claude Code feature — a file that auto-loads when you start a coding session in a repo. Cowork / Claude.ai doesn't have an exact equivalent: there's no plugin-level "always-on system prompt" file today. You can get ~90% of the way there with a deliberately-designed skill, and ~100% with a shared Project on top.
+          <code class="inline">CLAUDE.md</code> is a Claude Code feature — a file that auto-loads when you start a coding session in a repo. Cowork / Claude.ai doesn't have an exact equivalent: there's no plugin-level "always-on system prompt" file today. You can approximate it with a deliberately-designed skill that has a broad-enough trigger description that it fires on essentially any work in that team's domain.
         </div>
 
-        <h4>Pattern A — the "principles" skill (recommended)</h4>
+        <h4>How the pattern works</h4>
         <p>One skill per group plugin whose entire job is to load that team's philosophy as background context.</p>
 <pre><button class="copy" onclick="copyPre(this)">copy</button>plugins/acme-engineering/
 └── skills/
@@ -1542,12 +1548,6 @@ description: Use whenever the user is doing any engineering, technical, architec
 
 Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply them as background context throughout your response. Cite a specific principle by name when it materially shapes your answer.</pre>
 
-        <h4>Pattern B — every other skill in the plugin references it explicitly</h4>
-        <p>In <code class="inline">prd-template/SKILL.md</code>, <code class="inline">incident-runbook/SKILL.md</code>, etc., include: "Before drafting, read <code class="inline">../engineering-principles/principles.md</code> for the team's ways of working." This guarantees principles apply whenever <em>any</em> team skill fires, even if the principles skill itself didn't auto-trigger. Belt-and-braces.</p>
-
-        <h4>Pattern C — shared Project for true always-on coverage</h4>
-        <p>Stand up a team-wide shared Project ("Acme Engineering — Working Space") with the top-cited principles pasted into the Project's custom instructions. Anyone chatting inside that Project always has them loaded, and skills still fire on top. Use the Project for the most-cited principles; use the skill for the deeper reference material. Together they give you near-CLAUDE.md behavior.</p>
-
         <h4>What belongs in a principles doc</h4>
         <p>Value comes from being specific and opinionated:</p>
         <ul>
@@ -1570,7 +1570,7 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
           </div>
           <div class="card tight">
             <h4 style="margin-top:0">Team principles (per group plugin)</h4>
-            <p class="muted">"How <em>this team</em> operates." Engineering's review standards, GTM's qualification framework, Exec's communication norms, People's interview rubric.</p>
+            <p class="muted">"How <em>this team</em> operates." Engineering's review standards, BD's qualification framework, Exec's communication norms, Marketing's regulatory boundaries, People's interview rubric.</p>
           </div>
         </div>
 
@@ -1588,7 +1588,7 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       <summary><span class="badge accent">Skill pattern</span> <code class="inline">*-principles</code> — one per plugin (the CLAUDE.md analog)</summary>
       <div class="accordion-body">
         <div class="kv">
-          <div class="k">Instances</div><div><code class="inline">company-principles</code> (foundation), <code class="inline">exec-principles</code>, <code class="inline">bd-principles</code>, <code class="inline">engineering-principles</code>, <code class="inline">people-principles</code></div>
+          <div class="k">Instances</div><div><code class="inline">company-principles</code> (foundation), <code class="inline">exec-principles</code>, <code class="inline">bd-principles</code>, <code class="inline">engineering-principles</code>, <code class="inline">people-principles</code>, <code class="inline">marketing-principles</code></div>
           <div class="k">Triggers</div><div>Broad — fires on essentially any work in that team's domain. Description is intentionally wide.</div>
           <div class="k">Role</div><div>Background context skill. Loads philosophy, do's and don'ts, decision frameworks. Other skills in the same plugin reference its files directly.</div>
         </div>
@@ -1717,6 +1717,25 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
     </details>
 
     <details class="accordion">
+      <summary><span class="badge blue">Sub-agent</span> Additional sub-agents demonstrated in the Use Cases tab</summary>
+      <div class="accordion-body">
+        <p>These follow the same pattern as the three above — read-only personas with a specific critique focus, invoked by a particular skill at the end of drafting. Build each as part of the role plugin where it's most used.</p>
+        <ul>
+          <li><code class="inline">competitive-checker</code> (acme-bd) — flags overclaiming or missing acknowledgment of competitor strengths in pitch / proposal material.</li>
+          <li><code class="inline">pricing-reviewer</code> (acme-bd) — sanity-checks deal terms and tier structure.</li>
+          <li><code class="inline">deal-desk-reviewer</code> (acme-bd) — late-stage commercial-terms review.</li>
+          <li><code class="inline">strategic-devils-advocate</code> (acme-exec) — surfaces risks the user might want to escalate; argues the case against the draft.</li>
+          <li><code class="inline">voice-checker</code> (acme-foundation) — ensures the output sounds like the company, not generic AI prose.</li>
+          <li><code class="inline">regulatory-reviewer</code> (acme-marketing) — mandatory for any clinical / pharma comms; reviews per-claim against FDA-friendly language guidelines.</li>
+          <li><code class="inline">legal-reviewer</code> (acme-people) — jurisdictional and contractual-risk review for HR comms; built collaboratively with outside employment counsel.</li>
+          <li><code class="inline">empathy-reviewer</code> (acme-people) — checks tone for warmth, plain language, acknowledgment of human impact.</li>
+          <li><code class="inline">consistency-checker</code> (acme-people) — runs across multi-artifact outputs (memo + FAQ + Slack post) to verify numbers, dates, and terminology match.</li>
+          <li><code class="inline">security-reviewer</code>, <code class="inline">design-reviewer</code>, <code class="inline">test-coverage-reviewer</code> (acme-engineering) — code &amp; architecture review personas.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
       <summary><span class="badge" style="background:#eaf0fd;color:#1d4ed8">MCP</span> <code class="inline">acme-data</code> — internal metrics & pipeline</summary>
       <div class="accordion-body">
         <p>Optional, big payoff. A small HTTP MCP server that exposes opinionated read endpoints over your data warehouse: <code class="inline">get_pipeline_by_stage</code>, <code class="inline">current_burn</code>, <code class="inline">arr_by_segment</code>, <code class="inline">churn_last_quarter</code>. Auth via OAuth so employee access maps to existing permissions.</p>
@@ -1741,8 +1760,8 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
 
   <!-- ===== USE CASES ===== -->
   <section class="tab-panel" id="usecases">
-    <h2>Use cases — three detailed walkthroughs</h2>
-    <p class="lede">Three real workflows showing the system in action, end to end. Each one covers: who's using it, what they ask for, what fires under the hood (skills, sub-agents, MCPs, KB queries), how those skills were originally built, what the output looks like, and what changes vs. asking Claude with no system at all. The case-study company is in clinical / health-data — adjust the domain framing for your own.</p>
+    <h2>Use cases — four detailed walkthroughs</h2>
+    <p class="lede">Four real workflows showing the system in action, end to end. Each one covers: who's using it, what they ask for, the process flow Claude moves through, what fires under the hood (skills, sub-agents, MCPs, KB queries), how those skills were originally built, what the output looks like, and what changes vs. asking Claude with no system at all. The case-study company is in clinical / health-data — adjust the domain framing for your own.</p>
 
     <nav class="subtabs" role="tablist">
       <button class="subtab-btn active" data-subtab="uc-vpbd">VP BD: Pfizer pitch deck</button>
