@@ -762,6 +762,139 @@
   .flow-legend .sw-connector  { background: #e8f5ec; border-color: #a3d3b1; }
   .flow-legend .sw-subagent   { background: #f7e6ee; border-color: #d4afc4; }
 
+  /* Build progression staircase */
+  .stairs {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin: 16px 0 22px;
+  }
+  @media (max-width: 1000px) { .stairs { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 600px) { .stairs { grid-template-columns: 1fr; } }
+  .stair {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 12px 14px;
+    position: relative;
+  }
+  .stair .stair-num {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .stair .stair-time {
+    font-size: 10.5px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+  .stair h5 {
+    margin: 0 0 6px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .stair .stair-detail {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .stair .stair-learn {
+    font-size: 11px;
+    color: var(--ink-soft);
+    border-top: 1px dashed var(--border);
+    padding-top: 6px;
+    margin-top: auto;
+  }
+  .stair .stair-learn strong { color: var(--ink); font-weight: 600; }
+  /* Stair color gradient — gets darker / more saturated as you progress */
+  .stair.s0 { border-top-color: #e5cd83; }
+  .stair.s1 { border-top-color: #d49b50; }
+  .stair.s2 { border-top-color: #c2410c; }
+  .stair.s3 { border-top-color: #9b2c5c; }
+  .stair.s4 { border-top-color: #7c3aed; }
+  .stair.s5 { border-top-color: #1d4ed8; }
+  .stair.s0 .stair-num { color: #a16207; }
+  .stair.s1 .stair-num { color: #d49b50; }
+  .stair.s2 .stair-num { color: #c2410c; }
+  .stair.s3 .stair-num { color: #9b2c5c; }
+  .stair.s4 .stair-num { color: #7c3aed; }
+  .stair.s5 .stair-num { color: #1d4ed8; }
+
+  /* Code vs Cowork comparison */
+  .compare-2col {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 0;
+    margin: 10px 0 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  @media (max-width: 800px) {
+    .compare-2col { grid-template-columns: 1fr; }
+  }
+  .compare-2col .ch {
+    padding: 10px 14px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+    background: #f4f1ea;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-2col .ch.code   { background: #eaf0fd; color: #1d4ed8; }
+  .compare-2col .ch.cowork { background: #fff1ea; color: #c2410c; }
+  .compare-2col .cell {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .compare-2col .cell.topic {
+    font-weight: 600;
+    color: var(--ink);
+    background: #fbf9f4;
+  }
+  .compare-2col .cell.code   { background: #f7faff; color: var(--ink); }
+  .compare-2col .cell.cowork { background: #fffaf6; color: var(--ink); }
+  .compare-2col .cell.same { color: var(--green); font-style: italic; }
+  .compare-2col > div:nth-last-child(-n+3) { border-bottom: none; }
+  @media (max-width: 800px) {
+    .compare-2col .cell, .compare-2col .ch { border-right: none !important; }
+    .compare-2col .cell.topic { background: #f4f1ea; font-weight: 700; }
+  }
+
+  /* Workflow loop diagram container */
+  .workflow-diagram {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0 20px;
+  }
+
+  /* First 30 min checklist */
+  .checklist {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    background: var(--panel);
+    margin: 8px 0 16px;
+  }
+  .checklist li {
+    margin-bottom: 8px;
+    line-height: 1.55;
+  }
+  .checklist li code { background: #f4f1ea; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+
   .block {
     border: 1.5px solid var(--border-strong);
     border-radius: 8px;
@@ -892,6 +1025,7 @@
     <button class="tab-btn" data-tab="blocks">Building blocks</button>
     <button class="tab-btn" data-tab="deliverables">Specific deliverables</button>
     <button class="tab-btn" data-tab="usecases">Use cases</button>
+    <button class="tab-btn" data-tab="testing">How to test</button>
     <button class="tab-btn" data-tab="roadmap">Roadmap</button>
     <button class="tab-btn" data-tab="possible">What's possible today</button>
     <button class="tab-btn" data-tab="limits">Limitations</button>
@@ -903,7 +1037,7 @@
   <!-- ===== OVERVIEW ===== -->
   <section class="tab-panel active" id="overview">
     <h2>The shape of the answer</h2>
-    <p class="lede">Modern Claude (Teams / Enterprise, May 2026) gives you four primitives to personalize Claude for an org. Combine them right, and the company gets context-aware outputs without anyone copy-pasting "remember our brand voice" into every chat.</p>
+    <p class="lede">Modern Claude (Teams / Enterprise, May 2026) gives you three core primitives to personalize Claude for an org — plus sub-agents as the glue that ties them together. Combine them right, and the company gets context-aware outputs without anyone copy-pasting "remember our brand voice" into every chat.</p>
 
     <div class="row-3">
       <div class="card tight">
@@ -922,17 +1056,10 @@
         <p class="muted">Live data and actions — your CRM, data warehouse, Notion, internal APIs. Use when the data changes and you need fresh answers.</p>
       </div>
     </div>
-    <div class="row">
-      <div class="card tight">
-        <div class="badge accent">Context</div>
-        <h3 style="margin-top:6px">Projects</h3>
-        <p class="muted">Static, always-loaded context for an ongoing piece of work (a product launch, a client engagement). Different from skills — projects are scoped, skills are global.</p>
-      </div>
-      <div class="card tight">
-        <div class="badge blue">Specialist</div>
-        <h3 style="margin-top:6px">Sub-agents</h3>
-        <p class="muted">Specialized review/critic personas (e.g. <code class="inline">coo-reviewer</code>, <code class="inline">brand-checker</code>) that a skill can invoke as a separate read-only pass.</p>
-      </div>
+    <div class="card tight" style="margin-top:14px">
+      <div class="badge blue">Specialist</div>
+      <h3 style="margin-top:6px">Sub-agents</h3>
+      <p class="muted">Specialized review/critic personas (e.g. <code class="inline">coo-reviewer</code>, <code class="inline">brand-checker</code>) that a skill can invoke as a separate read-only pass. Compose with the three primitives above.</p>
     </div>
 
     <h3>One-paragraph plan</h3>
@@ -2904,6 +3031,327 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
       </div>
 
     </div><!-- /uc-hr -->
+
+  </section>
+
+  <!-- ===== HOW TO TEST ===== -->
+  <section class="tab-panel" id="testing">
+    <h2>How to test this yourself</h2>
+    <p class="lede">The fastest way to learn this architecture is to build a tiny version of it for yourself before pitching the friend's company. The recommended approach: develop locally in <strong>Claude Code</strong> (tight feedback loop, hot reload, real git workflow), then validate in <strong>Cowork</strong> periodically — same plugin folder, two surfaces. Within an afternoon you'll have hands-on calibration on the parts that don't read well in any architecture doc.</p>
+
+    <nav class="subtabs" role="tablist">
+      <button class="subtab-btn active" data-subtab="test-workflow">Setup &amp; workflow</button>
+      <button class="subtab-btn" data-subtab="test-progression">Build progression</button>
+      <button class="subtab-btn" data-subtab="test-compare">Claude Code vs Cowork</button>
+    </nav>
+
+    <!-- ============================ -->
+    <!-- SUBTAB 1: SETUP & WORKFLOW  -->
+    <!-- ============================ -->
+    <div class="subtab-panel active" data-subtab="test-workflow">
+
+      <h3 style="margin-top:0">The development loop</h3>
+      <p>One plugin folder is the source of truth. Develop in Claude Code where iteration is fast. Validate in Cowork weekly to confirm behavior matches the surface employees will actually use. Same files, two surfaces.</p>
+
+      <div class="workflow-diagram">
+        <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <marker id="wf-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#8a8a8a"/>
+            </marker>
+            <marker id="wf-arrow-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#1d4ed8"/>
+            </marker>
+            <marker id="wf-arrow-orange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#c2410c"/>
+            </marker>
+          </defs>
+
+          <!-- Center: plugin folder -->
+          <rect x="380" y="170" width="240" height="120" rx="12" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+          <text x="500" y="200" text-anchor="middle" font-size="14" font-weight="700">Plugin folder</text>
+          <text x="500" y="218" text-anchor="middle" font-size="11" fill="#8a8a8a">single source of truth</text>
+          <text x="500" y="240" text-anchor="middle" font-size="11" fill="#4a4a4a">SKILL.md · agents/ · .mcp.json</text>
+          <text x="500" y="256" text-anchor="middle" font-size="11" fill="#4a4a4a">commands/ · plugin.json</text>
+          <text x="500" y="276" text-anchor="middle" font-size="10.5" fill="#8a8a8a" font-style="italic">local + git tracked</text>
+
+          <!-- Left side: Claude Code loop -->
+          <rect x="40" y="60" width="280" height="340" rx="12" fill="#f7faff" stroke="#1d4ed8" stroke-width="1.5"/>
+          <text x="180" y="86" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">Claude Code (fast loop)</text>
+          <text x="180" y="104" text-anchor="middle" font-size="11" fill="#1d4ed8">5–10 iterations / hour</text>
+
+          <!-- Code loop steps -->
+          <rect x="60" y="124" width="240" height="38" rx="6" fill="#fff" stroke="#1d4ed8" stroke-width="1"/>
+          <text x="180" y="142" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1d4ed8">1. Edit SKILL.md</text>
+          <text x="180" y="156" text-anchor="middle" font-size="10" fill="#1d4ed8">in your editor</text>
+
+          <rect x="60" y="172" width="240" height="38" rx="6" fill="#fff" stroke="#1d4ed8" stroke-width="1"/>
+          <text x="180" y="190" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1d4ed8">2. Run test prompt</text>
+          <text x="180" y="204" text-anchor="middle" font-size="10" fill="#1d4ed8">claude "draft a meeting summary..."</text>
+
+          <rect x="60" y="220" width="240" height="38" rx="6" fill="#fff" stroke="#1d4ed8" stroke-width="1"/>
+          <text x="180" y="238" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1d4ed8">3. Inspect tool trace</text>
+          <text x="180" y="252" text-anchor="middle" font-size="10" fill="#1d4ed8">which files were read, which agents ran</text>
+
+          <rect x="60" y="268" width="240" height="38" rx="6" fill="#fff" stroke="#1d4ed8" stroke-width="1"/>
+          <text x="180" y="286" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1d4ed8">4. Tweak description / prompt</text>
+          <text x="180" y="300" text-anchor="middle" font-size="10" fill="#1d4ed8">save → repeat from 2</text>
+
+          <text x="180" y="332" text-anchor="middle" font-size="10.5" fill="#1d4ed8" font-style="italic">Hot reload · file watching</text>
+          <text x="180" y="348" text-anchor="middle" font-size="10.5" fill="#1d4ed8" font-style="italic">Terminal-visible tool calls</text>
+          <text x="180" y="364" text-anchor="middle" font-size="10.5" fill="#1d4ed8" font-style="italic">Easy MCP mocking</text>
+          <text x="180" y="380" text-anchor="middle" font-size="10.5" fill="#1d4ed8" font-style="italic">Git diff between iterations</text>
+
+          <!-- Right side: Cowork validation -->
+          <rect x="680" y="60" width="280" height="340" rx="12" fill="#fffaf6" stroke="#c2410c" stroke-width="1.5"/>
+          <text x="820" y="86" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">Cowork (weekly checkpoint)</text>
+          <text x="820" y="104" text-anchor="middle" font-size="11" fill="#c2410c">~1 hour every Fri</text>
+
+          <rect x="700" y="124" width="240" height="38" rx="6" fill="#fff" stroke="#c2410c" stroke-width="1"/>
+          <text x="820" y="142" text-anchor="middle" font-size="11.5" font-weight="600" fill="#c2410c">1. Push plugin folder to GitHub</text>
+          <text x="820" y="156" text-anchor="middle" font-size="10" fill="#c2410c">private repo with marketplace.json</text>
+
+          <rect x="700" y="172" width="240" height="38" rx="6" fill="#fff" stroke="#c2410c" stroke-width="1"/>
+          <text x="820" y="190" text-anchor="middle" font-size="11.5" font-weight="600" fill="#c2410c">2. Add as personal marketplace</text>
+          <text x="820" y="204" text-anchor="middle" font-size="10" fill="#c2410c">Customize → Plugins → Add marketplace</text>
+
+          <rect x="700" y="220" width="240" height="38" rx="6" fill="#fff" stroke="#c2410c" stroke-width="1"/>
+          <text x="820" y="238" text-anchor="middle" font-size="11.5" font-weight="600" fill="#c2410c">3. Test with realistic prompts</text>
+          <text x="820" y="252" text-anchor="middle" font-size="10" fill="#c2410c">same prompts you ran in Code</text>
+
+          <rect x="700" y="268" width="240" height="38" rx="6" fill="#fff" stroke="#c2410c" stroke-width="1"/>
+          <text x="820" y="286" text-anchor="middle" font-size="11.5" font-weight="600" fill="#c2410c">4. Note divergences from Code</text>
+          <text x="820" y="300" text-anchor="middle" font-size="10" fill="#c2410c">trigger threshold, UI rendering</text>
+
+          <text x="820" y="332" text-anchor="middle" font-size="10.5" fill="#c2410c" font-style="italic">Validates the surface employees</text>
+          <text x="820" y="348" text-anchor="middle" font-size="10.5" fill="#c2410c" font-style="italic">will actually use</text>
+          <text x="820" y="364" text-anchor="middle" font-size="10.5" fill="#c2410c" font-style="italic">Catches divergences early</text>
+          <text x="820" y="380" text-anchor="middle" font-size="10.5" fill="#c2410c" font-style="italic">Native connector behavior</text>
+
+          <!-- Arrows from each loop to plugin folder -->
+          <line x1="320" y1="220" x2="378" y2="220" stroke="#1d4ed8" stroke-width="1.5" marker-end="url(#wf-arrow-blue)"/>
+          <text x="335" y="214" font-size="10" fill="#1d4ed8" font-style="italic">file saves</text>
+
+          <line x1="622" y1="160" x2="678" y2="160" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#wf-arrow-orange)"/>
+          <text x="640" y="152" font-size="10" fill="#c2410c" font-style="italic">git push</text>
+
+          <!-- Loopback from Cowork to Plugin (issues found) -->
+          <path d="M 678 270 Q 640 320 622 270" fill="none" stroke="#c2410c" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#wf-arrow-orange)"/>
+          <text x="630" y="305" font-size="10" fill="#c2410c" font-style="italic">issues found</text>
+
+          <!-- Down arrow: promote to org -->
+          <rect x="380" y="320" width="240" height="60" rx="8" fill="#fff1ea" stroke="#c2410c" stroke-width="1.5"/>
+          <text x="500" y="344" text-anchor="middle" font-size="12" font-weight="700" fill="#7a2807">Promote to org marketplace</text>
+          <text x="500" y="362" text-anchor="middle" font-size="10.5" fill="#7a2807">once you're confident in your work,</text>
+          <text x="500" y="376" text-anchor="middle" font-size="10.5" fill="#7a2807">hand off to friend's IT/admin</text>
+
+          <line x1="500" y1="292" x2="500" y2="318" stroke="#8a8a8a" stroke-width="1.5" marker-end="url(#wf-arrow)"/>
+        </svg>
+      </div>
+
+      <h3>One-time setup (~10 minutes)</h3>
+      <div class="checklist">
+        <ol>
+          <li>Create a new local folder: <code>mkdir my-claude-plugins && cd my-claude-plugins</code></li>
+          <li>Initialize a git repo and an empty plugin scaffold:
+            <pre style="margin-top:6px"><button class="copy" onclick="copyPre(this)">copy</button>my-claude-plugins/
+├── .claude-plugin/
+│   └── marketplace.json
+└── plugins/
+    └── personal-foundation/
+        ├── plugin.json
+        ├── skills/
+        ├── agents/
+        └── commands/</pre>
+          </li>
+          <li>Add minimal <code>plugin.json</code>:
+            <pre style="margin-top:6px"><button class="copy" onclick="copyPre(this)">copy</button>{
+  "name": "personal-foundation",
+  "version": "0.0.1",
+  "description": "My local test plugin for learning the architecture"
+}</pre>
+          </li>
+          <li>Add minimal <code>.claude-plugin/marketplace.json</code> so you can install via Claude Code:
+            <pre style="margin-top:6px"><button class="copy" onclick="copyPre(this)">copy</button>{
+  "name": "personal-test",
+  "owner": "me",
+  "plugins": [
+    { "name": "personal-foundation", "path": "plugins/personal-foundation" }
+  ]
+}</pre>
+          </li>
+          <li>Tell Claude Code to use this marketplace:<br><code>/plugin marketplace add /absolute/path/to/my-claude-plugins</code></li>
+          <li>Install your (currently empty) plugin: <code>/plugin install personal-foundation@personal-test</code></li>
+          <li>Push the repo to a private GitHub repo. You'll point Cowork at this same repo later for validation.</li>
+        </ol>
+      </div>
+
+      <h3>Your first 30 minutes after setup</h3>
+      <div class="checklist">
+        <ol>
+          <li>Pick something <strong>you actually do weekly</strong> — your meeting summary format, your personal weekly journal, your code-review pre-flight checklist. Don't pick something theoretical.</li>
+          <li>Create <code>plugins/personal-foundation/skills/&lt;your-skill-name&gt;/SKILL.md</code> with YAML frontmatter (<code>name</code>, <code>description</code>) and a body that tells Claude what to do.</li>
+          <li>Add 1–2 reference files in the same folder — your preferred format, your voice rules, 1–2 example outputs.</li>
+          <li>Open Claude Code and run a prompt that should trigger your skill.</li>
+          <li>Inspect the trace: did Claude load your skill? Did it read the reference files? If not, sharpen the <code>description</code> field (more concrete trigger phrases) and try again.</li>
+          <li>Once it fires reliably, add a sub-agent: <code>plugins/personal-foundation/agents/my-reviewer.md</code> as a read-only critic. Reference it from your SKILL.md ("After drafting, call my-reviewer for a critique pass.").</li>
+          <li>Iterate. Note what surprises you about how the description-to-trigger relationship works.</li>
+        </ol>
+      </div>
+
+    </div><!-- /test-workflow -->
+
+
+    <!-- ============================== -->
+    <!-- SUBTAB 2: BUILD PROGRESSION  -->
+    <!-- ============================== -->
+    <div class="subtab-panel" data-subtab="test-progression">
+
+      <h3 style="margin-top:0">What to build, in order</h3>
+      <p>Each stage adds one concept. Don't skip stages — the value is in feeling the rough edges at each level before you compound them.</p>
+
+      <div class="stairs">
+
+        <div class="stair s0">
+          <div class="stair-num">Stage 0</div>
+          <div class="stair-time">10 min</div>
+          <h5>Empty scaffold</h5>
+          <div class="stair-detail">Set up the local repo, the marketplace.json, and an empty plugin. Install it via <code>/plugin marketplace add</code>. Confirm Claude Code can see it.</div>
+          <div class="stair-learn"><strong>You learn:</strong> the plugin folder shape, the marketplace mechanic.</div>
+        </div>
+
+        <div class="stair s1">
+          <div class="stair-num">Stage 1</div>
+          <div class="stair-time">1–2 hours</div>
+          <h5>One real skill</h5>
+          <div class="stair-detail">Build one skill you'd use weekly (meeting summary, weekly journal, code-review checklist). Just SKILL.md + 1–2 reference files. No sub-agent yet.</div>
+          <div class="stair-learn"><strong>You learn:</strong> how skill description quality affects trigger reliability. The single most underrated lever in the whole system.</div>
+        </div>
+
+        <div class="stair s2">
+          <div class="stair-num">Stage 2</div>
+          <div class="stair-time">1 hour</div>
+          <h5>Skill + sub-agent</h5>
+          <div class="stair-detail">Add a read-only critic sub-agent referenced from the skill. The sub-agent should return 2–3 critiques. Iterate on the sub-agent prompt.</div>
+          <div class="stair-learn"><strong>You learn:</strong> sub-agent context isolation — how the parent thread stays clean while the critic burns tokens being thorough.</div>
+        </div>
+
+        <div class="stair s3">
+          <div class="stair-num">Stage 3</div>
+          <div class="stair-time">2–3 hours</div>
+          <h5>Plugin with multiple skills</h5>
+          <div class="stair-detail">Add a 2nd and 3rd skill to the same plugin. Have one skill reference shared files (e.g. <code>brand-guidelines/voice.md</code>) used by other skills.</div>
+          <div class="stair-learn"><strong>You learn:</strong> file-sharing patterns inside a plugin, and how Claude picks between overlapping skills based on description specificity.</div>
+        </div>
+
+        <div class="stair s4">
+          <div class="stair-num">Stage 4</div>
+          <div class="stair-time">half a day</div>
+          <h5>Plugin + custom MCP</h5>
+          <div class="stair-detail">Stand up a tiny local MCP server (a 50-line Python or Node service) that returns mock data. Declare it in <code>.mcp.json</code>. Have a skill instruct Claude to query it.</div>
+          <div class="stair-learn"><strong>You learn:</strong> the MCP wiring — how skills + MCPs compose, what the OAuth/auth headache looks like, why opinionated endpoints beat raw SQL.</div>
+        </div>
+
+        <div class="stair s5">
+          <div class="stair-num">Stage 5</div>
+          <div class="stair-time">1+ day</div>
+          <h5>Multi-plugin architecture</h5>
+          <div class="stair-detail">Split into 2 plugins: <code>personal-foundation</code> (always-on) and a role plugin (e.g. <code>personal-eng</code>). Have role-plugin skills reference foundation-plugin files. Push to GitHub. Validate in Cowork.</div>
+          <div class="stair-learn"><strong>You learn:</strong> the layered composition the friend's company will use. This is when the whole architecture clicks viscerally.</div>
+        </div>
+
+      </div>
+
+      <div class="callout">
+        <strong>Don't skip ahead</strong>
+        Tempting to jump straight to Stage 5. The reason to walk the path: Stage 1's lesson about description quality is so underrated that most people deploying skill-based systems professionally still get it wrong. Feeling it once, on a personal skill you actually use, calibrates judgment that no documentation can.
+      </div>
+
+      <h3>Stretch goals once you've done Stage 5</h3>
+      <ul>
+        <li><strong>Knowledge base MCP.</strong> Index 50–100 of your own documents (Notion exports, GDrive folder). Build a tiny vector-search MCP. Have a skill query it. This is Phase 2 / KB-tier work — see the Knowledge base tab.</li>
+        <li><strong>Cross-skill referencing under pressure.</strong> Add a constraint: every skill in your plugin must reference <code>brand-guidelines/voice.md</code> for tone. See how often Claude actually does it without prompting.</li>
+        <li><strong>Eval harness.</strong> Create a tiny <code>evals/</code> folder with 5 "ideal input → expected behavior" cases per skill. Run them weekly and watch quality drift.</li>
+        <li><strong>Hand it to a friend.</strong> Send your private GitHub repo URL to a trusted friend on Cowork. Have them add it as a personal marketplace. Their feedback is the closest you can get to "how does this feel for someone who didn't build it."</li>
+      </ul>
+
+    </div><!-- /test-progression -->
+
+
+    <!-- ============================== -->
+    <!-- SUBTAB 3: CODE vs COWORK     -->
+    <!-- ============================== -->
+    <div class="subtab-panel" data-subtab="test-compare">
+
+      <h3 style="margin-top:0">Where they're the same, where they differ</h3>
+      <p>Most of what you build is portable verbatim. A handful of things genuinely differ — knowing which is which prevents the "works in Code, broken in Cowork" surprise.</p>
+
+      <h4>Portable verbatim (same file, both surfaces)</h4>
+      <ul>
+        <li>SKILL.md format (YAML frontmatter + body)</li>
+        <li>Sub-agent definitions (<code>agents/*.md</code>)</li>
+        <li>Slash commands (<code>commands/*.md</code>)</li>
+        <li>Plugin folder structure (<code>plugin.json</code>, <code>skills/</code>, <code>agents/</code>, <code>commands/</code>)</li>
+        <li><code>.mcp.json</code> declarations</li>
+        <li>The marketplace manifest format</li>
+      </ul>
+
+      <h4>Differs — design for it</h4>
+      <div class="compare-2col">
+        <div class="ch">Topic</div>
+        <div class="ch code">Claude Code</div>
+        <div class="ch cowork">Cowork</div>
+
+        <div class="cell topic">Iteration speed</div>
+        <div class="cell code">Hot reload — save file, re-run, done. Seconds per cycle.</div>
+        <div class="cell cowork">Re-upload zip or wait for git sync. Minutes per cycle.</div>
+
+        <div class="cell topic">Tool-call visibility</div>
+        <div class="cell code">Full terminal trace — see which files were read, which sub-agents ran, with what inputs.</div>
+        <div class="cell cowork">Opaque — only the final output is visible to the user. Design skills to surface what they did via "footnote" patterns.</div>
+
+        <div class="cell topic">Native connectors</div>
+        <div class="cell code">None natively. Slack / GDrive / Notion access requires an MCP wrapper (Composio or DIY).</div>
+        <div class="cell cowork">First-party connectors for Slack, GDrive, M365, Notion, Salesforce, GitHub, etc. — each user authenticates once.</div>
+
+        <div class="cell topic">Sub-agent rendering</div>
+        <div class="cell code">Visible in the terminal as a separate sub-process with its own context.</div>
+        <div class="cell cowork">Invisible to the user unless your skill explicitly surfaces what the sub-agent did.</div>
+
+        <div class="cell topic">Marketplace host</div>
+        <div class="cell code">Any git host (GitHub, GitLab, Bitbucket, self-hosted). Or local folder path.</div>
+        <div class="cell cowork">Org marketplaces: <strong>github.com private/internal repo only</strong>. No GHES, no GitLab.</div>
+
+        <div class="cell topic">Auto-trigger flavor</div>
+        <div class="cell code">Leans engineering — "write code, edit files, run commands." Skills written in that voice fire reliably.</div>
+        <div class="cell cowork">Leans work-document — "draft a memo, summarize a meeting." Same skill may need a more aggressive description to fire here.</div>
+
+        <div class="cell topic">Installation flow</div>
+        <div class="cell code"><code>/plugin marketplace add &lt;url&gt;</code> then <code>/plugin install &lt;name&gt;</code>.</div>
+        <div class="cell cowork">Customize → Plugins → Browse / Add marketplace. UI-driven.</div>
+
+        <div class="cell topic">Org-wide distribution</div>
+        <div class="cell code">Each developer adds the marketplace locally. No central admin concept.</div>
+        <div class="cell cowork">Org admin adds the marketplace once; auto-installs to all (Teams) or to groups (Enterprise).</div>
+
+        <div class="cell topic">Hooks &amp; strict gating</div>
+        <div class="cell code">Real hooks (pre-tool-use, post-tool-use) for hard enforcement of guardrails.</div>
+        <div class="cell cowork">No hooks. Guardrails enforced via skill instructions + sub-agent review (best-effort, not strict).</div>
+
+        <div class="cell topic">Git workflow integration</div>
+        <div class="cell code">Native — diff, branch, history, PR review of skill changes.</div>
+        <div class="cell cowork">Indirect via the marketplace repo. Cowork itself doesn't expose git.</div>
+      </div>
+
+      <div class="callout warn">
+        <strong>The "works in Code, broken in Cowork" pattern</strong>
+        Most often this is the description-flavor issue. A skill description written like "Helps with engineering work — investigate bugs, write tests, edit files" fires beautifully in Code and ignores you in Cowork because Cowork's default disposition isn't engineering-shaped. Rewrite descriptions in plain-work language: "Use whenever the user is drafting a doc, writing a memo, planning work, or asking about engineering decisions." That kind of phrasing fires in both. Test descriptions in both surfaces before declaring a skill done.
+      </div>
+
+      <h3>The one-paragraph summary</h3>
+      <p>Build in Code because the loop is 10× faster and the trace is transparent. Validate in Cowork because that's the surface employees will actually use, and small UX/trigger differences only show up there. Both consume the <em>same plugin folder from the same git repo</em>, so there's no porting — just two windows looking at the same source of truth.</p>
+
+    </div><!-- /test-compare -->
 
   </section>
 
