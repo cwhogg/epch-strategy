@@ -210,6 +210,131 @@
     margin: 8px 0 20px;
   }
 
+  /* How-it-works diagram */
+  .hiw-foundation {
+    border: 2px solid var(--accent);
+    background: linear-gradient(180deg, var(--accent-soft), #fffaf6);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    box-shadow: var(--shadow);
+  }
+  .hiw-foundation h4 {
+    margin: 0 0 4px;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--accent-ink);
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .hiw-foundation .who {
+    font-size: 12px;
+    color: var(--accent-ink);
+    opacity: 0.75;
+    margin-bottom: 10px;
+  }
+  .hiw-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 22px;
+    font-size: 13px;
+  }
+  .hiw-grid .lbl {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--accent-ink);
+    font-weight: 700;
+    opacity: 0.8;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .hiw-flow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    height: 36px;
+    margin: 0;
+    padding: 0 30px;
+  }
+  .hiw-flow .arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    position: relative;
+  }
+  .hiw-flow .arrow::before {
+    content: "";
+    width: 2px;
+    background: var(--accent);
+    flex: 1;
+    opacity: 0.5;
+  }
+  .hiw-flow .arrow::after {
+    content: "▼";
+    font-size: 12px;
+    line-height: 1;
+    margin-top: 2px;
+    color: var(--accent);
+  }
+  .hiw-teams {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 900px) {
+    .hiw-teams { grid-template-columns: 1fr; }
+    .hiw-flow { grid-template-columns: 1fr; height: auto; }
+    .hiw-flow .arrow { height: 28px; }
+  }
+  .hiw-team {
+    border: 1.5px solid var(--border-strong);
+    border-top: 4px solid var(--ink);
+    border-radius: 8px;
+    padding: 14px 16px 16px;
+    background: #fff;
+    box-shadow: var(--shadow);
+  }
+  .hiw-team.exec  { border-top-color: #7c3aed; }
+  .hiw-team.bd    { border-top-color: #15803d; }
+  .hiw-team.eng   { border-top-color: #1d4ed8; }
+  .hiw-team h4 {
+    margin: 0 0 2px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .hiw-team .who {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .hiw-team .sect { margin-top: 10px; }
+  .hiw-team .sect:first-of-type { margin-top: 0; }
+  .hiw-team .sect .lbl {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-soft);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .hiw-team.exec .sect .lbl { color: #7c3aed; }
+  .hiw-team.bd   .sect .lbl { color: #15803d; }
+  .hiw-team.eng  .sect .lbl { color: #1d4ed8; }
+  .hiw-team .sect ul {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .hiw-team .sect li { margin-bottom: 1px; }
+  .hiw-team .sect li code { font-size: 12px; background: #f4f1ea; padding: 0 4px; border-radius: 3px; }
+
   .block {
     border: 1.5px solid var(--border-strong);
     border-radius: 8px;
@@ -335,6 +460,7 @@
 
   <nav class="tabs" role="tablist">
     <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="howitworks">How it works</button>
     <button class="tab-btn" data-tab="architecture">Recommended architecture</button>
     <button class="tab-btn" data-tab="blocks">Building blocks</button>
     <button class="tab-btn" data-tab="deliverables">Specific deliverables</button>
@@ -385,6 +511,186 @@
     <div class="callout">
       <strong>Why this stack, not just Projects</strong>
       Projects are great for a specific ongoing piece of work, but they don't auto-trigger across all conversations and don't carry executable code or sub-agents. For company-wide "Claude always knows our brand / format / context," you want skills inside a plugin marketplace — that's the only mechanism that gives you (a) automatic invocation, (b) executable templates, (c) versioned distribution, and (d) admin-level rollout controls.
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="tab-panel" id="howitworks">
+    <h2>How it works</h2>
+    <p class="lede">Every employee gets the foundation plugin automatically. On top of that, each person also receives the plugin for the team they're on — so an exec gets foundation + exec; a salesperson gets foundation + BD; an engineer gets foundation + engineering. Claude composes them, and the most specific layer wins where they conflict.</p>
+
+    <div class="diagram">
+      <div class="hiw-foundation">
+        <h4><code class="inline" style="background:transparent;border:none;padding:0;font-size:15px;color:inherit">acme-foundation</code> — auto-installed for everyone</h4>
+        <div class="who">Universal. Loaded in every employee's Claude on every conversation.</div>
+        <div class="hiw-grid">
+          <div>
+            <span class="lbl">Skills</span>
+            <code class="inline">company-principles</code>, <code class="inline">brand-guidelines</code>, <code class="inline">company-context</code>, <code class="inline">weekly-update</code>, <code class="inline">meeting-notes</code>
+          </div>
+          <div>
+            <span class="lbl">Sub-agents</span>
+            <code class="inline">brand-checker</code>, <code class="inline">voice-checker</code>
+          </div>
+          <div>
+            <span class="lbl">Connectors (org-wide auth)</span>
+            Slack, GDrive / M365, Notion
+          </div>
+          <div>
+            <span class="lbl">Shared reference files</span>
+            <code class="inline">_shared/glossary.md</code>, <code class="inline">_shared/style.md</code>, brand assets (SVG/PNG)
+          </div>
+        </div>
+      </div>
+
+      <div class="hiw-flow" aria-hidden="true">
+        <div class="arrow"></div>
+        <div class="arrow"></div>
+        <div class="arrow"></div>
+      </div>
+
+      <div class="hiw-teams">
+
+        <div class="hiw-team exec">
+          <h4><code class="inline" style="background:transparent;border:none;padding:0;font-size:14.5px;color:inherit">acme-exec</code></h4>
+          <div class="who">Leadership / Staff+ · group-scoped auto-install</div>
+
+          <div class="sect">
+            <span class="lbl">Skills</span>
+            <ul>
+              <li><code>exec-principles</code> — leadership philosophy &amp; norms</li>
+              <li><code>exec-memo</code> (strict, mandatory reviewer)</li>
+              <li><code>board-update</code></li>
+              <li><code>all-hands-deck</code></li>
+              <li><code>okr-planning</code></li>
+              <li><code>compensation-framework</code></li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">Sub-agents</span>
+            <ul>
+              <li><code>coo-reviewer</code> — critiques exec memos</li>
+              <li><code>numbers-checker</code> — reconciles claims to data</li>
+              <li><code>strategic-devils-advocate</code></li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">MCP servers</span>
+            <ul>
+              <li><code>acme-data</code> — KPIs, burn, runway, ARR by segment</li>
+              <li><code>cap-table</code> — ownership &amp; option pool</li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">Connectors / sensitive files</span>
+            <ul>
+              <li>Carta connector</li>
+              <li><code>_internal/comp-bands.md</code></li>
+              <li><code>_internal/board-cadence.md</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hiw-team bd">
+          <h4><code class="inline" style="background:transparent;border:none;padding:0;font-size:14.5px;color:inherit">acme-bd</code></h4>
+          <div class="who">Business Development · Sales + Partnerships · group-scoped auto-install</div>
+
+          <div class="sect">
+            <span class="lbl">Skills</span>
+            <ul>
+              <li><code>bd-principles</code> — qualification &amp; deal philosophy</li>
+              <li><code>pitch-deck</code></li>
+              <li><code>client-proposal</code> (SOW + pricing)</li>
+              <li><code>discovery-call-notes</code></li>
+              <li><code>objection-handling</code></li>
+              <li><code>partnership-memo</code></li>
+              <li><code>renewal-playbook</code></li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">Sub-agents</span>
+            <ul>
+              <li><code>competitive-checker</code> — flags positioning risks</li>
+              <li><code>pricing-reviewer</code> — sanity-checks deal terms</li>
+              <li><code>deal-desk-reviewer</code></li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">MCP servers</span>
+            <ul>
+              <li><code>acme-data</code> — pipeline, deal stages, ACV, churn</li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">Connectors / templates</span>
+            <ul>
+              <li>Salesforce, HubSpot, Outreach</li>
+              <li>Gong (call recordings)</li>
+              <li><code>templates/sow-master.docx</code>, <code>templates/msa.docx</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hiw-team eng">
+          <h4><code class="inline" style="background:transparent;border:none;padding:0;font-size:14.5px;color:inherit">acme-engineering</code></h4>
+          <div class="who">Engineering · group-scoped auto-install</div>
+
+          <div class="sect">
+            <span class="lbl">Skills</span>
+            <ul>
+              <li><code>engineering-principles</code> — architecture &amp; review standards</li>
+              <li><code>prd-template</code></li>
+              <li><code>arch-decision-record</code> (ADR)</li>
+              <li><code>incident-runbook</code> &amp; <code>postmortem</code></li>
+              <li><code>code-review-checklist</code></li>
+              <li><code>oncall-handoff</code></li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">Sub-agents</span>
+            <ul>
+              <li><code>security-reviewer</code> — security pass on designs/PRs</li>
+              <li><code>design-reviewer</code> — architecture critique</li>
+              <li><code>test-coverage-reviewer</code></li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">MCP servers</span>
+            <ul>
+              <li><code>acme-codebase</code> — semantic search across repos</li>
+              <li>GitHub MCP</li>
+            </ul>
+          </div>
+
+          <div class="sect">
+            <span class="lbl">Connectors / reference</span>
+            <ul>
+              <li>GitHub, PagerDuty, Linear</li>
+              <li><code>_shared/coding-standards/</code></li>
+              <li><code>_shared/security-checklist.md</code></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <h3>Reading the diagram</h3>
+    <p>The <strong>foundation plugin</strong> is everyone's baseline. It carries the truly universal stuff: company principles, brand voice, positioning, the meeting-notes and weekly-update formats, plus the org-wide connectors (Slack, GDrive, Notion) that every employee benefits from.</p>
+    <p>Each <strong>team plugin</strong> layers role-specific skills, sub-agents, MCP servers, and connectors on top of foundation. An exec drafting a board update gets <code class="inline">company-principles</code> + <code class="inline">exec-principles</code> + the <code class="inline">board-update</code> skill + the <code class="inline">coo-reviewer</code> sub-agent + live numbers from <code class="inline">acme-data</code> — all without naming any of those things explicitly. A salesperson writing a proposal gets <code class="inline">company-principles</code> + <code class="inline">bd-principles</code> + <code class="inline">client-proposal</code> + <code class="inline">pricing-reviewer</code> + live deal context from Salesforce.</p>
+    <p>One person can belong to multiple groups. A founder-engineer who's also on the exec team gets all three layers (foundation + exec + engineering); group memberships compose additively.</p>
+
+    <div class="callout">
+      <strong>Naming &amp; org reality check</strong>
+      The team boxes are illustrative. Your real groups might be Sales, Marketing, RevOps, Customer Success, Product, Design, Finance, People — split or combine them to match how the company already organizes itself in Slack channels and Notion spaces. The principle holds either way: one foundation plugin everyone gets, plus one plugin per real team.
     </div>
   </section>
 
