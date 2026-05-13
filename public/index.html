@@ -336,6 +336,133 @@
   .hiw-team .sect li { margin-bottom: 1px; }
   .hiw-team .sect li code { font-size: 12px; background: #f4f1ea; padding: 0 4px; border-radius: 3px; }
 
+  /* Vendor market map */
+  .vendor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 8px 0 20px;
+  }
+  @media (max-width: 900px) {
+    .vendor-grid { grid-template-columns: 1fr; }
+  }
+  .vendor-segment {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--ink);
+    border-radius: 10px;
+    padding: 14px 16px 32px;
+    cursor: pointer;
+    transition: all .15s ease;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  .vendor-segment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 28px rgba(0,0,0,0.08);
+  }
+  .vendor-segment.cat-experience { border-top-color: #c2410c; }
+  .vendor-segment.cat-knowledge  { border-top-color: #1d4ed8; }
+  .vendor-segment.cat-build      { border-top-color: #7c3aed; }
+  .vendor-segment.cat-data       { border-top-color: #a16207; }
+  .vendor-segment.cat-ops        { border-top-color: #15803d; }
+  .vendor-segment h4 {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .vendor-segment .vendors {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .vendor-segment .more {
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .vendor-segment:hover .more { color: var(--accent); }
+
+  .vendor-legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .vendor-legend .swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .vendor-detail { display: none; }
+  .vendor-detail.active { display: block; }
+  .vendor-back {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    transition: all .12s ease;
+  }
+  .vendor-back:hover {
+    color: var(--ink);
+    border-color: var(--border-strong);
+    background: #f4f1ea;
+  }
+  .vendor-detail h3 {
+    margin-top: 0;
+  }
+  .vendor-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background: var(--panel);
+  }
+  .vendor-card h5 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .vendor-card p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .vendor-card .tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 3px;
+    background: #f4f1ea;
+    color: var(--ink-soft);
+    margin-left: 6px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+  .vendor-card .tag.managed { background: #fff1ea; color: var(--accent-ink); }
+  .vendor-card .tag.oss { background: #e8f5ec; color: var(--green); }
+  .vendor-card .tag.both { background: #eaf0fd; color: var(--blue); }
+
   .block {
     border: 1.5px solid var(--border-strong);
     border-radius: 8px;
@@ -470,6 +597,7 @@
     <button class="tab-btn" data-tab="possible">What's possible today</button>
     <button class="tab-btn" data-tab="limits">Limitations</button>
     <button class="tab-btn" data-tab="kb">Knowledge base</button>
+    <button class="tab-btn" data-tab="vendors">Vendor landscape</button>
   </nav>
 
   <!-- ===== OVERVIEW ===== -->
@@ -1807,6 +1935,423 @@ When asked to draft a client proposal:
 
   </section>
 
+  <!-- ===== VENDOR LANDSCAPE ===== -->
+  <section class="tab-panel" id="vendors">
+    <h2>Vendor landscape</h2>
+    <p class="lede">A market map of the vendors that show up when you build out the components in this architecture. Click any segment to drill into the vendors in that space with brief commentary on when each is worth considering. Color-banded by where the vendor sits in your stack.</p>
+
+    <div class="vendor-legend">
+      <span><span class="swatch" style="background:#c2410c"></span>Experience layer (connectors, plugin distribution)</span>
+      <span><span class="swatch" style="background:#1d4ed8"></span>Knowledge layer (managed KB / RAG)</span>
+      <span><span class="swatch" style="background:#7c3aed"></span>Build pieces (DBs, models, frameworks)</span>
+      <span><span class="swatch" style="background:#a16207"></span>Data &amp; code surfaces</span>
+      <span><span class="swatch" style="background:#15803d"></span>Ops (eval, observability, hosting)</span>
+    </div>
+
+    <!-- ========== MARKET MAP GRID ========== -->
+    <div class="vendor-grid" id="vendor-grid">
+
+      <div class="vendor-segment cat-experience" data-segment="connectors">
+        <h4>MCP marketplaces &amp; connectors</h4>
+        <div class="vendors">Anthropic connectors · Composio · Smithery · Glama · Zapier MCP · Pipedream · n8n</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-knowledge" data-segment="kb-managed">
+        <h4>Enterprise knowledge / KB (managed)</h4>
+        <div class="vendors">Glean · Notion AI · Microsoft 365 Copilot · Atlassian Rovo · Mendable · Vectara</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-build" data-segment="vector-dbs">
+        <h4>Vector databases</h4>
+        <div class="vendors">Pinecone · Weaviate · Qdrant · Chroma · Turbopuffer · pgvector · LanceDB</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-build" data-segment="embeddings">
+        <h4>Embedding models</h4>
+        <div class="vendors">Voyage AI · Cohere · OpenAI · Nomic · BGE · Jina</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-build" data-segment="parsing">
+        <h4>Document parsing &amp; call ingestion</h4>
+        <div class="vendors">Unstructured · LlamaParse · Reducto · Docling · Gong · Granola · AssemblyAI · Deepgram</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-build" data-segment="frameworks">
+        <h4>RAG &amp; agent frameworks</h4>
+        <div class="vendors">LlamaIndex · LangChain · Haystack · LangGraph · CrewAI · AutoGen</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-data" data-segment="semantic">
+        <h4>Data / semantic layer</h4>
+        <div class="vendors">Cube · Hex · Mode · dbt · Snowflake · Databricks</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-data" data-segment="code">
+        <h4>Code-aware search</h4>
+        <div class="vendors">Sourcegraph · Greptile · Cody · Codeium / Windsurf · Aider repo-map</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-ops" data-segment="evals">
+        <h4>Evals &amp; observability</h4>
+        <div class="vendors">Braintrust · Langfuse · LangSmith · Helicone · HoneyHive · Phoenix (Arize)</div>
+        <span class="more">View detail →</span>
+      </div>
+
+      <div class="vendor-segment cat-ops" data-segment="hosting">
+        <h4>Hosting for MCPs &amp; KB API</h4>
+        <div class="vendors">Cloudflare Workers · Modal · Fly.io · Railway · Vercel · Render</div>
+        <span class="more">View detail →</span>
+      </div>
+
+    </div>
+
+    <p class="muted" style="font-size:12.5px;margin-top:10px">Not exhaustive — focused on the vendors worth considering for a company of 30–500 people building out the architecture in this brief. Pricing and capabilities change frequently; verify before committing.</p>
+
+    <!-- ========== DETAIL PANELS ========== -->
+
+    <div class="vendor-detail" data-segment="connectors">
+      <button class="vendor-back">← Back to map</button>
+      <h3>MCP marketplaces &amp; connectors</h3>
+      <p>Where you get the integrations Claude talks to. Default to first-party Anthropic connectors when they exist; reach for third-party marketplaces for the long tail.</p>
+
+      <div class="vendor-card">
+        <h5>Anthropic first-party connectors <span class="tag managed">Native</span></h5>
+        <p>Slack, GDrive, M365, Notion, Salesforce, GitHub, Linear, Asana, Box, Zapier. Each user authenticates once. Lowest friction; use these first for anything they cover.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Composio <span class="tag managed">Managed</span></h5>
+        <p>250+ pre-built MCP servers covering most SaaS (HubSpot, Outreach, Clay, Stripe, Gong, etc.). The right answer when Anthropic doesn't have a first-party connector and you don't want to write one.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Smithery <span class="tag managed">Marketplace</span></h5>
+        <p>MCP server marketplace and discovery layer. Useful for browsing what already exists before building your own.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Glama <span class="tag managed">Marketplace + gateway</span></h5>
+        <p>MCP catalog + gateway service. Useful when you want a single proxy in front of many MCPs (auth, logging, rate limiting).</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Zapier MCP <span class="tag managed">Managed</span></h5>
+        <p>Exposes 6000+ Zapier integrations as MCP tools. Lower fidelity than dedicated connectors, but enormous breadth — good for "we just need a quick read/write into [obscure SaaS]."</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Pipedream <span class="tag managed">Managed</span></h5>
+        <p>Workflow tool that also serves MCPs. More developer-friendly than Zapier. Useful if you want serverless glue between systems with MCP exposure.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>n8n <span class="tag oss">Open source</span></h5>
+        <p>Open-source workflow automation with MCP serving. Self-hostable; useful when you need glue between internal systems that can't go through a SaaS connector.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="kb-managed">
+      <button class="vendor-back">← Back to map</button>
+      <h3>Enterprise knowledge / KB (managed)</h3>
+      <p>Buy-instead-of-build for the knowledge layer. Almost always the right call for companies with broad SaaS sprawl. Front any of these with your own MCP wrapper so you can swap backends later without touching skills.</p>
+
+      <div class="vendor-card">
+        <h5>Glean <span class="tag managed">Managed</span></h5>
+        <p>Category leader for enterprise search across SaaS. Indexes Slack, GDrive, Notion, Confluence, Salesforce, Jira, Zendesk, etc., handles permissions natively, exposes an MCP. The default buy for KB if you have data spread across many systems.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Notion AI <span class="tag managed">Managed</span></h5>
+        <p>If your company is Notion-centric, the built-in AI search reaches deeper into Notion content than any external indexer would. Reasonable v1 for a Notion-only company.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Microsoft 365 Copilot <span class="tag managed">Managed</span></h5>
+        <p>Same logic for M365 shops. Native search across SharePoint, OneDrive, Outlook, Teams. Available where M365 is already deployed.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Atlassian Rovo <span class="tag managed">Managed</span></h5>
+        <p>For companies with Confluence + Jira + Bitbucket as their primary surface. Indexes across the Atlassian suite with permission awareness.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Mendable <span class="tag managed">Managed</span></h5>
+        <p>More developer-facing managed RAG. Point it at sources (docs, GitHub, websites), get a search/Q&amp;A API and increasingly an MCP. Smaller-scale than Glean; cheaper to get started.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Vectara <span class="tag managed">Managed</span></h5>
+        <p>Similar shape to Mendable. End-to-end RAG-as-a-service: ingestion, indexing, hybrid retrieval, re-ranking, API. Worth comparing if Mendable isn't a fit.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="vector-dbs">
+      <button class="vendor-back">← Back to map</button>
+      <h3>Vector databases</h3>
+      <p>The storage layer when you build the KB yourself. Pinecone is the safe default; the alternatives are interesting for specific reasons.</p>
+
+      <div class="vendor-card">
+        <h5>Pinecone <span class="tag managed">Managed</span></h5>
+        <p>The default managed vector DB. Mature, well-documented, scales easily. Most tutorials assume Pinecone. Worth paying for unless you have a strong reason to self-host.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Weaviate <span class="tag both">Managed + OSS</span></h5>
+        <p>Open source with a managed cloud offering. Strong hybrid search (vector + keyword) and modules for re-ranking. Good when you want options to self-host later.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Qdrant <span class="tag both">Managed + OSS</span></h5>
+        <p>Open source written in Rust; fast and memory-efficient. Cloud offering available. Popular for self-hosted production deployments.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Chroma <span class="tag oss">Open source</span></h5>
+        <p>Lightweight, embeddable. Good for prototyping or for embedding into a single application. Not ideal at scale.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Turbopuffer <span class="tag managed">Managed</span></h5>
+        <p>Newer entrant. Optimized for cold queries and archive-heavy workloads — pricing breaks differently than Pinecone, often dramatically cheaper for large but infrequently-accessed corpora. Worth considering for a KB heavy on historical content.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>pgvector <span class="tag oss">Open source</span></h5>
+        <p>Postgres extension. If you already run Postgres and your KB is modest in size, this is the lowest-overhead option. Avoids running a separate database.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>LanceDB <span class="tag oss">Open source</span></h5>
+        <p>Embedded, file-based. Useful for offline/local KB scenarios or when you want a vector DB that ships with the application without infra.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="embeddings">
+      <button class="vendor-back">← Back to map</button>
+      <h3>Embedding models</h3>
+      <p>Convert text chunks into vectors so they can be searched. The choice meaningfully affects retrieval quality; benchmark on your own corpus before locking in.</p>
+
+      <div class="vendor-card">
+        <h5>Voyage AI <span class="tag managed">Managed</span></h5>
+        <p>Anthropic-acquired; the recommended embedding family for pipelines that feed Claude. Strong performance, especially on the larger context-window models. Default choice for KBs serving Claude-based skills.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Cohere embed-v3 <span class="tag managed">Managed</span></h5>
+        <p>Long-standing high-quality embedding API. Notably good multilingual support. Worth comparing against Voyage.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>OpenAI text-embedding-3 <span class="tag managed">Managed</span></h5>
+        <p>Reliable, well-priced. Two sizes (small / large). Reasonable default if you're already using OpenAI for other things, otherwise prefer Voyage for Claude pipelines.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Nomic Embed <span class="tag oss">Open source</span></h5>
+        <p>Strong open-source embedding model. Useful if you need to self-host or run embeddings on-prem (regulated industries, air-gapped environments).</p>
+      </div>
+      <div class="vendor-card">
+        <h5>BGE (BAAI) <span class="tag oss">Open source</span></h5>
+        <p>Family of open-source embedding models. Competitive quality; worth considering for self-hosted deployments.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Jina Embeddings <span class="tag both">Managed + OSS</span></h5>
+        <p>Multimodal and multilingual embeddings. Useful if your corpus includes images or non-English content.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="parsing">
+      <button class="vendor-back">← Back to map</button>
+      <h3>Document parsing &amp; call ingestion</h3>
+      <p>Getting clean text out of messy sources. The quality of parsing dominates everything downstream — bad text in, bad retrieval out. Worth spending real money here.</p>
+
+      <h4 style="margin-top:18px">Document parsing</h4>
+      <div class="vendor-card">
+        <h5>Unstructured.io <span class="tag both">Managed + OSS</span></h5>
+        <p>Broad coverage of formats (PDF, DOCX, PPT, HTML, email, image OCR). Good default for "I just need to get text out of everything." Both API and self-host options.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>LlamaParse <span class="tag managed">Managed</span></h5>
+        <p>LlamaIndex's parsing service. Strong on PDFs, including tables and complex layouts. Tight integration with LlamaIndex if you're using that framework.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Reducto <span class="tag managed">Managed</span></h5>
+        <p>Newer, focused on highest-quality PDF and table extraction. Pricier but materially better on documents with complex tables (contracts, proposals, financials).</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Docling <span class="tag oss">Open source</span></h5>
+        <p>IBM's open-source document conversion. Strong baseline; worth trying before paying for managed services on simpler corpora.</p>
+      </div>
+
+      <h4 style="margin-top:18px">Call &amp; meeting transcription</h4>
+      <div class="vendor-card">
+        <h5>Gong <span class="tag managed">Managed</span></h5>
+        <p>Sales call recording with rich transcripts. The single highest-value KB source for BD plugins. Has an API; exposes transcripts and call metadata.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Chorus (ZoomInfo) <span class="tag managed">Managed</span></h5>
+        <p>Direct Gong competitor. Similar feature set. Worth comparing on pricing and integration breadth.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Fathom <span class="tag managed">Managed</span></h5>
+        <p>Meeting recording (broader than just sales). Good free tier; popular with smaller teams.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Granola <span class="tag managed">Managed</span></h5>
+        <p>Unobtrusive meeting notes — listens passively, produces structured summaries. Gaining adoption fast for its "no bot in the meeting" approach.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Otter.ai <span class="tag managed">Managed</span></h5>
+        <p>Long-standing meeting transcription. Broad integrations. Less polished than Granola for AI-era workflows but well-established.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>AssemblyAI / Deepgram <span class="tag managed">Managed</span></h5>
+        <p>Raw transcription APIs if you want to build your own meeting-recording pipeline. Useful when you need transcripts but don't want a meeting product opinion baked in.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="frameworks">
+      <button class="vendor-back">← Back to map</button>
+      <h3>RAG &amp; agent frameworks</h3>
+      <p>The libraries that gluing retrieval + LLM + tooling together. For Cowork plugins, you'll usually only need these inside an MCP server you build (e.g. the KB MCP). Skills themselves don't need a framework.</p>
+
+      <div class="vendor-card">
+        <h5>LlamaIndex <span class="tag oss">Open source</span></h5>
+        <p>Retrieval-focused framework. Strongest if your project is primarily "build a good RAG pipeline." Rich ecosystem around parsing, chunking, and re-ranking.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>LangChain <span class="tag oss">Open source</span></h5>
+        <p>Broader agent framework. Bigger surface than LlamaIndex but heavier. Worth it if you need orchestration beyond just retrieval.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Haystack <span class="tag oss">Open source</span></h5>
+        <p>Deepset's framework. Cleaner abstractions than LangChain for production RAG. Strong if you prefer a more structured codebase.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>LangGraph <span class="tag oss">Open source</span></h5>
+        <p>Typed multi-agent state machines from the LangChain team. Useful when sub-agents have complex flow (parallel critics, conditional escalation).</p>
+      </div>
+      <div class="vendor-card">
+        <h5>CrewAI <span class="tag oss">Open source</span></h5>
+        <p>Role-based multi-agent framework. Each agent gets a persona, the framework handles orchestration. Useful for complex review pipelines.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>AutoGen <span class="tag oss">Open source</span></h5>
+        <p>Microsoft's multi-agent framework. Mature, well-documented. Strong for conversational multi-agent setups.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="semantic">
+      <button class="vendor-back">← Back to map</button>
+      <h3>Data / semantic layer</h3>
+      <p>What sits behind the structured-data MCP (e.g. <code class="inline">acme-data</code>). Choice depends heavily on your existing data stack.</p>
+
+      <div class="vendor-card">
+        <h5>Cube <span class="tag both">Managed + OSS</span></h5>
+        <p>Semantic layer that's particularly clean as an MCP backend. Define metrics once ("ARR", "churn", "pipeline value") and Claude calls them by name without needing to write SQL. Often the best-fit for the data MCP layer.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Hex <span class="tag managed">Managed</span></h5>
+        <p>Notebook + dashboard tool. Increasingly exposes queries via API and MCP. Good if your team already has dashboards there.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Mode <span class="tag managed">Managed</span></h5>
+        <p>Analytics platform with API access. Similar story to Hex.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>dbt <span class="tag both">Managed + OSS</span></h5>
+        <p>Transformation layer for the warehouse. If you have dbt models, wrap them in a thin MCP server that exposes them as named endpoints. Cleaner than raw SQL access.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Snowflake / Databricks / BigQuery <span class="tag managed">Managed</span></h5>
+        <p>Warehouses. Have community MCP servers. Treat raw SQL access as a fallback, not the primary MCP interface — Claude writing SQL against a wide schema is fragile.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="code">
+      <button class="vendor-back">← Back to map</button>
+      <h3>Code-aware search</h3>
+      <p>For the engineering plugin's codebase MCP. Different from KB tooling because code chunking, ranking, and call-graph awareness all matter.</p>
+
+      <div class="vendor-card">
+        <h5>Sourcegraph <span class="tag both">Managed + OSS</span></h5>
+        <p>The established player in code intelligence. Cody is their AI surface; their MCP server exposes code search and intelligence to Claude. Enterprise-ready.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Greptile <span class="tag managed">Managed</span></h5>
+        <p>Newer, AI-focused code search. Optimized for natural-language queries over codebases. Good if Sourcegraph feels heavyweight.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Cody (Sourcegraph) <span class="tag managed">Managed</span></h5>
+        <p>The AI-surface side of Sourcegraph. If you've already standardized on Sourcegraph, Cody is the path to MCP exposure.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Codeium / Windsurf <span class="tag managed">Managed</span></h5>
+        <p>IDE-integrated AI with API surfaces. Less typical as an MCP backend but worth knowing about if your team uses them.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Aider's repo-map <span class="tag oss">Open source</span></h5>
+        <p>Lightweight open-source approach: build a compact map of the codebase that Claude can use as context. DIY but very transparent.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="evals">
+      <button class="vendor-back">← Back to map</button>
+      <h3>Evals &amp; observability</h3>
+      <p>The most under-built layer for most companies and where surprisingly small investment pays off. Without this you're flying blind on whether your skills are getting better or worse over time.</p>
+
+      <div class="vendor-card">
+        <h5>Braintrust <span class="tag managed">Managed</span></h5>
+        <p>Best-in-class evals + observability for LLM apps. Strong Anthropic integration. Use this if you're going to do evals seriously.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Langfuse <span class="tag both">Managed + OSS</span></h5>
+        <p>Open source, self-hostable observability + evals. Growing fast. The right buy if you need to keep data on-prem.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>LangSmith <span class="tag managed">Managed</span></h5>
+        <p>LangChain's offering. Polished UI. Best value if you're already in the LangChain ecosystem; less compelling otherwise.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Helicone <span class="tag both">Managed + OSS</span></h5>
+        <p>Lightweight, focused on observability and cost tracking. Lower-friction setup. Good starting point before you commit to a heavier tool.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>HoneyHive <span class="tag managed">Managed</span></h5>
+        <p>Eval + observability with stronger emphasis on production monitoring. Worth comparing against Braintrust.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Phoenix (Arize) <span class="tag oss">Open source</span></h5>
+        <p>Open-source LLM observability from Arize. Good for self-hosted ML-ops shops.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>PromptLayer <span class="tag managed">Managed</span></h5>
+        <p>Prompt management and versioning. Less about evals, more about treating prompts as first-class artifacts. Useful if your skill SKILL.md files start drifting in many directions.</p>
+      </div>
+    </div>
+
+    <div class="vendor-detail" data-segment="hosting">
+      <button class="vendor-back">← Back to map</button>
+      <h3>Hosting for MCPs &amp; KB API</h3>
+      <p>Where the MCP servers you build actually run. Most of these are fine; pick based on what your team already operates.</p>
+
+      <div class="vendor-card">
+        <h5>Cloudflare Workers <span class="tag managed">Managed</span></h5>
+        <p>Popular for lightweight MCP servers. Good cold-start, generous free tier, native KV/D1/R2 storage. Great default for a small <code class="inline">acme-data</code>-style MCP.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Modal <span class="tag managed">Managed</span></h5>
+        <p>Serverless Python with GPU support. Strong fit for the KB indexing pipeline (embedding generation, batch parsing). Less compelling for the always-on MCP API itself.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Fly.io <span class="tag managed">Managed</span></h5>
+        <p>Straightforward containerized hosting with global edge. Good if your MCP needs to be near users in multiple regions.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Railway <span class="tag managed">Managed</span></h5>
+        <p>Similar shape to Fly. Polished developer experience. Easy enough that non-DevOps folks can deploy and maintain.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Vercel <span class="tag managed">Managed</span></h5>
+        <p>HTTP-based MCPs work fine here. Best if your team is already using Vercel for the rest of its frontend stack.</p>
+      </div>
+      <div class="vendor-card">
+        <h5>Render <span class="tag managed">Managed</span></h5>
+        <p>Containerized hosting with managed Postgres and Redis. Solid general-purpose choice for hosting both the MCP API and any small auxiliary services.</p>
+      </div>
+    </div>
+
+  </section>
+
   <footer class="foot">
     Architecture brief generated May 12, 2026 · Verify capability details against the current Claude Help Center, Claude Docs, and your specific plan tier before committing to a build. Items marked VERIFY in the capability matrix are the most likely to have drifted.
   </footer>
@@ -1823,6 +2368,46 @@ When asked to draft a client proposal:
     document.getElementById(t.dataset.tab).classList.add('active');
     window.scrollTo({top: 0, behavior: 'smooth'});
   }));
+
+  // Vendor market map: click segment → show detail; back → show grid
+  document.querySelectorAll('.vendor-segment').forEach(seg => {
+    seg.addEventListener('click', () => {
+      const id = seg.dataset.segment;
+      const grid = document.getElementById('vendor-grid');
+      const legend = grid && grid.previousElementSibling;
+      grid.style.display = 'none';
+      // hide the legend + post-grid muted note as well
+      document.querySelectorAll('#vendors .vendor-legend').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('#vendors > p.muted').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.vendor-detail').forEach(d => d.classList.remove('active'));
+      const target = document.querySelector(`.vendor-detail[data-segment="${id}"]`);
+      if (target) target.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+  document.querySelectorAll('.vendor-back').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.vendor-detail').forEach(d => d.classList.remove('active'));
+      const grid = document.getElementById('vendor-grid');
+      grid.style.display = 'grid';
+      document.querySelectorAll('#vendors .vendor-legend').forEach(el => el.style.display = '');
+      document.querySelectorAll('#vendors > p.muted').forEach(el => el.style.display = '');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+
+  // When switching main tabs into Vendors, always reset to map view
+  document.querySelectorAll('.tab-btn').forEach(t => {
+    t.addEventListener('click', () => {
+      if (t.dataset.tab === 'vendors') {
+        document.querySelectorAll('.vendor-detail').forEach(d => d.classList.remove('active'));
+        const grid = document.getElementById('vendor-grid');
+        if (grid) grid.style.display = 'grid';
+        document.querySelectorAll('#vendors .vendor-legend').forEach(el => el.style.display = '');
+        document.querySelectorAll('#vendors > p.muted').forEach(el => el.style.display = '');
+      }
+    });
+  });
 
   // Sub-tabs (architecture section)
   const subtabs = document.querySelectorAll('.subtab-btn');
