@@ -463,6 +463,181 @@
   .vendor-card .tag.oss { background: #e8f5ec; color: var(--green); }
   .vendor-card .tag.both { background: #eaf0fd; color: var(--blue); }
 
+  /* Use cases */
+  .uc-persona {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: linear-gradient(180deg, var(--accent-soft), #fffaf6);
+    border: 1.5px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 0 0 18px;
+  }
+  .uc-persona .uc-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .uc-persona h3 {
+    margin: 0 0 4px;
+    font-size: 17px;
+    color: var(--accent-ink);
+  }
+  .uc-persona .task {
+    color: var(--accent-ink);
+    font-size: 14px;
+    margin: 0;
+  }
+  .uc-persona .task strong { font-weight: 700; }
+
+  .uc-input {
+    background: #f4f1ea;
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 14px 16px;
+    color: var(--ink);
+    margin: 12px 0 22px;
+    position: relative;
+    font-style: italic;
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+  .uc-input::before {
+    content: "User types ↓";
+    display: block;
+    font-style: normal;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .uc-section {
+    margin: 22px 0;
+  }
+  .uc-section > h4 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
+
+  .uc-anatomy {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 800px) { .uc-anatomy { grid-template-columns: 1fr; } }
+  .uc-anatomy .uc-row {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--ink);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .uc-anatomy .uc-row.skills    { border-left-color: #c2410c; }
+  .uc-anatomy .uc-row.agents    { border-left-color: #15803d; }
+  .uc-anatomy .uc-row.mcps      { border-left-color: #1d4ed8; }
+  .uc-anatomy .uc-row.kb        { border-left-color: #7c3aed; }
+  .uc-anatomy .uc-row.connectors{ border-left-color: #a16207; }
+  .uc-anatomy .uc-row .role {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--ink-soft);
+  }
+  .uc-anatomy .uc-row.skills .role     { color: #c2410c; }
+  .uc-anatomy .uc-row.agents .role     { color: #15803d; }
+  .uc-anatomy .uc-row.mcps .role       { color: #1d4ed8; }
+  .uc-anatomy .uc-row.kb .role         { color: #7c3aed; }
+  .uc-anatomy .uc-row.connectors .role { color: #a16207; }
+  .uc-anatomy .uc-row ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13px;
+  }
+  .uc-anatomy .uc-row li { margin-bottom: 2px; }
+  .uc-anatomy .uc-row li code {
+    background: #f4f1ea;
+    padding: 0 5px;
+    border-radius: 3px;
+    font-size: 12.5px;
+  }
+
+  .uc-built {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    background: var(--panel);
+  }
+  .uc-built h5 {
+    margin: 0 0 6px;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .uc-built h5 code { font-size: 12.5px; background: #f4f1ea; padding: 1px 5px; border-radius: 3px; }
+  .uc-built ul { margin: 4px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink-soft); }
+  .uc-built ul li { margin-bottom: 2px; }
+
+  .uc-output {
+    background: #f7f5ee;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  .uc-output ul, .uc-output ol { margin: 6px 0 0; padding-left: 20px; }
+  .uc-output li { margin-bottom: 3px; }
+
+  .uc-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  @media (max-width: 800px) { .uc-compare { grid-template-columns: 1fr; } }
+  .uc-compare .col {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .uc-compare .without {
+    background: var(--red-soft);
+    border-color: #f0c4c4;
+  }
+  .uc-compare .with {
+    background: var(--green-soft);
+    border-color: #b7d8c0;
+  }
+  .uc-compare h5 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+  }
+  .uc-compare .without h5 { color: var(--red); }
+  .uc-compare .with h5 { color: var(--green); }
+  .uc-compare ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.55; }
+  .uc-compare li { margin-bottom: 4px; }
+
   .block {
     border: 1.5px solid var(--border-strong);
     border-radius: 8px;
@@ -592,12 +767,13 @@
     <button class="tab-btn" data-tab="architecture">Recommended architecture</button>
     <button class="tab-btn" data-tab="blocks">Building blocks</button>
     <button class="tab-btn" data-tab="deliverables">Specific deliverables</button>
-    <button class="tab-btn" data-tab="hosting">Hosting & iteration</button>
+    <button class="tab-btn" data-tab="usecases">Use cases</button>
     <button class="tab-btn" data-tab="roadmap">Roadmap</button>
     <button class="tab-btn" data-tab="possible">What's possible today</button>
     <button class="tab-btn" data-tab="limits">Limitations</button>
     <button class="tab-btn" data-tab="kb">Knowledge base</button>
     <button class="tab-btn" data-tab="vendors">Vendor landscape</button>
+    <button class="tab-btn" data-tab="hosting">Hosting & iteration</button>
   </nav>
 
   <!-- ===== OVERVIEW ===== -->
@@ -1437,6 +1613,474 @@ Read `principles.md`, `dos-and-donts.md`, and `decision-frameworks.md`. Apply th
         <p>Slash commands map to the relevant skill and seed a structured prompt. Lower the activation energy for the most common workflows.</p>
       </div>
     </details>
+  </section>
+
+  <!-- ===== USE CASES ===== -->
+  <section class="tab-panel" id="usecases">
+    <h2>Use cases — three detailed walkthroughs</h2>
+    <p class="lede">Three real workflows showing the system in action, end to end. Each one covers: who's using it, what they ask for, what fires under the hood (skills, sub-agents, MCPs, KB queries), how those skills were originally built, what the output looks like, and what changes vs. asking Claude with no system at all. The case-study company is in clinical / health-data — adjust the domain framing for your own.</p>
+
+    <nav class="subtabs" role="tablist">
+      <button class="subtab-btn active" data-subtab="uc-vpbd">VP BD: Pfizer pitch deck</button>
+      <button class="subtab-btn" data-subtab="uc-coo">COO: Weekly OKR memo</button>
+      <button class="subtab-btn" data-subtab="uc-vpm">VP Marketing: Trial result LinkedIn post</button>
+    </nav>
+
+    <!-- ============================ -->
+    <!-- USE CASE 1: VP BD / Pfizer    -->
+    <!-- ============================ -->
+    <div class="subtab-panel active" data-subtab="uc-vpbd">
+
+      <div class="uc-persona">
+        <div class="uc-icon">BD</div>
+        <div>
+          <h3>VP Business Development — Big Pharma lead</h3>
+          <p class="task"><strong>Task:</strong> Create a pitch deck for a real-world-evidence (RWE) data partnership with Pfizer, focused on cardiometabolic outcomes.</p>
+        </div>
+      </div>
+
+      <div class="uc-input">Draft a pitch deck for Pfizer for our cardiometabolic RWE data partnership. They're focused on the GLP-1 successor pipeline this year — frame our offer around that. Include our pharma traction numbers and a slide on how this compares to the deal we ran with Merck last year.</div>
+
+      <div class="uc-section">
+        <h4>Under the hood — what fires when this is typed</h4>
+        <div class="uc-anatomy">
+          <div class="uc-row skills">
+            <div class="role">Skills loaded (auto-triggered)</div>
+            <ul>
+              <li><code>company-principles</code> — foundation</li>
+              <li><code>brand-guidelines</code> — foundation</li>
+              <li><code>company-context</code> — foundation, for positioning &amp; ICP</li>
+              <li><code>bd-principles</code> — acme-bd</li>
+              <li><code>pitch-deck</code> — acme-bd, the primary skill</li>
+            </ul>
+          </div>
+          <div class="uc-row agents">
+            <div class="role">Sub-agents called</div>
+            <ul>
+              <li><code>brand-checker</code> — validates colors, fonts, voice on every slide</li>
+              <li><code>competitive-checker</code> — flags positioning risks vs. named competitors</li>
+              <li><code>pricing-reviewer</code> — sanity-checks any pricing structure shown</li>
+            </ul>
+          </div>
+          <div class="uc-row mcps">
+            <div class="role">MCP servers queried</div>
+            <ul>
+              <li><code>acme-data</code> → pharma_traction(segment=&quot;biopharma&quot;), arr_by_customer_tier(), case_study_count(domain=&quot;cardiometabolic&quot;)</li>
+            </ul>
+          </div>
+          <div class="uc-row kb">
+            <div class="role">Knowledge base queries (Phase 2)</div>
+            <ul>
+              <li><code>kb_recent("Pfizer", days=540)</code> — every Pfizer touchpoint, call, email thread</li>
+              <li><code>kb_search("RWE pitch decks pharma", filters={team:"bd"}, top_k=3)</code></li>
+              <li><code>kb_get_doc("merck-2024-deal-summary")</code> — the explicit comparison the user asked for</li>
+              <li><code>kb_search("GLP-1 pipeline competitive landscape", days=180)</code></li>
+            </ul>
+          </div>
+          <div class="uc-row connectors">
+            <div class="role">Native connectors used</div>
+            <ul>
+              <li>Salesforce — Pfizer account record, contacts, prior deal stages</li>
+              <li>Gong — recordings of any prior Pfizer discovery calls</li>
+              <li>GDrive — fetch the Merck case study deck from shared drive</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>How the relevant skills were originally built</h4>
+
+        <div class="uc-built">
+          <h5>The <code>pitch-deck</code> skill (in <code>plugins/acme-bd/skills/pitch-deck/</code>) was assembled from:</h5>
+          <ul>
+            <li>The brand-team's master deck file (<code>templates/acme-master.pptx</code>) with all approved layouts.</li>
+            <li>A pharma-specific narrative arc the VP BD wrote out (<code>templates/pharma-narrative.md</code>: Problem → Why us → Methodology → Pharma traction → Customer-specific angle → Pricing → Ask).</li>
+            <li>Three anonymized winning decks from the past 12 months, with key slides annotated for what worked (<code>examples/</code>).</li>
+            <li>The pharma positioning workshop transcript the CEO ran with the BD team (extracted into <code>reference/pharma-positioning.md</code>).</li>
+            <li>A Python helper (<code>scripts/build_deck.py</code>) using python-pptx that opens the template and fills slides programmatically.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>bd-principles</code> skill was built from:</h5>
+          <ul>
+            <li>The team's qualification framework (MEDDPICC adaptation), already in Notion → exported to <code>principles.md</code>.</li>
+            <li>The "what we always say / never say" doc the VP BD maintains → became <code>dos-and-donts.md</code>.</li>
+            <li>The CEO's recorded sales philosophy talk from a Loom session → transcribed into <code>decision-frameworks.md</code>.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>competitive-checker</code> sub-agent was built from:</h5>
+          <ul>
+            <li>A read-only persona prompt (<code>agents/competitive-checker.md</code>) trained to check for: overclaiming vs. competitors, missing acknowledgment of competitor strengths, unsupported "we're better because" claims.</li>
+            <li>The VP BD's "common positioning mistakes" list, gathered from review of 20 lost deals.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>acme-data</code> MCP server (for pharma traction numbers) exposes:</h5>
+          <ul>
+            <li>Endpoints fed from the company data warehouse (Snowflake) via dbt models. Defined: <code>pharma_traction()</code>, <code>arr_by_customer_tier()</code>, <code>case_study_count()</code>, <code>active_pharma_pilots()</code>.</li>
+            <li>OAuth-gated so each user's permissions are honored.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>What comes back</h4>
+        <div class="uc-output">
+          A 12-slide PPTX file ready for the VP BD's review:
+          <ol>
+            <li>Cover — Pfizer + Acme co-branding, brand-approved layout.</li>
+            <li>The cardiometabolic data gap — framed against Pfizer's published pipeline priorities (pulled from KB).</li>
+            <li>Why Acme — three specific differentiators, each backed by a metric from <code>acme-data</code>.</li>
+            <li>RWE methodology — using the canonical narrative from <code>pharma-narrative.md</code>.</li>
+            <li>Pfizer-specific angle — references the GLP-1 framing the user asked for; pulls in 2 prior touchpoints from Gong / Salesforce.</li>
+            <li>Pharma traction — live numbers (X active pharma engagements, $Y in pharma ARR, Z published case studies).</li>
+            <li>Comparison: the Merck 2024 partnership — structure, scope, outcome, pulled from KB.</li>
+            <li>Proposed scope &amp; timeline.</li>
+            <li>Pricing approach (tiered) — sanity-checked by <code>pricing-reviewer</code>.</li>
+            <li>Team — pulled from internal directory.</li>
+            <li>Risks &amp; mitigations.</li>
+            <li>Ask &amp; next steps.</li>
+          </ol>
+          Plus a footnote: "Drew on: Pfizer touchpoints from 2025-Q3 onward, prior pharma decks for [pharma_co_1, pharma_co_2], the Merck 2024 deal summary. Brand-checked, competitive-checked. <code>pricing-reviewer</code> flagged the tiered model as ship-ready."
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>Why this beats Claude alone</h4>
+        <div class="uc-compare">
+          <div class="col without">
+            <h5>Without the system</h5>
+            <ul>
+              <li>Generic deck — no brand colors, no master template, default fonts.</li>
+              <li>No knowledge of prior Pfizer interactions; treats them as a cold prospect.</li>
+              <li>Can't pull live traction numbers; everything has to be typed in by hand.</li>
+              <li>"Why us" slides full of platitudes ("industry-leading," "best-in-class") without specifics.</li>
+              <li>The "compared to Merck deal" slide either omitted or hallucinated.</li>
+              <li>No competitive sanity check — risks claims that legal would block.</li>
+              <li>VP BD spends 2–4 hours rebuilding the structure to match how the team actually pitches.</li>
+            </ul>
+          </div>
+          <div class="col with">
+            <h5>With the system</h5>
+            <ul>
+              <li>Output is on-brand, on-template, on-tone from the first draft.</li>
+              <li>Pfizer-specific angle pulled from real prior interactions in Gong / SFDC.</li>
+              <li>Numbers are live and source-cited — VP BD can defend every figure on the call.</li>
+              <li>Narrative arc matches the team's proven pitch structure.</li>
+              <li>Merck comparison is the actual deal summary, not a fabrication.</li>
+              <li><code>competitive-checker</code> caught and softened a borderline claim before draft was shown.</li>
+              <li>VP BD spends 20 min on a 12-slide draft instead of 4 hours on a 6-slide skeleton.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /uc-vpbd -->
+
+
+    <!-- ============================ -->
+    <!-- USE CASE 2: COO / OKR memo    -->
+    <!-- ============================ -->
+    <div class="subtab-panel" data-subtab="uc-coo">
+
+      <div class="uc-persona">
+        <div class="uc-icon">CO</div>
+        <div>
+          <h3>COO — Weekly cross-functional status</h3>
+          <p class="task"><strong>Task:</strong> Pull this week's status reports from every department, summarize them in a one-page memo, and map each department's progress against the Q2 OKRs. Flag at-risk items.</p>
+        </div>
+      </div>
+
+      <div class="uc-input">Take all department status reports filed this week and write a one-page status memo for the leadership team. For each Q2 OKR, give me a green/yellow/red status with current vs. target numbers. Call out anything at risk and any decisions you need from me.</div>
+
+      <div class="uc-section">
+        <h4>Under the hood</h4>
+        <div class="uc-anatomy">
+          <div class="uc-row skills">
+            <div class="role">Skills loaded</div>
+            <ul>
+              <li><code>company-principles</code> — foundation</li>
+              <li><code>brand-guidelines</code> — for memo voice</li>
+              <li><code>weekly-update</code> — foundation, format reference</li>
+              <li><code>exec-principles</code> — acme-exec</li>
+              <li><code>exec-memo</code> — acme-exec, primary skill</li>
+            </ul>
+          </div>
+          <div class="uc-row agents">
+            <div class="role">Sub-agents called</div>
+            <ul>
+              <li><code>coo-reviewer</code> — wait, the COO <em>is</em> the user, so this skill is configured to skip the reviewer in this case (or run it as a "self-critique you can ignore")</li>
+              <li><code>numbers-checker</code> — reconciles every numeric claim against <code>acme-data</code></li>
+              <li><code>strategic-devils-advocate</code> — surfaces risks the COO might want to escalate</li>
+            </ul>
+          </div>
+          <div class="uc-row mcps">
+            <div class="role">MCP servers queried</div>
+            <ul>
+              <li><code>acme-data</code> → <code>okr_status(quarter="Q2")</code>, <code>headcount_actuals()</code>, <code>arr_by_segment()</code>, <code>burn_rate()</code></li>
+            </ul>
+          </div>
+          <div class="uc-row connectors">
+            <div class="role">Native connectors used</div>
+            <ul>
+              <li>Notion — pulls weekly status pages from each dept space (BD, Engineering, Marketing, Customer Success, People, Finance)</li>
+              <li>GDrive — Q2 OKR doc</li>
+              <li>Linear — counts of open / shipped tickets per team this week</li>
+            </ul>
+          </div>
+          <div class="uc-row kb">
+            <div class="role">Knowledge base queries (Phase 2)</div>
+            <ul>
+              <li><code>kb_recent("status memo", days=90)</code> — last quarter's memos for continuity of voice and risk-tracking</li>
+              <li><code>kb_recent("at-risk OKR", days=180)</code> — items that were previously flagged at risk to thread continuity</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>How the relevant skills were originally built</h4>
+
+        <div class="uc-built">
+          <h5>The <code>exec-memo</code> skill (in <code>plugins/acme-exec/skills/exec-memo/</code>) came from:</h5>
+          <ul>
+            <li>The COO's preferred memo template (TL;DR / Status / OKR Scorecard / Risks / Asks) → <code>reference/format.md</code>.</li>
+            <li>Three anonymized real memos from the past two quarters → <code>examples/</code>.</li>
+            <li>The COO's "what makes a memo good" Loom recording (15 min) → transcribed into <code>reference/voice.md</code>.</li>
+            <li>The instruction "always show OKR status as green/yellow/red with numbers, never just narrative" → in the SKILL.md trigger logic.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>weekly-update</code> skill (foundation) was built from:</h5>
+          <ul>
+            <li>The standard format the company adopted six months ago (Done / Doing / Blocked / Asks).</li>
+            <li>10+ examples of well-formed weekly updates from across teams, anonymized.</li>
+            <li>Instructions on how each department should structure their Notion status page so the memo skill can parse them consistently.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>numbers-checker</code> sub-agent was built from:</h5>
+          <ul>
+            <li>A read-only persona that re-derives every numeric claim in the draft from <code>acme-data</code>.</li>
+            <li>Instructed to flag: any claim that disagrees with the source by &gt;5%, any claim with no source, any percentage without a denominator.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>acme-data</code> MCP server (for OKR status) exposes:</h5>
+          <ul>
+            <li><code>okr_status(quarter)</code> — joined view of the OKR doc (key results) against current warehouse data, returning per-OKR percent-to-target.</li>
+            <li>Maintained by the data team; updated whenever new OKRs are committed for a quarter.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>What comes back</h4>
+        <div class="uc-output">
+          A one-page memo, structured exactly as the COO prefers:
+          <ul>
+            <li><strong>TL;DR (2 lines):</strong> "Q2 on track at the topline; pipeline conversion lagging plan by 18%; Engineering hires 1 month behind. 3 decisions needed below."</li>
+            <li><strong>Department highlights:</strong> 3-line summary per department, drawn from this week's Notion status pages.</li>
+            <li><strong>OKR scorecard:</strong> table of all Q2 OKRs with current/target/status (green/yellow/red), every number tied to <code>acme-data</code>.</li>
+            <li><strong>Risks at the top:</strong> the 3 most at-risk items, each with what's causing it and what's been tried — surfaced by <code>strategic-devils-advocate</code>.</li>
+            <li><strong>Asks:</strong> 2-3 specific decisions the COO needs to make (e.g. "Approve hiring an external recruiter to unstuck Eng pipeline?").</li>
+            <li><strong>Footnote:</strong> "Numbers reconciled against <code>acme-data</code> as of [timestamp]. Source pages: [links]."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>Why this beats Claude alone</h4>
+        <div class="uc-compare">
+          <div class="col without">
+            <h5>Without the system</h5>
+            <ul>
+              <li>COO opens 8 Notion pages, the OKR doc, a SQL dashboard, and a calculator.</li>
+              <li>~3 hours of reading + summarizing + cross-referencing.</li>
+              <li>OKR statuses derived by hand; easy to misremember last week's targets.</li>
+              <li>No continuity with prior memos; risks that were flagged a month ago get re-discovered or get dropped.</li>
+              <li>Format drifts between weeks because there's no enforced template.</li>
+              <li>The "ask" section is often vague because it's the last thing written.</li>
+            </ul>
+          </div>
+          <div class="col with">
+            <h5>With the system</h5>
+            <ul>
+              <li>Memo arrives in &lt;10 minutes after request.</li>
+              <li>OKR scorecard is live-derived from warehouse, not from memory.</li>
+              <li>Every numeric claim is checked by <code>numbers-checker</code> before COO sees it.</li>
+              <li>Continuity with prior memos: items flagged before are surfaced as recurring risks, not new discoveries.</li>
+              <li>Format is the same every week, so leadership team learns to scan it.</li>
+              <li>Asks are structured as decisions, not narrative — easier to act on.</li>
+              <li>COO spends saved time on actually making the decisions, not assembling the memo.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /uc-coo -->
+
+
+    <!-- ================================ -->
+    <!-- USE CASE 3: VP Marketing / LinkedIn -->
+    <!-- ================================ -->
+    <div class="subtab-panel" data-subtab="uc-vpm">
+
+      <div class="uc-persona">
+        <div class="uc-icon">M</div>
+        <div>
+          <h3>VP Marketing — Clinical comms</h3>
+          <p class="task"><strong>Task:</strong> Write a LinkedIn post announcing the company's Phase 2b cardiac trial results — exciting but compliant with FDA-friendly language guidelines.</p>
+        </div>
+      </div>
+
+      <div class="uc-input">We just got the Phase 2b results for the cardiac drug — primary endpoint hit with statistical significance (p&lt;0.001, 32% relative risk reduction in the composite endpoint vs. placebo). Write me a 200-word LinkedIn post for the company page. Make it compelling but legally safe — we haven't filed for approval yet.</div>
+
+      <div class="uc-section">
+        <h4>Under the hood</h4>
+        <div class="uc-anatomy">
+          <div class="uc-row skills">
+            <div class="role">Skills loaded</div>
+            <ul>
+              <li><code>company-principles</code> — foundation</li>
+              <li><code>brand-guidelines</code> — voice critical here</li>
+              <li><code>company-context</code> — pipeline framing</li>
+              <li><code>marketing-principles</code> — acme-marketing</li>
+              <li><code>linkedin-post</code> — acme-marketing, primary skill</li>
+              <li><code>medical-claims-policy</code> — acme-marketing, the regulatory guardrails skill</li>
+            </ul>
+          </div>
+          <div class="uc-row agents">
+            <div class="role">Sub-agents called</div>
+            <ul>
+              <li><code>regulatory-reviewer</code> — checks every claim against FDA-friendly language rules; mandatory for any post involving clinical data</li>
+              <li><code>brand-checker</code> — voice + banned phrases ("breakthrough," "miracle," "cure," etc. without proper FDA designation)</li>
+              <li><code>voice-checker</code> — ensures the post sounds like Acme, not generic pharma PR</li>
+            </ul>
+          </div>
+          <div class="uc-row mcps">
+            <div class="role">MCP servers queried</div>
+            <ul>
+              <li><code>acme-data</code> → <code>trial_results(study_id)</code> — pulls the actual statistics so Claude doesn't have to be re-typed numbers</li>
+            </ul>
+          </div>
+          <div class="uc-row kb">
+            <div class="role">Knowledge base queries (Phase 2)</div>
+            <ul>
+              <li><code>kb_search("LinkedIn announcement trial results", filters={team:"marketing"}, top_k=3)</code> — top performers from past announcements</li>
+              <li><code>kb_search("FDA-friendly language clinical", top_k=2)</code> — internal guideline doc</li>
+              <li><code>kb_recent("cardiac drug pipeline narrative", days=180)</code> — to thread continuity with public messaging</li>
+            </ul>
+          </div>
+          <div class="uc-row connectors">
+            <div class="role">Native connectors used</div>
+            <ul>
+              <li>GDrive — pulls the trial statistical report and the team's internal "what we can / can't say" memo</li>
+              <li>(Optional) Hootsuite / Buffer — for direct posting once approved</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>How the relevant skills were originally built</h4>
+
+        <div class="uc-built">
+          <h5>The <code>linkedin-post</code> skill came from:</h5>
+          <ul>
+            <li>The marketing team's analysis of their top 20 LinkedIn posts (engagement metrics) → patterns extracted into <code>templates/post-formats.md</code> (announcement / thought leadership / milestone / patient story).</li>
+            <li>The brand team's voice doc, scoped down for LinkedIn → <code>reference/voice-on-linkedin.md</code>.</li>
+            <li>10+ exemplar posts annotated with what made them work → <code>examples/top-performing-posts.md</code>.</li>
+            <li>Length and structural rules: hook → context → numbers → impact → next step → CTA → hashtags. Hard cap at 250 words.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>medical-claims-policy</code> skill came from:</h5>
+          <ul>
+            <li>The regulatory affairs team's internal "FDA-friendly language" doc → cleaned up into <code>policy.md</code>.</li>
+            <li>A list of every phrase the medical / legal team has had to redline in the past two years → <code>banned-phrases.md</code>.</li>
+            <li>Approved alternative phrasings ("statistically significant" yes, "proven" no; "may help" yes, "cures" no) → <code>preferred-language.md</code>.</li>
+            <li>Real examples of past posts with the redlined version next to the published version → <code>examples/before-after.md</code>.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>regulatory-reviewer</code> sub-agent was built from:</h5>
+          <ul>
+            <li>A read-only persona that reviews every clinical claim against <code>medical-claims-policy</code> rules.</li>
+            <li>Output format: per-claim ✓ / ⚠️ / ✗, with a specific suggested rewrite for any flagged item.</li>
+            <li>Final line: "Ship-ready: yes / needs medical review / do not publish."</li>
+            <li>Built collaboratively with the regulatory affairs team — they reviewed the prompt for completeness.</li>
+          </ul>
+        </div>
+
+        <div class="uc-built">
+          <h5>The <code>marketing-principles</code> skill (foundation of acme-marketing) was built from:</h5>
+          <ul>
+            <li>The CMO's brand philosophy ("we lead with patient impact, not company achievement") → <code>principles.md</code>.</li>
+            <li>The team's positioning around cardiac care → <code>decision-frameworks.md</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>What comes back</h4>
+        <div class="uc-output">
+          A 200-word LinkedIn post draft, plus a regulatory-review summary:
+          <p style="margin-top:8px"><strong>Post:</strong></p>
+          <p style="margin:4px 0;font-style:italic">"Today we're sharing results from our Phase 2b study of [drug name] in patients with [condition] — a milestone for the patients and clinicians who've been part of this work. Across the trial, [drug name] showed a 32% reduction in [composite endpoint] vs. placebo, with statistical significance (p&lt;0.001). What this means: [grounded patient-impact framing — no overpromise]. We're now preparing for Phase 3, with the goal of submitting to regulatory authorities in [year]. Read the full results from the study team here: [link]. Thank you to the patients, investigators, and clinical teams who made this possible."</p>
+          <p><strong>Regulatory-reviewer pass:</strong></p>
+          <ul>
+            <li>✓ Numbers cited with confidence interval / p-value source.</li>
+            <li>✓ "Reduction in [composite endpoint]" — accurate framing of what was measured.</li>
+            <li>✓ "Preparing for Phase 3" — accurate, no implied approval.</li>
+            <li>⚠️ Original draft said "promising new treatment" — softened to "milestone" since "treatment" implies approval.</li>
+            <li>✗ → ✓ Original draft included "could change how we treat [condition]" — flagged as overclaim, replaced with "could expand options for clinicians and patients."</li>
+            <li>Ship-ready: <strong>yes, with medical review of the patient-impact paragraph as final check.</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="uc-section">
+        <h4>Why this beats Claude alone</h4>
+        <div class="uc-compare">
+          <div class="col without">
+            <h5>Without the system</h5>
+            <ul>
+              <li>VP Marketing has to remember and apply the FDA-friendly language guidelines from memory.</li>
+              <li>High risk of overclaiming — "breakthrough," "cure," "could revolutionize" sneak in.</li>
+              <li>No awareness of the team's past high-performing post structure.</li>
+              <li>Numbers retyped from memory = risk of error in a public post about clinical data.</li>
+              <li>Every draft requires a slow, manual round-trip with regulatory affairs before publishing.</li>
+              <li>Voice drifts toward generic pharma PR rather than the specific Acme tone.</li>
+            </ul>
+          </div>
+          <div class="col with">
+            <h5>With the system</h5>
+            <ul>
+              <li>Output is already aligned with the regulatory-affairs guidelines on first draft.</li>
+              <li><code>regulatory-reviewer</code> annotates every claim with ✓ / ⚠️ / ✗ — VP Marketing can see exactly what was softened and why.</li>
+              <li>Numbers are pulled live from the trial-results MCP, not retyped.</li>
+              <li>Post structure follows the team's empirically-best-performing pattern.</li>
+              <li>Voice matches Acme's brand guide, not generic pharma boilerplate.</li>
+              <li>Regulatory affairs review becomes a 5-minute confirmation, not a multi-day rewrite cycle.</li>
+              <li>Risk of a publicly-embarrassing claim drops dramatically.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /uc-vpm -->
+
   </section>
 
   <!-- ===== HOSTING ===== -->
