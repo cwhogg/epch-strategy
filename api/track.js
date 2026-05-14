@@ -16,16 +16,22 @@ export default async function handler(req, res) {
       || req.headers['x-real-ip']
       || 'unknown';
     const userAgent = req.headers['user-agent'] || 'unknown';
+    const city = req.headers['x-vercel-ip-city'] || '';
+    const region = req.headers['x-vercel-ip-country-region'] || '';
+    const country = req.headers['x-vercel-ip-country'] || '';
 
     if (type === 'pageload') {
       if (!visitId) {
         return res.status(400).json({ error: 'Missing visitId' });
       }
 
+      const location = [city, region, country].filter(Boolean).join(', ');
+
       const visit = {
         id: visitId,
         ip,
         userAgent,
+        location,
         timestamp: new Date().toISOString(),
         duration: 0,
       };

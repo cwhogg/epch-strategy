@@ -169,6 +169,7 @@
           <tr>
             <th>#</th>
             <th>IP</th>
+            <th>Location</th>
             <th>Timestamp</th>
             <th>Time on Site</th>
             <th>User Agent</th>
@@ -230,6 +231,7 @@
       tr.innerHTML =
         '<td>' + (i + 1) + '</td>' +
         '<td>' + escapeHtml(v.ip) + '</td>' +
+        '<td>' + escapeHtml(v.location || '--') + '</td>' +
         '<td>' + escapeHtml(timeStr) + '</td>' +
         '<td>' + formatDuration(v.duration) + '</td>' +
         '<td title="' + escapeAttr(v.userAgent) + '">' + escapeHtml(v.userAgent) + '</td>';
