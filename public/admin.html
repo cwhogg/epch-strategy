@@ -52,45 +52,7 @@
     letter-spacing: -0.01em;
   }
 
-  /* Login */
-  #login-section {
-    max-width: 400px;
-    margin: 80px auto;
-    text-align: center;
-  }
-  #login-section input {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius);
-    font-size: 15px;
-    margin-bottom: 12px;
-    outline: none;
-  }
-  #login-section input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-  }
-  #login-section button {
-    width: 100%;
-    padding: 10px 14px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  #login-section button:hover { opacity: 0.9; }
-  .login-error {
-    color: #b91c1c;
-    font-size: 13px;
-    margin-top: 8px;
-  }
-
   /* Dashboard */
-  #dashboard { display: none; }
 
   .stats {
     display: grid;
@@ -180,16 +142,6 @@
 <body>
 <div class="wrap">
 
-  <!-- Login -->
-  <div id="login-section">
-    <div class="eyebrow">Admin</div>
-    <h1>Visitor Analytics</h1>
-    <input type="password" id="secret-input" placeholder="Enter admin password" autocomplete="off">
-    <button onclick="doLogin()">Sign In</button>
-    <div class="login-error" id="login-error"></div>
-  </div>
-
-  <!-- Dashboard -->
   <div id="dashboard">
     <a href="/" class="back-link">&larr; Back to site</a>
     <button class="refresh-btn" onclick="loadData()">Refresh</button>
@@ -229,42 +181,21 @@
 
 </div>
 <script>
-  let adminSecret = '';
-
-  document.getElementById('secret-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') doLogin();
-  });
-
-  function doLogin() {
-    const input = document.getElementById('secret-input');
-    const error = document.getElementById('login-error');
-    adminSecret = input.value.trim();
-    if (!adminSecret) {
-      error.textContent = 'Please enter a password.';
-      return;
-    }
-    error.textContent = '';
-    loadData();
-  }
-
   async function loadData() {
-    const error = document.getElementById('login-error');
     try {
-      const resp = await fetch('/api/visits?secret=' + encodeURIComponent(adminSecret));
-      if (resp.status === 401) {
-        error.textContent = 'Invalid password.';
-        return;
-      }
+      const resp = await fetch('/api/visits');
       if (!resp.ok) {
-        error.textContent = 'Server error. Try again.';
+        console.error('Server error', resp.status);
         return;
       }
       const data = await resp.json();
       showDashboard(data.visits || []);
     } catch (err) {
-      error.textContent = 'Network error. Try again.';
+      console.error('Network error', err);
     }
   }
+
+  loadData();
 
   function formatDuration(seconds) {
     if (!seconds || seconds <= 0) return '--';
@@ -275,9 +206,6 @@
   }
 
   function showDashboard(visits) {
-    document.getElementById('login-section').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-
     // Stats
     document.getElementById('stat-total').textContent = visits.length;
 

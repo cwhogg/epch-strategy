@@ -10,11 +10,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const secret = req.query.secret;
-  if (!secret || secret !== process.env.ADMIN_SECRET) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
   try {
     // Get all visits from the list
     const rawVisits = await kv.lrange('visits', 0, -1);
