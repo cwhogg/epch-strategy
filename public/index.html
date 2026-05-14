@@ -4354,6 +4354,35 @@ When asked to draft a client proposal:
   }
   window.copyPre = copyPre;
 
+  // --- Visitor tracking ---
+  (function() {
+    var visitId = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    var startTime = Date.now();
+
+    // Record pageload
+    fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'pageload', visitId: visitId })
+    }).catch(function() {});
+
+    // Send duration on page hide or unload
+    function sendDuration() {
+      var seconds = Math.round((Date.now() - startTime) / 1000);
+      var data = JSON.stringify({ type: 'duration', visitId: visitId, duration: seconds });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/track', new Blob([data], { type: 'application/json' }));
+      } else {
+        fetch('/api/track', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: data, keepalive: true }).catch(function() {});
+      }
+    }
+
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'hidden') sendDuration();
+    });
+    window.addEventListener('beforeunload', sendDuration);
+  })();
+
 </script>
 </body>
 </html>
